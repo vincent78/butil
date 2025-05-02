@@ -1,0 +1,3 @@
+module chain.com/eth
+
+go 1.20
