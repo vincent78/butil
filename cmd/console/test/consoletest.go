@@ -3,9 +3,9 @@ package main
 import (
 	"context"
 	"fmt"
-	"gitee.com/vincent78/gcutil/cmd/console"
-	bm "gitee.com/vincent78/gcutil/model"
-	"gitee.com/vincent78/gcutil/utils/timeUtil"
+	"github.com/vincent78/butil/cmd/console"
+	bm "github.com/vincent78/butil/model"
+	"github.com/vincent78/butil/utils/timeUtil"
 	"time"
 )
 

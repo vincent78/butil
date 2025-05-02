@@ -1,7 +1,7 @@
 package sys
 
 import (
-	"gitee.com/vincent78/gcutil/utils/fileUtil"
+	"github.com/vincent78/butil/utils/fileUtil"
 	"os"
 	"strconv"
 )

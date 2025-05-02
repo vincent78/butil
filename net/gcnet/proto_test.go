@@ -2,8 +2,8 @@ package gcnet
 
 import (
 	"fmt"
-	"gitee.com/vincent78/gcutil/net/gcnet/proto.pb"
-	"gitee.com/vincent78/gcutil/utils/strUtil"
+	"github.com/vincent78/butil/net/gcnet/proto.pb"
+	"github.com/vincent78/butil/utils/strUtil"
 	"google.golang.org/protobuf/proto"
 	"testing"
 )

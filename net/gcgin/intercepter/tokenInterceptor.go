@@ -2,9 +2,9 @@ package intercepter
 
 import (
 	"context"
-	"gitee.com/vincent78/gcutil/global"
-	"gitee.com/vincent78/gcutil/token"
 	"github.com/gin-gonic/gin"
+	"github.com/vincent78/butil/global"
+	"github.com/vincent78/butil/token"
 )
 
 func TokenInterceptor() gin.HandlerFunc {

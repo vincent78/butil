@@ -2,7 +2,7 @@ package thread
 
 import (
 	"fmt"
-	"gitee.com/vincent78/gcutil/logger"
+	"github.com/vincent78/butil/logger"
 	"testing"
 	"time"
 )

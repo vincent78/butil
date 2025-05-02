@@ -2,7 +2,7 @@ package lifecycle
 
 import (
 	"fmt"
-	"gitee.com/vincent78/gcutil/sys"
+	"github.com/vincent78/butil/sys"
 )
 
 func AppBaseInit() {

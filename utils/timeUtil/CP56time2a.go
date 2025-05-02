@@ -5,7 +5,7 @@ import (
 	"encoding/hex"
 	"errors"
 	"fmt"
-	"gitee.com/vincent78/gcutil/utils/byteUtil"
+	"github.com/vincent78/butil/utils/byteUtil"
 	"time"
 )
 

@@ -1,8 +1,8 @@
 package global
 
 import (
-	"gitee.com/vincent78/gcutil/timewheel"
 	"github.com/urfave/cli/v2"
+	"github.com/vincent78/butil/timewheel"
 	"os"
 )
 

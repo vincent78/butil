@@ -1,4 +1,4 @@
-module gitee.com/vincent78/gcutil
+module github.com/vincent78/butil
 
 go 1.24
 

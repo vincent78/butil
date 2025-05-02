@@ -4,7 +4,7 @@ import (
 	"bufio"
 	"context"
 	"fmt"
-	"gitee.com/vincent78/gcutil/model"
+	"github.com/vincent78/butil/model"
 	"golang.org/x/text/encoding/simplifiedchinese"
 	"io"
 	"os"
@@ -26,9 +26,15 @@ var EnvPath = ""
 
 func ShellCommand(cmdStr string, arg ...string) error {
 	if len(arg) > 0 {
-		fmt.Fprintf(os.Stdout, "%s %v \n", cmdStr, arg)
+		_, err := fmt.Fprintf(os.Stdout, "%s %v \n", cmdStr, arg)
+		if err != nil {
+			return err
+		}
 	} else {
-		fmt.Fprintf(os.Stdout, "%s \n", cmdStr)
+		_, err := fmt.Fprintf(os.Stdout, "%s \n", cmdStr)
+		if err != nil {
+			return err
+		}
 	}
 
 	var cmdTmp = cmdStr

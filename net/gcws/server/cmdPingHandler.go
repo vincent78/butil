@@ -1,8 +1,8 @@
 package server
 
 import (
-	"gitee.com/vincent78/gcutil/net/gcws/common"
-	"gitee.com/vincent78/gcutil/utils/timeUtil"
+	"github.com/vincent78/butil/net/gcws/common"
+	"github.com/vincent78/butil/utils/timeUtil"
 )
 
 type PingCmdHandler struct {

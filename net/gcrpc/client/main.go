@@ -2,7 +2,7 @@ package main
 
 import (
 	"context"
-	pb "gitee.com/vincent78/gcutil/net/gcrpc/proto.pb"
+	pb "github.com/vincent78/butil/net/gcrpc/proto.pb"
 	"google.golang.org/grpc"
 	"log"
 )

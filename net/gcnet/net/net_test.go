@@ -1,7 +1,7 @@
 package gcnet
 
 import (
-	"gitee.com/vincent78/gcutil/logger"
+	"github.com/vincent78/butil/logger"
 	"net"
 	"testing"
 )

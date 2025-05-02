@@ -3,7 +3,7 @@ package logger3
 import (
 	"context"
 	"fmt"
-	"gitee.com/vincent78/gcutil/config"
+	"github.com/vincent78/butil/config"
 )
 
 type LogModel struct {

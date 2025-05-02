@@ -1,10 +1,10 @@
 package server
 
 import (
-	"gitee.com/vincent78/gcutil/global"
-	"gitee.com/vincent78/gcutil/logger"
-	"gitee.com/vincent78/gcutil/net/gcgin"
-	"gitee.com/vincent78/gcutil/sys"
+	"github.com/vincent78/butil/global"
+	"github.com/vincent78/butil/logger"
+	"github.com/vincent78/butil/net/gcgin"
+	"github.com/vincent78/butil/sys"
 	"testing"
 )
 

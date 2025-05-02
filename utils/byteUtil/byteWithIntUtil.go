@@ -5,8 +5,6 @@ import (
 	"encoding/binary"
 	"fmt"
 	"math"
-	"strconv"
-	"strings"
 )
 
 /***********************************************************************************************
@@ -255,14 +253,6 @@ func Bytes2IntLittleEndian(b []byte) (int, error) {
 	default:
 		return 0, fmt.Errorf("%s", "Bytes2Int bytes lenth is invaild!")
 	}
-}
-
-func Print(frame []byte) string {
-	f := make([]string, 0, len(frame))
-	for _, k := range frame {
-		f = append(f, strconv.Itoa(int(k)))
-	}
-	return fmt.Sprintf("[%v]", strings.Join(f, ","))
 }
 
 func Join(prefix, context []byte) []byte {

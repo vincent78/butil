@@ -2,8 +2,8 @@ package server
 
 import (
 	"fmt"
-	"gitee.com/vincent78/gcutil/net/gcws/common"
 	"github.com/gorilla/websocket"
+	"github.com/vincent78/butil/net/gcws/common"
 	"net/http"
 	"time"
 )

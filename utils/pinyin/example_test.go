@@ -1,7 +1,7 @@
 package pinyin_test
 
 import (
-	"gitee.com/vincent78/gcutil/utils/pinyin"
+	"github.com/vincent78/butil/utils/pinyin"
 	"testing"
 )
 

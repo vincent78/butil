@@ -2,7 +2,7 @@ package sys
 
 import (
 	"fmt"
-	"gitee.com/vincent78/gcutil/model"
+	"github.com/vincent78/butil/model"
 	"os"
 	"runtime"
 )

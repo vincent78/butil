@@ -3,8 +3,8 @@ package objUtil
 import (
 	"errors"
 	"fmt"
-	"gitee.com/vincent78/gcutil/utils/mapUtil"
-	"gitee.com/vincent78/gcutil/utils/strUtil"
+	"github.com/vincent78/butil/utils/mapUtil"
+	"github.com/vincent78/butil/utils/strUtil"
 	"reflect"
 	"strconv"
 	"strings"

@@ -1,9 +1,9 @@
 package netUtil
 
 import (
-	"gitee.com/vincent78/gcutil/logger"
-	"gitee.com/vincent78/gcutil/net/gcgin"
 	"github.com/gin-gonic/gin"
+	"github.com/vincent78/butil/logger"
+	"github.com/vincent78/butil/net/gcgin"
 )
 
 const (

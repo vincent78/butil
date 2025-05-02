@@ -3,9 +3,9 @@ package common
 import (
 	"encoding/json"
 	"fmt"
-	"gitee.com/vincent78/gcutil/model"
-	"gitee.com/vincent78/gcutil/token"
-	"gitee.com/vincent78/gcutil/utils/strUtil"
+	"github.com/vincent78/butil/model"
+	"github.com/vincent78/butil/token"
+	"github.com/vincent78/butil/utils/strUtil"
 )
 
 type WSCmd struct {

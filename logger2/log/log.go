@@ -2,11 +2,11 @@
 package log
 
 import (
-	"gitee.com/vincent78/gcutil/logger2/logger"
-	log "gitee.com/vincent78/gcutil/logger2/logger"
-	"gitee.com/vincent78/gcutil/logger2/writer"
-	"gitee.com/vincent78/gcutil/logger2/zap"
-	"gitee.com/vincent78/gcutil/utils/fileUtil"
+	"github.com/vincent78/butil/logger2/logger"
+	log "github.com/vincent78/butil/logger2/logger"
+	"github.com/vincent78/butil/logger2/writer"
+	"github.com/vincent78/butil/logger2/zap"
+	"github.com/vincent78/butil/utils/fileUtil"
 	"io"
 	"os"
 )

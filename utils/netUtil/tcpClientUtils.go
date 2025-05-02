@@ -1,7 +1,7 @@
 package netUtil
 
 import (
-	"gitee.com/vincent78/gcutil/logger"
+	"github.com/vincent78/butil/logger"
 	"net"
 )
 
@@ -41,7 +41,7 @@ func (t *TCPClient) Conn() (transfer *TCPTransfer, err error) {
 	return
 }
 
-//与服务器断开连接
+// 与服务器断开连接
 func (t *TCPTransfer) CloseConn() (err error) {
 	logger.Info("TCPTransfer close conn")
 	if t == nil {

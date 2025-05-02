@@ -2,8 +2,8 @@ package logger3
 
 import (
 	"fmt"
-	"gitee.com/vincent78/gcutil/utils/strUtil"
-	"gitee.com/vincent78/gcutil/utils/timeUtil"
+	"github.com/vincent78/butil/utils/strUtil"
+	"github.com/vincent78/butil/utils/timeUtil"
 	"sync"
 )
 

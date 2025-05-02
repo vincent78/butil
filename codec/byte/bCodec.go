@@ -3,8 +3,8 @@ package codec
 import (
 	"errors"
 	"fmt"
-	"gitee.com/vincent78/gcutil/utils/byteUtil"
-	"gitee.com/vincent78/gcutil/utils/reflectx"
+	"github.com/vincent78/butil/utils/byteUtil"
+	"github.com/vincent78/butil/utils/reflectx"
 	"reflect"
 	"strconv"
 )

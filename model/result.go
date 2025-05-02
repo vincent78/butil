@@ -4,7 +4,7 @@ import (
 	"encoding/json"
 	"fmt"
 
-	"gitee.com/vincent78/gcutil/utils/strUtil"
+	"github.com/vincent78/butil/utils/strUtil"
 )
 
 type ResultModel[T any] struct {

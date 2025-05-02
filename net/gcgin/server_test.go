@@ -2,8 +2,8 @@ package gcgin
 
 import (
 	"fmt"
-	"gitee.com/vincent78/gcutil/global"
-	"gitee.com/vincent78/gcutil/logger"
+	"github.com/vincent78/butil/global"
+	"github.com/vincent78/butil/logger"
 	"regexp"
 	"testing"
 )

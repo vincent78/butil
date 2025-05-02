@@ -1,8 +1,8 @@
 package client
 
 import (
-	"gitee.com/vincent78/gcutil/global"
-	"gitee.com/vincent78/gcutil/model"
+	"github.com/vincent78/butil/global"
+	"github.com/vincent78/butil/model"
 )
 
 const (

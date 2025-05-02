@@ -2,11 +2,11 @@ package console
 
 import (
 	"fmt"
-	"gitee.com/vincent78/gcutil/logger"
-	"gitee.com/vincent78/gcutil/model"
-	"gitee.com/vincent78/gcutil/utils/fileUtil"
 	"github.com/mattn/go-colorable"
 	"github.com/peterh/liner"
+	"github.com/vincent78/butil/logger"
+	"github.com/vincent78/butil/model"
+	"github.com/vincent78/butil/utils/fileUtil"
 	"io"
 	"os"
 	"os/signal"

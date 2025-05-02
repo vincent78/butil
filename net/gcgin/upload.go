@@ -3,9 +3,9 @@ package gcgin
 import (
 	"errors"
 	"fmt"
-	"gitee.com/vincent78/gcutil/utils/objUtil"
-	"gitee.com/vincent78/gcutil/utils/timeUtil"
 	"github.com/gin-gonic/gin"
+	"github.com/vincent78/butil/utils/objUtil"
+	"github.com/vincent78/butil/utils/timeUtil"
 	"log"
 	"net/http"
 	"os"

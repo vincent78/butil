@@ -2,7 +2,7 @@ package mapUtil
 
 import (
 	"encoding/json"
-	"gitee.com/vincent78/gcutil/logger"
+	"github.com/vincent78/butil/logger"
 	"testing"
 )
 

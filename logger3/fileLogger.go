@@ -3,11 +3,11 @@ package logger3
 import (
 	"context"
 	"fmt"
-	"gitee.com/vincent78/gcutil/cmd/console"
-	"gitee.com/vincent78/gcutil/config"
-	"gitee.com/vincent78/gcutil/thread"
-	"gitee.com/vincent78/gcutil/utils/fileUtil"
-	"gitee.com/vincent78/gcutil/utils/timeUtil"
+	"github.com/vincent78/butil/cmd/console"
+	"github.com/vincent78/butil/config"
+	"github.com/vincent78/butil/thread"
+	"github.com/vincent78/butil/utils/fileUtil"
+	"github.com/vincent78/butil/utils/timeUtil"
 	"os"
 	"runtime/debug"
 )

@@ -1,7 +1,7 @@
 package logger
 
 import (
-	"gitee.com/vincent78/gcutil/dup"
+	"github.com/vincent78/butil/dup"
 )
 
 type LogConfig struct {

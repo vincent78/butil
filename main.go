@@ -1,7 +1,7 @@
 package main
 
 import (
-	"gitee.com/vincent78/gcutil/sys"
+	"github.com/vincent78/butil/sys"
 )
 
 func main() {

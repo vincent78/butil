@@ -3,7 +3,7 @@ package logger
 import (
 	"context"
 	"fmt"
-	dlog "gitee.com/vincent78/gcutil/logger2/log2"
+	dlog "github.com/vincent78/butil/logger2/log2"
 	"log"
 	"os"
 	"runtime"

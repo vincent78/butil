@@ -3,8 +3,8 @@ package console
 import (
 	"context"
 	"fmt"
-	"gitee.com/vincent78/gcutil/logger"
-	"gitee.com/vincent78/gcutil/model"
+	"github.com/vincent78/butil/logger"
+	"github.com/vincent78/butil/model"
 	"io"
 	"strings"
 )

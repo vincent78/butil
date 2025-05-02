@@ -2,10 +2,10 @@ package client
 
 import (
 	"fmt"
-	"gitee.com/vincent78/gcutil/global"
-	"gitee.com/vincent78/gcutil/logger"
-	"gitee.com/vincent78/gcutil/sys"
-	"gitee.com/vincent78/gcutil/utils/timeUtil"
+	"github.com/vincent78/butil/global"
+	"github.com/vincent78/butil/logger"
+	"github.com/vincent78/butil/sys"
+	"github.com/vincent78/butil/utils/timeUtil"
 	"testing"
 	"time"
 )

@@ -1,12 +1,12 @@
 package intercepter
 
 import (
-	"gitee.com/vincent78/gcutil/global"
-	"gitee.com/vincent78/gcutil/logger"
-	"gitee.com/vincent78/gcutil/model"
-	httpModel "gitee.com/vincent78/gcutil/net/gcgin/model"
-	"gitee.com/vincent78/gcutil/utils/strUtil"
 	"github.com/gin-gonic/gin"
+	"github.com/vincent78/butil/global"
+	"github.com/vincent78/butil/logger"
+	"github.com/vincent78/butil/model"
+	httpModel "github.com/vincent78/butil/net/gcgin/model"
+	"github.com/vincent78/butil/utils/strUtil"
 	"net"
 	"net/http"
 	"net/http/httputil"

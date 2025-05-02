@@ -3,7 +3,7 @@ package templateUtil
 import (
 	"bytes"
 	"fmt"
-	"gitee.com/vincent78/gcutil/utils/fileUtil"
+	"github.com/vincent78/butil/utils/fileUtil"
 	"text/template"
 )
 

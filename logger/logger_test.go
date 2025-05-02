@@ -1,7 +1,7 @@
 package logger
 
 import (
-	"gitee.com/vincent78/gcutil/utils/strUtil"
+	"github.com/vincent78/butil/utils/strUtil"
 	"sync"
 	"testing"
 	"time"

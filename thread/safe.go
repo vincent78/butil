@@ -2,8 +2,8 @@ package thread
 
 import (
 	"fmt"
-	"gitee.com/vincent78/gcutil/logger"
-	"gitee.com/vincent78/gcutil/sys"
+	"github.com/vincent78/butil/logger"
+	"github.com/vincent78/butil/sys"
 )
 
 // Go starts a recoverable goroutine.

@@ -2,7 +2,7 @@ package model
 
 import (
 	"fmt"
-	"gitee.com/vincent78/gcutil/global"
+	"github.com/vincent78/butil/global"
 )
 
 type ErrorModel struct {

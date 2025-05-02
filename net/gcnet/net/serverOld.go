@@ -4,9 +4,9 @@ import (
 	"bufio"
 	"bytes"
 	"encoding/binary"
-	"gitee.com/vincent78/gcutil/logger"
-	gcnet "gitee.com/vincent78/gcutil/net/gcnet/proto.pb"
 	"github.com/golang/protobuf/proto"
+	"github.com/vincent78/butil/logger"
+	gcnet "github.com/vincent78/butil/net/gcnet/proto.pb"
 	"net"
 )
 

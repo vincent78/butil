@@ -1,9 +1,9 @@
 package lifecycle
 
 import (
-	"gitee.com/vincent78/gcutil/logger"
-	"gitee.com/vincent78/gcutil/sys"
 	"github.com/urfave/cli/v2"
+	"github.com/vincent78/butil/logger"
+	"github.com/vincent78/butil/sys"
 )
 
 type AppLifecycleInitModel struct {

@@ -1,7 +1,7 @@
 package common
 
 import (
-	"gitee.com/vincent78/gcutil/utils/timeUtil"
+	"github.com/vincent78/butil/utils/timeUtil"
 	"testing"
 	"time"
 )

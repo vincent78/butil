@@ -3,8 +3,8 @@ package netUtil
 import (
 	"errors"
 	"fmt"
-	"gitee.com/vincent78/gcutil/logger"
-	"gitee.com/vincent78/gcutil/utils/concurrentUtil"
+	"github.com/vincent78/butil/logger"
+	"github.com/vincent78/butil/utils/concurrentUtil"
 	"net"
 	"strings"
 	"sync"

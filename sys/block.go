@@ -2,7 +2,7 @@ package sys
 
 import (
 	"context"
-	"gitee.com/vincent78/gcutil/logger"
+	"github.com/vincent78/butil/logger"
 	"os"
 	"os/signal"
 	"syscall"

@@ -1,8 +1,8 @@
 package fileUtil
 
 import (
-	log "gitee.com/vincent78/gcutil/logger2/logger"
-	"gitee.com/vincent78/gcutil/utils/strUtil"
+	log "github.com/vincent78/butil/logger2/logger"
+	"github.com/vincent78/butil/utils/strUtil"
 	"os"
 	"path"
 	"path/filepath"

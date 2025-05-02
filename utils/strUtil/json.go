@@ -5,8 +5,8 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
-	"gitee.com/vincent78/gcutil/utils/mapUtil"
-	"gitee.com/vincent78/gcutil/utils/reflectx"
+	"github.com/vincent78/butil/utils/mapUtil"
+	"github.com/vincent78/butil/utils/reflectx"
 	"strings"
 )
 

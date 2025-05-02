@@ -2,8 +2,8 @@ package zap
 
 import (
 	"fmt"
-	"gitee.com/vincent78/gcutil/logger2/logger"
-	"gitee.com/vincent78/gcutil/logger2/writer"
+	"github.com/vincent78/butil/logger2/logger"
+	"github.com/vincent78/butil/logger2/writer"
 	"testing"
 )
 

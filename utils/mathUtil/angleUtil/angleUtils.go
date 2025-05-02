@@ -1,8 +1,8 @@
 package angleUtil
 
 import (
-	"gitee.com/vincent78/gcutil/logger"
-	"gitee.com/vincent78/gcutil/utils/mathUtil"
+	"github.com/vincent78/butil/logger"
+	"github.com/vincent78/butil/utils/mathUtil"
 	"math"
 )
 
@@ -49,7 +49,9 @@ func RoundAngle(angle int32) int16 {
 
 // 计算最终下位机需要的换向指令中的targetHeading (最终托盘与小车一起旋转成到角度(单位是0.01度)，小车车身与托盘随动)
 // 计算原理：
+//
 //	目标货架角度 - 当前货架角度 = 目标托盘角度（targetHeading）- 当前托盘角度(都相对于地图来说的)
+//
 // param: robotHeading 小车相对于地图角度
 // param: palletAngle 托盘相对于小车角度（俯视图来观察）(范围在-180~180)
 // param: rackHeading 货架相对于地图的角度

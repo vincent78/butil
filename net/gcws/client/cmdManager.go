@@ -1,9 +1,9 @@
 package client
 
 import (
-	"gitee.com/vincent78/gcutil/global"
-	"gitee.com/vincent78/gcutil/logger"
-	"gitee.com/vincent78/gcutil/net/gcws/common"
+	"github.com/vincent78/butil/global"
+	"github.com/vincent78/butil/logger"
+	"github.com/vincent78/butil/net/gcws/common"
 )
 
 func DoCmdAction(c *WSClient, cmd *common.WSCmd) {

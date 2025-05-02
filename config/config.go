@@ -3,9 +3,9 @@ package config
 import (
 	"encoding/json"
 	"fmt"
-	"gitee.com/vincent78/gcutil/utils/fileUtil"
-	"gitee.com/vincent78/gcutil/utils/strUtil"
 	"github.com/spf13/viper"
+	"github.com/vincent78/butil/utils/fileUtil"
+	"github.com/vincent78/butil/utils/strUtil"
 )
 
 /*

@@ -2,7 +2,7 @@ package main
 
 import (
 	"fmt"
-	"gitee.com/vincent78/gcutil/timewheel"
+	"github.com/vincent78/butil/timewheel"
 	"time"
 )
 

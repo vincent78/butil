@@ -1,9 +1,9 @@
 package common
 
 import (
-	"gitee.com/vincent78/gcutil/global"
-	"gitee.com/vincent78/gcutil/logger"
-	"gitee.com/vincent78/gcutil/timewheel"
+	"github.com/vincent78/butil/global"
+	"github.com/vincent78/butil/logger"
+	"github.com/vincent78/butil/timewheel"
 	"time"
 )
 
@@ -24,12 +24,12 @@ const (
 )
 
 const (
-	CmdCategorySys     = "sys"
-	CmdCategoryDefault   = ""
-	CmdCategoryLogicGame = "logicGame"
-	CmdCategoryLogicServer = "logicServer"
+	CmdCategorySys          = "sys"
+	CmdCategoryDefault      = ""
+	CmdCategoryLogicGame    = "logicGame"
+	CmdCategoryLogicServer  = "logicServer"
 	CmdCategoryLogicDesktop = "logicDesktop"
-	CmdCategoryLogicPlayer = "logicPlayer"
+	CmdCategoryLogicPlayer  = "logicPlayer"
 )
 
 const (

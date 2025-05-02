@@ -2,10 +2,10 @@ package server
 
 import (
 	"context"
-	"gitee.com/vincent78/gcutil/global"
-	"gitee.com/vincent78/gcutil/logger"
-	"gitee.com/vincent78/gcutil/net/gcws/common"
 	"github.com/gin-gonic/gin"
+	"github.com/vincent78/butil/global"
+	"github.com/vincent78/butil/logger"
+	"github.com/vincent78/butil/net/gcws/common"
 )
 
 // Hub maintains the set of active servers and broadcasts messages to the

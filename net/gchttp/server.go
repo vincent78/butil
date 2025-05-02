@@ -2,10 +2,10 @@ package gchttp
 
 import (
 	"fmt"
-	"gitee.com/vincent78/gcutil/logger"
-	"gitee.com/vincent78/gcutil/model"
-	"gitee.com/vincent78/gcutil/token"
-	gctime "gitee.com/vincent78/gcutil/utils/timeUtil"
+	"github.com/vincent78/butil/logger"
+	"github.com/vincent78/butil/model"
+	"github.com/vincent78/butil/token"
+	gctime "github.com/vincent78/butil/utils/timeUtil"
 	"io"
 	"net"
 	"net/http"

@@ -2,10 +2,10 @@ package user
 
 import (
 	"fmt"
-	"gitee.com/vincent78/gcutil/net/gcgin/intercepter"
-	"gitee.com/vincent78/gcutil/utils/mathUtil/numberUtil"
-	"gitee.com/vincent78/gcutil/utils/timeUtil"
 	"github.com/gin-gonic/gin"
+	"github.com/vincent78/butil/net/gcgin/intercepter"
+	"github.com/vincent78/butil/utils/mathUtil/numberUtil"
+	"github.com/vincent78/butil/utils/timeUtil"
 )
 
 func ExtractClaims(c *gin.Context) intercepter.MapClaims {

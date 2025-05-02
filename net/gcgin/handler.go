@@ -2,10 +2,10 @@ package gcgin
 
 import (
 	"context"
-	"gitee.com/vincent78/gcutil/model"
-	model2 "gitee.com/vincent78/gcutil/net/gcgin/model"
 	"github.com/gin-gonic/gin"
 	"github.com/go-playground/validator/v10"
+	"github.com/vincent78/butil/model"
+	model2 "github.com/vincent78/butil/net/gcgin/model"
 	"net/http"
 )
 

@@ -2,15 +2,15 @@ package gcgin
 
 import (
 	"fmt"
-	"gitee.com/vincent78/gcutil/global"
-	"gitee.com/vincent78/gcutil/logger"
-	itcp "gitee.com/vincent78/gcutil/net/gcgin/intercepter"
-	"gitee.com/vincent78/gcutil/net/gcgin/model"
-	"gitee.com/vincent78/gcutil/sys"
-	"gitee.com/vincent78/gcutil/token"
-	"gitee.com/vincent78/gcutil/utils/timeUtil"
 	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
+	"github.com/vincent78/butil/global"
+	"github.com/vincent78/butil/logger"
+	itcp "github.com/vincent78/butil/net/gcgin/intercepter"
+	"github.com/vincent78/butil/net/gcgin/model"
+	"github.com/vincent78/butil/sys"
+	"github.com/vincent78/butil/token"
+	"github.com/vincent78/butil/utils/timeUtil"
 	"net"
 	"net/http"
 	"os"
@@ -56,7 +56,7 @@ func InitEngine(debug bool) *gin.Engine {
 	return e
 }
 
-func SyncStartServer(addr string,g *gin.Engine) {
+func SyncStartServer(addr string, g *gin.Engine) {
 	// start the web server
 	c := make(chan struct{})
 	go StartServer(addr, c, g)

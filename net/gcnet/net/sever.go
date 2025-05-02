@@ -4,7 +4,7 @@ import (
 	"bufio"
 	"encoding/hex"
 	"fmt"
-	"gitee.com/vincent78/gcutil/logger"
+	"github.com/vincent78/butil/logger"
 	"io"
 	"net"
 )

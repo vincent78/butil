@@ -2,7 +2,7 @@ package exec
 
 import (
 	"context"
-	"gitee.com/vincent78/gcutil/model"
+	"github.com/vincent78/butil/model"
 	"testing"
 	"time"
 )

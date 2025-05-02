@@ -1,7 +1,7 @@
 package token
 
 import (
-	utime "gitee.com/vincent78/gcutil/utils/timeUtil"
+	utime "github.com/vincent78/butil/utils/timeUtil"
 	"testing"
 	"time"
 )

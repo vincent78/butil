@@ -1,13 +1,13 @@
 package token
 
 import (
-	"gitee.com/vincent78/gcutil/logger"
 	"github.com/chilts/sid"
 	"github.com/kjk/betterguid"
 	"github.com/oklog/ulid"
 	"github.com/rs/xid"
 	"github.com/segmentio/ksuid"
 	"github.com/sony/sonyflake"
+	"github.com/vincent78/butil/logger"
 	"math/rand"
 	"strconv"
 	"time"

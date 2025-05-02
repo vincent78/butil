@@ -1,7 +1,7 @@
 package codeUtil
 
 import (
-	"gitee.com/vincent78/gcutil/token"
+	"github.com/vincent78/butil/token"
 	"strings"
 )
 

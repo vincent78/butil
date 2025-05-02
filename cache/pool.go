@@ -2,7 +2,7 @@ package cache
 
 import (
 	"context"
-	"gitee.com/vincent78/gcutil/thread"
+	"github.com/vincent78/butil/thread"
 	"sync"
 )
 

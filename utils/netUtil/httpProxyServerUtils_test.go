@@ -2,12 +2,12 @@ package netUtil
 
 import (
 	"fmt"
-	"gitee.com/vincent78/gcutil/global"
-	"gitee.com/vincent78/gcutil/logger"
-	"gitee.com/vincent78/gcutil/model"
-	"gitee.com/vincent78/gcutil/net/gchttp"
-	"gitee.com/vincent78/gcutil/utils/strUtil"
 	"github.com/gin-gonic/gin"
+	"github.com/vincent78/butil/global"
+	"github.com/vincent78/butil/logger"
+	"github.com/vincent78/butil/model"
+	"github.com/vincent78/butil/net/gchttp"
+	"github.com/vincent78/butil/utils/strUtil"
 	io "io"
 	"net/http"
 	"strconv"

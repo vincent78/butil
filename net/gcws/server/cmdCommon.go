@@ -1,7 +1,7 @@
 package server
 
 import (
-	"gitee.com/vincent78/gcutil/net/gcws/common"
+	"github.com/vincent78/butil/net/gcws/common"
 )
 
 //func ParseCmdInput[T any](source interface{}, obj T) *model.ErrorModel {

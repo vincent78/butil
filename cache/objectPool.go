@@ -1,7 +1,7 @@
 package cache
 
 import (
-	"gitee.com/vincent78/gcutil/utils/objUtil"
+	"github.com/vincent78/butil/utils/objUtil"
 	"sync"
 )
 

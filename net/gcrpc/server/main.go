@@ -1,7 +1,7 @@
 package main
 
 import (
-	pb "gitee.com/vincent78/gcutil/net/gcrpc/proto.pb"
+	pb "github.com/vincent78/butil/net/gcrpc/proto.pb"
 	"golang.org/x/net/context"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/reflection"
