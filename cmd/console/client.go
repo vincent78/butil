@@ -50,7 +50,7 @@ func (c *Client) DoHandler(apName string, args ...string) model.RespModel {
 				case msg := <-ch:
 					if c.printer != nil {
 						str := fmt.Sprintf("%v%v", msg, string(Newline))
-						fmt.Fprintf(c.printer, str)
+						fmt.Fprintf(c.printer, str, "", "")
 						logger.Info("cmd[%v]: %v", key, str)
 					}
 				}
