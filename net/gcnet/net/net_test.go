@@ -12,5 +12,8 @@ func TestNetServer(t *testing.T) {
 	})
 
 	ch := make(chan *ServerListener)
-	Server(NewNetConfig("0.0.0.0", 7003), ch)
+	err := Server(NewNetConfig("0.0.0.0", 7003), ch)
+	if err != nil {
+		return
+	}
 }

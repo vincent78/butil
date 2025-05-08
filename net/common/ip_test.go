@@ -1,4 +1,4 @@
-package gcnet
+package common
 
 import (
 	"testing"
@@ -10,5 +10,5 @@ func TestIp(t *testing.T) {
 		t.Error(err)
 	}
 
-	t.Logf(ip.String())
+	t.Logf("%v", ip.String())
 }

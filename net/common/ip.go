@@ -1,4 +1,4 @@
-package gcnet
+package common
 
 import (
 	"encoding/json"
