@@ -3,14 +3,14 @@ package numberUtil
 import (
 	sj "encoding/json"
 	j "github.com/json-iterator/go"
-	"github.com/vincent78/butil/logger"
+	"github.com/vincent78/butil/logger/logger1"
 	"strconv"
 )
 
 func Int64ToInt(n1 int64) int {
 	t := strconv.FormatInt(n1, 10)
 	if r, e := strconv.Atoi(t); e != nil {
-		logger.Error("Int64ToInt error: %v", e.Error())
+		logger1.Error("Int64ToInt error: %v", e.Error())
 		return 0
 	} else {
 		return r

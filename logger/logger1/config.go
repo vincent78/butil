@@ -1,4 +1,4 @@
-package logger
+package logger1
 
 import (
 	"github.com/vincent78/butil/dup"

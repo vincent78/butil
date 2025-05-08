@@ -3,7 +3,7 @@ package console
 import (
 	"context"
 	"fmt"
-	"github.com/vincent78/butil/logger"
+	"github.com/vincent78/butil/logger/logger1"
 	"github.com/vincent78/butil/model"
 	"io"
 	"strings"
@@ -38,7 +38,7 @@ func (c *Client) RegisterApiHandler(api, name string, f ApiHandleFunc) {
 
 func (c *Client) DoHandler(apName string, args ...string) model.RespModel {
 	key := c.getKey(apName)
-	logger.Info("handler: %v - %v", key, args)
+	logger1.Info("handler: %v - %v", key, args)
 	if f, exist := c.apiHandler[key]; exist && f != nil {
 		ch := make(chan string)
 		ctx := context.Background()
@@ -51,13 +51,13 @@ func (c *Client) DoHandler(apName string, args ...string) model.RespModel {
 					if c.printer != nil {
 						str := fmt.Sprintf("%v%v", msg, string(Newline))
 						fmt.Fprintf(c.printer, str, "", "")
-						logger.Info("cmd[%v]: %v", key, str)
+						logger1.Info("cmd[%v]: %v", key, str)
 					}
 				}
 			}
 		}(ctx)
 		m := f(ctx, ch, args...)
-		logger.Info("cmd[%v] result: %v", key, m)
+		logger1.Info("cmd[%v] result: %v", key, m)
 		if m.Code == model.SUCCESS {
 			if m.Data != nil {
 				ch <- fmt.Sprintf("%v", m.Data)
@@ -69,7 +69,7 @@ func (c *Client) DoHandler(apName string, args ...string) model.RespModel {
 		return m
 	} else {
 		m := ErrorNoHandler(key)
-		logger.Info("cmd[%v] result: %v", key, m)
+		logger1.Info("cmd[%v] result: %v", key, m)
 		return model.FailureRespWithErrModel(m)
 	}
 }

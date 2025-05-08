@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"github.com/mattn/go-colorable"
 	"github.com/peterh/liner"
-	"github.com/vincent78/butil/logger"
+	"github.com/vincent78/butil/logger/logger1"
 	"github.com/vincent78/butil/model"
 	"github.com/vincent78/butil/utils/fileUtil"
 	"io"
@@ -137,9 +137,9 @@ func (c *Console) clearHistory() {
 	c.history = nil
 	c.prompter.ClearHistory()
 	if err := os.Remove(c.histPath); err != nil {
-		logger.Error("can't delete history file: %v", err)
+		logger1.Error("can't delete history file: %v", err)
 	} else {
-		logger.Debug("history file deleted")
+		logger1.Debug("history file deleted")
 	}
 }
 

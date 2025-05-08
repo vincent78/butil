@@ -3,22 +3,22 @@ package gcgin
 import (
 	"fmt"
 	"github.com/vincent78/butil/global"
-	"github.com/vincent78/butil/logger"
+	"github.com/vincent78/butil/logger/logger1"
 	"regexp"
 	"testing"
 )
 
 func initLogger() {
 	path := "/tmp/http"
-	conf := logger.NewLogConfig()
+	conf := logger1.NewLogConfig()
 	conf.Path = path
-	logger.NewLogger(conf)
+	logger1.NewLogger(conf)
 
-	conf = logger.NewLogConfig()
+	conf = logger1.NewLogConfig()
 	conf.Path = path
 	conf.Name = global.LogFileHttpName
 	conf.ToConsole = false
-	logger.NewLogger(conf)
+	logger1.NewLogger(conf)
 }
 
 func TestServer(t *testing.T) {

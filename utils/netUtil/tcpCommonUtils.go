@@ -1,7 +1,7 @@
 package netUtil
 
 import (
-	"github.com/vincent78/butil/logger"
+	"github.com/vincent78/butil/logger/logger1"
 	"net"
 	"time"
 )
@@ -40,7 +40,7 @@ func NewTCPTransfer(conn net.Conn) *TCPTransfer {
 func ValidateTCPAddr(tcpAddr string) (addr *net.TCPAddr, err error) {
 	// 校验地址格式是否正确
 	if addr, err = net.ResolveTCPAddr(TCP, tcpAddr); err != nil {
-		logger.Error("tcp resolve ip %v failed,errMsg: %v", tcpAddr, err)
+		logger1.Error("tcp resolve ip %v failed,errMsg: %v", tcpAddr, err)
 		return nil, err
 	}
 	return addr, nil
@@ -52,7 +52,7 @@ func GetTCPAddr(addr string) (*net.TCPAddr, error) {
 	var tcpAddr *net.TCPAddr
 	var err error
 	if tcpAddr, err = net.ResolveTCPAddr(TCP, addr); err != nil {
-		logger.Error("tcp resolve ip : %v failed,err: %v", addr, err)
+		logger1.Error("tcp resolve ip : %v failed,err: %v", addr, err)
 		return tcpAddr, err
 	}
 	return tcpAddr, err

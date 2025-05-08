@@ -5,7 +5,7 @@ import (
 	"bytes"
 	"encoding/binary"
 	"github.com/golang/protobuf/proto"
-	"github.com/vincent78/butil/logger"
+	"github.com/vincent78/butil/logger/logger1"
 	gcnet "github.com/vincent78/butil/net/gcnet/proto.pb"
 	"net"
 )
@@ -22,16 +22,16 @@ func RegistNetHandler(cmd string, f NetHandler) {
 
 func init() {
 	RegistNetHandler("unknown", func(data interface{}, conn net.Conn) {
-		logger.Error("net[%v] receive unknown command. data: %v", conn.RemoteAddr(), data)
+		logger1.Error("net[%v] receive unknown command. data: %v", conn.RemoteAddr(), data)
 	})
 	RegistNetHandler("stop", func(data interface{}, conn net.Conn) {
-		logger.Error("net[%v] receive unknown command. data: %v", conn.RemoteAddr(), data)
+		logger1.Error("net[%v] receive unknown command. data: %v", conn.RemoteAddr(), data)
 	})
 }
 
 // 接收消息
 func readMessageOld(conn net.Conn) {
-	logger.Info("new connect: %v", conn.RemoteAddr())
+	logger1.Info("new connect: %v", conn.RemoteAddr())
 	ClientMap[conn.RemoteAddr()] = conn
 	reader := bufio.NewReader(conn)
 	//读消息
@@ -44,7 +44,7 @@ func readMessageOld(conn net.Conn) {
 				conn.Write([]byte("数据格式有误，请重新发"))
 			}
 			//buf= make([]byte, 10240,10240)//前两个字节表示本次请求body为长度
-			logger.Debug("receive %s %+v \n", conn.RemoteAddr(), p)
+			logger1.Debug("receive %s %+v \n", conn.RemoteAddr(), p)
 			cmd := p.Cmd
 			if cmd == "" {
 				cmd = "unknown"

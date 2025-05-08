@@ -2,7 +2,7 @@ package client
 
 import (
 	"github.com/vincent78/butil/global"
-	"github.com/vincent78/butil/logger"
+	"github.com/vincent78/butil/logger/logger1"
 	"github.com/vincent78/butil/net/gcws/common"
 )
 
@@ -13,7 +13,7 @@ type CloseCMDHandler struct {
 }
 
 func (h *CloseCMDHandler) doAction(c *WSClient, cmd *common.WSCmd) {
-	logger.InfoByName(global.LogFileWSCName, c.NormalLogger("do close action"))
+	logger1.InfoByName(global.LogFileWSCName, c.NormalLogger("do close action"))
 	c.Resp(cmd.Success("ok"))
 	c.url = nil
 	c.DisConn()

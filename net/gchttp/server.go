@@ -2,7 +2,7 @@ package gchttp
 
 import (
 	"fmt"
-	"github.com/vincent78/butil/logger"
+	"github.com/vincent78/butil/logger/logger1"
 	"github.com/vincent78/butil/model"
 	"github.com/vincent78/butil/token"
 	gctime "github.com/vincent78/butil/utils/timeUtil"
@@ -35,14 +35,14 @@ func RegistHandle(name string, handler HttpHandler) {
 
 func StartServer(addr string, c chan struct{}) {
 	if addr == "" {
-		logger.Error("StartServer: the input params can't be nil.")
+		logger1.Error("StartServer: the input params can't be nil.")
 		return
 	}
 	for key, handler := range httpRoutes {
-		logger.Debug("gchttp register the handler: %v", key)
+		logger1.Debug("gchttp register the handler: %v", key)
 		http.HandleFunc(key, handler)
 	}
-	logger.Debug("gchttp server : %v", addr)
+	logger1.Debug("gchttp server : %v", addr)
 	server := &http.Server{
 		ReadTimeout:  30 * time.Second,
 		WriteTimeout: 30 * time.Second,
@@ -63,17 +63,17 @@ openssl req -new -x509 -key server.key -out server.crt -days 365
 */
 func StartTLSServer(addr, crt, key string) {
 	if crt == "" || key == "" || addr == "" {
-		logger.Error("StartTLSServer: the input params can't be nil.")
+		logger1.Error("StartTLSServer: the input params can't be nil.")
 		return
 	}
 	for key, handler := range httpRoutes {
 		for key, handler := range httpRoutes {
-			logger.Debug("register the https handler: %v", key)
+			logger1.Debug("register the https handler: %v", key)
 			http.HandleFunc(key, handler)
 		}
 		http.HandleFunc(key, handler)
 	}
-	logger.Debug("https server : %v", addr)
+	logger1.Debug("https server : %v", addr)
 	server := &http.Server{
 		Addr:         addr,
 		ReadTimeout:  5 * time.Second,
@@ -96,7 +96,7 @@ func SetTextRep(w http.ResponseWriter) {
 
 func FailureResp(w http.ResponseWriter, code int, msg string) {
 	w.WriteHeader(code)
-	logger.Error("%v - %v", code, msg)
+	logger1.Error("%v - %v", code, msg)
 	io.WriteString(w, msg)
 }
 

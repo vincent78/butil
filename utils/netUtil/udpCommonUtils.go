@@ -1,7 +1,7 @@
 package netUtil
 
 import (
-	"github.com/vincent78/butil/logger"
+	"github.com/vincent78/butil/logger/logger1"
 	"net"
 )
 
@@ -29,7 +29,7 @@ func NewUDPTransfer(conn *net.UDPConn) *UDPTransfer {
 func ValidateUDPAddr(udpAddr string) (addr *net.UDPAddr, err error) {
 	// 校验地址格式是否正确
 	if addr, err = net.ResolveUDPAddr(UDP, udpAddr); err != nil {
-		logger.Error("udp resolve ip `%s` failed, errMsg: %s", udpAddr, err.Error())
+		logger1.Error("udp resolve ip `%s` failed, errMsg: %s", udpAddr, err.Error())
 		return nil, err
 	}
 	return addr, nil

@@ -4,7 +4,7 @@ import (
 	"bufio"
 	"encoding/hex"
 	"fmt"
-	"github.com/vincent78/butil/logger"
+	"github.com/vincent78/butil/logger/logger1"
 	"io"
 	"net"
 )
@@ -16,9 +16,9 @@ func Server(conf *NetConfig, c chan *ServerListener) error {
 	if err != nil {
 		return err
 	}
-	logger.Info("==============================================")
-	logger.Info("tcp listen at : %v", lisAddr)
-	logger.Info("==============================================")
+	logger1.Info("==============================================")
+	logger1.Info("tcp listen at : %v", lisAddr)
+	logger1.Info("==============================================")
 	go func() {
 		for {
 			conn, err := listener.Accept()
@@ -26,7 +26,7 @@ func Server(conf *NetConfig, c chan *ServerListener) error {
 				if err == io.EOF {
 					return
 				}
-				logger.Error("server accept error:%v", err)
+				logger1.Error("server accept error:%v", err)
 				continue
 			}
 
@@ -34,7 +34,7 @@ func Server(conf *NetConfig, c chan *ServerListener) error {
 				go readMessageOld(conn)
 			} else {
 				l := NewServerListener(conn.RemoteAddr().String())
-				logger.Info("==== connected: %v", l.LogPrefix)
+				logger1.Info("==== connected: %v", l.LogPrefix)
 				c <- l
 				go readMessage(conn, l, conf)
 				go writeMessage(conn, l, conf)
@@ -45,9 +45,9 @@ func Server(conf *NetConfig, c chan *ServerListener) error {
 }
 
 func writeMessage(conn net.Conn, l *ServerListener, conf *NetConfig) {
-	logger.Info("prepare write for: %v", l.LogPrefix)
+	logger1.Info("prepare write for: %v", l.LogPrefix)
 	defer func() {
-		logger.Info("close write for: %v", l.LogPrefix)
+		logger1.Info("close write for: %v", l.LogPrefix)
 	}()
 
 	for {
@@ -56,9 +56,9 @@ func writeMessage(conn net.Conn, l *ServerListener, conf *NetConfig) {
 
 			_, err := conn.Write(bytes)
 			if err != nil {
-				logger.Error("<<--[%v] error: %x", l.LogPrefix, bytes)
+				logger1.Error("<<--[%v] error: %x", l.LogPrefix, bytes)
 			} else {
-				logger.Debug("<<--[%v]: %x", l.LogPrefix, bytes)
+				logger1.Debug("<<--[%v]: %x", l.LogPrefix, bytes)
 			}
 		case <-l.CloseCH:
 			return
@@ -67,9 +67,9 @@ func writeMessage(conn net.Conn, l *ServerListener, conf *NetConfig) {
 }
 
 func readMessage(conn net.Conn, l *ServerListener, conf *NetConfig) {
-	logger.Info("prepare read for: %v", l.LogPrefix)
+	logger1.Info("prepare read for: %v", l.LogPrefix)
 	defer func() {
-		logger.Info("close read for: %v", l.LogPrefix)
+		logger1.Info("close read for: %v", l.LogPrefix)
 	}()
 	reader := bufio.NewReader(conn)
 	for {
@@ -79,7 +79,7 @@ func readMessage(conn net.Conn, l *ServerListener, conf *NetConfig) {
 			if err != io.EOF {
 				l.ErrorCH <- err
 				if netErr, ok := err.(net.Error); ok && netErr.Timeout() {
-					logger.Error("read timeout:", err)
+					logger1.Error("read timeout:", err)
 				}
 			} else {
 				l.Close()
@@ -88,7 +88,7 @@ func readMessage(conn net.Conn, l *ServerListener, conf *NetConfig) {
 		}
 		if n > 0 {
 			buf := recvBuf[:n]
-			logger.Debug("-->>[%v]: %v", l.LogPrefix, hex.EncodeToString(buf))
+			logger1.Debug("-->>[%v]: %v", l.LogPrefix, hex.EncodeToString(buf))
 			l.ReceiveCH <- buf
 		}
 	}

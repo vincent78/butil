@@ -2,7 +2,7 @@ package common
 
 import (
 	"github.com/vincent78/butil/global"
-	"github.com/vincent78/butil/logger"
+	"github.com/vincent78/butil/logger/logger1"
 	"github.com/vincent78/butil/timewheel"
 	"time"
 )
@@ -51,7 +51,7 @@ const (
 
 func InitTimewheel(logName string) {
 	if global.Timewheel == nil {
-		logger.DebugByName(logName, "init timewheel")
+		logger1.DebugByName(logName, "init timewheel")
 		global.Timewheel, _ = timewheel.NewTimeWheel(1*time.Second, 360, timewheel.TickSafeMode())
 		global.Timewheel.Start()
 	}

@@ -5,7 +5,7 @@ import (
 	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
 	"github.com/vincent78/butil/global"
-	"github.com/vincent78/butil/logger"
+	"github.com/vincent78/butil/logger/logger1"
 	itcp "github.com/vincent78/butil/net/gcgin/intercepter"
 	"github.com/vincent78/butil/net/gcgin/model"
 	"github.com/vincent78/butil/sys"
@@ -38,7 +38,7 @@ func InitEngine(debug bool) *gin.Engine {
 		MaxAge:           12 * time.Hour,
 	}
 
-	logger.DebugByName(global.LogFileHttpName, "gin config")
+	logger1.DebugByName(global.LogFileHttpName, "gin config")
 
 	e.Use(cors.New(config))
 	e.Use(itcp.GinRecovery())
@@ -74,14 +74,14 @@ func StartServer(addr string, c chan struct{}, g *gin.Engine) {
 	g.HandleMethodNotAllowed = true
 	g.NoRoute(recover400)
 	g.Use(recover500)
-	logger.InfoByName(global.LogFileHttpName, "------------------------------------------")
-	logger.InfoByName(global.LogFileHttpName, "web port:\t\t %v", addr)
-	logger.InfoByName(global.LogFileHttpName, "current pid: %v", os.Getpid())
-	logger.InfoByName(global.LogFileHttpName, "------------------------------------------")
+	logger1.InfoByName(global.LogFileHttpName, "------------------------------------------")
+	logger1.InfoByName(global.LogFileHttpName, "web port:\t\t %v", addr)
+	logger1.InfoByName(global.LogFileHttpName, "current pid: %v", os.Getpid())
+	logger1.InfoByName(global.LogFileHttpName, "------------------------------------------")
 
 	err := g.RunListener(l)
 	if err != nil {
-		logger.ErrorByName(global.LogFileHttpName, "start server error: %v", err)
+		logger1.ErrorByName(global.LogFileHttpName, "start server error: %v", err)
 	}
 }
 
@@ -119,7 +119,7 @@ func recover400(c *gin.Context) {
 func recover500(c *gin.Context) {
 	defer func() {
 		if r := recover(); r != nil {
-			logger.ErrorByName(global.LogFileHttpName, "panic: %v\n", r)
+			logger1.ErrorByName(global.LogFileHttpName, "panic: %v\n", r)
 			//debug.PrintStack()
 			c.JSON(200, gin.H{
 				"code":    500,

@@ -1,7 +1,7 @@
 package angleUtil
 
 import (
-	"github.com/vincent78/butil/logger"
+	"github.com/vincent78/butil/logger/logger1"
 	"github.com/vincent78/butil/utils/mathUtil"
 	"math"
 )
@@ -59,21 +59,21 @@ func RoundAngle(angle int32) int16 {
 // param: offsetAngle 偏差范围 （+-）
 // return: targetHeading,ok 托盘相对于地图的角度（小车在转动时会随着托盘一起转） , 是否需要小车进行换向（false : 不需要换向， true ： 需要换向）
 func CalcTargetHeading(robotHeading int16, palletAngle int16, rackHeading int16, targetRackHeading int16, offsetAngle int16) (targetHeading int16, isNeedChangePod bool) {
-	logger.Info("CalcTargetHeading [robotHeading : %d,palletAngle : %d,rackHeading : %d,targetRackHeading : %d,offsetAngle : %d,]", robotHeading, palletAngle, robotHeading, targetHeading, offsetAngle)
+	logger1.Info("CalcTargetHeading [robotHeading : %d,palletAngle : %d,rackHeading : %d,targetRackHeading : %d,offsetAngle : %d,]", robotHeading, palletAngle, robotHeading, targetHeading, offsetAngle)
 	// 计算当前货架角度差值
 	var differRackHeading int16 = RoundAngle(AddInt16(targetRackHeading, -rackHeading))
-	logger.Info("rack [differRackHeading : %d ]", differRackHeading)
+	logger1.Info("rack [differRackHeading : %d ]", differRackHeading)
 	offsetAngle = mathUtil.AbsInt16(offsetAngle)
 	// 说明当前货架方向不需要发生变化
 	var palletHeading int16 = CalcCurPalletHeading(robotHeading, palletAngle)
-	logger.Info("pallet [palletHeading : %d ]", palletHeading)
+	logger1.Info("pallet [palletHeading : %d ]", palletHeading)
 	if differRackHeading == AngleZero || mathUtil.BetweenInt16(differRackHeading, -offsetAngle, offsetAngle) {
 		return palletHeading, false
 	}
 	var targetHeadingTemp int32 = AddInt16(differRackHeading, palletHeading)
-	logger.Info("pallet old [targetHeading : %d ]", targetHeading)
+	logger1.Info("pallet old [targetHeading : %d ]", targetHeading)
 	targetHeading = RoundAngle(targetHeadingTemp)
-	logger.Info("pallet new [targetHeading : %d ]", targetHeading)
+	logger1.Info("pallet new [targetHeading : %d ]", targetHeading)
 	if targetHeading == AngleCircleHalf && robotHeading > 0 {
 		return AngleCircleHalf, true
 	}
@@ -126,9 +126,9 @@ func CalcMapTwoPointsHeading(startX int, startY int, endX int, endY int) (headin
 		}
 	}
 	tanX := float64(endY-startY) / float64(endX-startX)
-	logger.Info("tanX : %v", tanX)
+	logger1.Info("tanX : %v", tanX)
 	atan := math.Atan(tanX) / (math.Pi / 180)
-	logger.Info("path old [heading : %v ]", atan)
+	logger1.Info("path old [heading : %v ]", atan)
 	heading = RoundAngle(int32(atan * 100))
 	if startX > endX {
 		if startY > endY {
@@ -137,7 +137,7 @@ func CalcMapTwoPointsHeading(startX int, startY int, endX int, endY int) (headin
 			heading = heading + AngleCircleHalf
 		}
 	}
-	logger.Info("path new [heading : %v ]", heading)
+	logger1.Info("path new [heading : %v ]", heading)
 	return heading
 }
 

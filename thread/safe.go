@@ -2,7 +2,7 @@ package thread
 
 import (
 	"fmt"
-	"github.com/vincent78/butil/logger"
+	"github.com/vincent78/butil/logger/logger1"
 	"github.com/vincent78/butil/sys"
 )
 
@@ -24,8 +24,8 @@ func GoWithRecover(goroutine func(), customRecover func(err interface{})) {
 }
 
 func defaultRecoverGoroutine(err interface{}) {
-	logger.Error("Error in Go routine: %v", err)
-	logger.Error("Stack: %s", sys.Stack())
+	logger1.Error("Error in Go routine: %v", err)
+	logger1.Error("Stack: %s", sys.Stack())
 }
 
 // OperationWithRecover wrap a backoff operation in a Recover.

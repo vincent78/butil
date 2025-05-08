@@ -2,7 +2,7 @@ package lifecycle
 
 import (
 	"github.com/urfave/cli/v2"
-	"github.com/vincent78/butil/logger"
+	"github.com/vincent78/butil/logger/logger1"
 	"github.com/vincent78/butil/sys"
 )
 
@@ -31,34 +31,34 @@ func init() {
 }
 
 func AppInit(model *AppLifecycleInitModel) {
-	logger.Info("---- appInit ----")
+	logger1.Info("---- appInit ----")
 	AppBaseInit()
 	sys.ManualGC()
 	close(model.Finished)
 }
 
 func AppPrepare() {
-	logger.Info("---- appPrepare ----")
+	logger1.Info("---- appPrepare ----")
 	if AppBasePrepared() {
 		sys.ManualGC()
-		logger.Info("App Has Prepared")
+		logger1.Info("App Has Prepared")
 		AppLifecycleWorkBegin <- true
 	}
 }
 
 func AppPause(ctx *cli.Context) {
-	logger.Info("---- appPause ----")
+	logger1.Info("---- appPause ----")
 	AppBasePause()
 	sys.ManualGC()
 }
 
 func AppActive(ctx *cli.Context) {
-	logger.Info("---- appActive ----")
+	logger1.Info("---- appActive ----")
 	AppBaseActive()
 	sys.ManualGC()
 }
 
 func AppDestroy(ctx *cli.Context) {
-	logger.Info("---- appDestroy ----")
+	logger1.Info("---- appDestroy ----")
 	AppBaseDestory()
 }

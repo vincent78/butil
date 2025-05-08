@@ -2,7 +2,7 @@ package thread
 
 import (
 	"fmt"
-	"github.com/vincent78/butil/logger"
+	"github.com/vincent78/butil/logger/logger1"
 	"testing"
 	"time"
 )
@@ -10,7 +10,7 @@ import (
 func TestPool(t *testing.T) {
 	pool, err := NewPool(20, 5)
 	if err != nil {
-		logger.Error("the Pool create error : %v", err.Error())
+		logger1.Error("the Pool create error : %v", err.Error())
 		return
 	}
 	var testFunc = func(arg interface{}) error {
@@ -22,7 +22,7 @@ func TestPool(t *testing.T) {
 	for i := 0; i < 50; i++ {
 		err := pool.Submit(testFunc, fmt.Sprintf("index %v", i))
 		if err != nil {
-			logger.Error("the task error : %v", err.Error())
+			logger1.Error("the task error : %v", err.Error())
 			break
 		}
 	}

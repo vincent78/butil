@@ -5,7 +5,7 @@ import (
 	"fmt"
 	"github.com/gorilla/websocket"
 	"github.com/vincent78/butil/global"
-	"github.com/vincent78/butil/logger"
+	"github.com/vincent78/butil/logger/logger1"
 	"github.com/vincent78/butil/net/gcws/common"
 	"github.com/vincent78/butil/timewheel"
 	"github.com/vincent78/butil/token"
@@ -65,7 +65,7 @@ func (c *WSServer) Send(cmd *common.WSCmd) {
 func (c *WSServer) Dispose() {
 	defer func() {
 		if r := recover(); r != nil {
-			logger.ErrorByName(global.LogFileWSSName, c.NormalLogger("dispose with error: %v", r))
+			logger1.ErrorByName(global.LogFileWSSName, c.NormalLogger("dispose with error: %v", r))
 		}
 	}()
 	if c.cancelFunc != nil {
@@ -87,14 +87,14 @@ func (c *WSServer) Dispose() {
 // ensures that there is at most one reader on a connection by executing all
 // reads from this goroutine.
 func (c *WSServer) readPump() {
-	logger.InfoByName(global.LogFileWSSName, c.NormalLogger("readPump start"))
+	logger1.InfoByName(global.LogFileWSSName, c.NormalLogger("readPump start"))
 	defer func() {
-		logger.InfoByName(global.LogFileWSSName, c.NormalLogger("readPump end"))
+		logger1.InfoByName(global.LogFileWSSName, c.NormalLogger("readPump end"))
 	}()
 
 	defer func() {
 		if r := recover(); r != nil {
-			logger.ErrorByName(global.LogFileWSSName, c.NormalLogger("readPump: %v", r))
+			logger1.ErrorByName(global.LogFileWSSName, c.NormalLogger("readPump: %v", r))
 		}
 	}()
 
@@ -107,7 +107,7 @@ func (c *WSServer) readPump() {
 				websocket.CloseGoingAway,
 				websocket.CloseAbnormalClosure,
 			) {
-				logger.ErrorByName(global.LogFileWSSName, "error: %v", err)
+				logger1.ErrorByName(global.LogFileWSSName, "error: %v", err)
 				continue
 			}
 			HubManager.unregister <- c
@@ -116,23 +116,23 @@ func (c *WSServer) readPump() {
 
 		c.lastRespTime = timeUtil.NowMillis()
 		if mType != websocket.TextMessage {
-			logger.WarnByName(global.LogFileWSSName, c.NormalLogger("receive msg type %v - %v", mType, strUtil.Bytes2String(message)))
+			logger1.WarnByName(global.LogFileWSSName, c.NormalLogger("receive msg type %v - %v", mType, strUtil.Bytes2String(message)))
 			continue
 		} else {
-			logger.DebugByName(global.LogFileWSSName, c.InLogger("%v", strUtil.Bytes2String(message)))
+			logger1.DebugByName(global.LogFileWSSName, c.InLogger("%v", strUtil.Bytes2String(message)))
 			if cmd, err := common.ParseCmd(message); err == nil {
 				if cmd.Cmd == "" && cmd.PID != "" {
-					logger.DebugByName(global.LogFileWSSName, c.NormalLogger("receive the resp without handler"))
+					logger1.DebugByName(global.LogFileWSSName, c.NormalLogger("receive the resp without handler"))
 				} else {
 					key := cmd.HandlerKey()
 					if handler, exist := c.cmdHandlers[key]; exist && handler != nil {
 						handler.DoAction(c, cmd)
 					} else {
-						logger.ErrorByName(global.LogFileWSSName, c.NormalLogger("the cmd[%v] handler is not exist or not current", cmd.HandlerKey()))
+						logger1.ErrorByName(global.LogFileWSSName, c.NormalLogger("the cmd[%v] handler is not exist or not current", cmd.HandlerKey()))
 					}
 				}
 			} else {
-				logger.ErrorByName(global.LogFileWSSName, c.NormalLogger("cmd parse error: %v ", err.ToString()))
+				logger1.ErrorByName(global.LogFileWSSName, c.NormalLogger("cmd parse error: %v ", err.ToString()))
 				if cmd.Cmd != "" {
 					c.Send(cmd.FailureByErrModel(err))
 				}
@@ -147,14 +147,14 @@ func (c *WSServer) readPump() {
 // application ensures that there is at most one writer to a connection by
 // executing all writes from this goroutine.
 func (c *WSServer) writePump() {
-	logger.InfoByName(global.LogFileWSSName, c.NormalLogger("writePump start"))
+	logger1.InfoByName(global.LogFileWSSName, c.NormalLogger("writePump start"))
 	defer func() {
-		logger.InfoByName(global.LogFileWSSName, c.NormalLogger("writePump end"))
+		logger1.InfoByName(global.LogFileWSSName, c.NormalLogger("writePump end"))
 	}()
 
 	defer func() {
 		if r := recover(); r != nil {
-			logger.ErrorByName(global.LogFileWSSName, c.NormalLogger("writePump: %v", r))
+			logger1.ErrorByName(global.LogFileWSSName, c.NormalLogger("writePump: %v", r))
 		}
 	}()
 
@@ -163,9 +163,9 @@ func (c *WSServer) writePump() {
 		case message, _ := <-c.writeCH:
 			err := c.conn.WriteMessage(websocket.TextMessage, message)
 			if err != nil {
-				logger.ErrorByName(global.LogFileWSSName, c.NormalLogger(err.Error()))
+				logger1.ErrorByName(global.LogFileWSSName, c.NormalLogger(err.Error()))
 			} else {
-				logger.DebugByName(global.LogFileWSSName, c.OutLogger(strUtil.Bytes2String(message)))
+				logger1.DebugByName(global.LogFileWSSName, c.OutLogger(strUtil.Bytes2String(message)))
 			}
 		case <-c.ctx.Done():
 			return
@@ -178,7 +178,7 @@ func serveWs(w http.ResponseWriter, r *http.Request, f func(s *WSServer)) {
 	tk := r.Header.Get(global.RequestTokenKey)
 	conn, err := upgrader.Upgrade(w, r, nil)
 	if err != nil {
-		logger.ErrorByName(global.LogFileWSSName, err.Error())
+		logger1.ErrorByName(global.LogFileWSSName, err.Error())
 		return
 	}
 
@@ -197,7 +197,7 @@ func serveWs(w http.ResponseWriter, r *http.Request, f func(s *WSServer)) {
 	go server.readPump()
 
 	conn.SetCloseHandler(func(code int, text string) error {
-		logger.InfoByName(global.LogFileWSSName, server.NormalLogger("handle close action: %v - %v", code, text))
+		logger1.InfoByName(global.LogFileWSSName, server.NormalLogger("handle close action: %v - %v", code, text))
 		HubManager.unregister <- server
 		return nil
 	})

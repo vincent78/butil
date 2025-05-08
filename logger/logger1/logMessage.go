@@ -1,4 +1,4 @@
-package logger
+package logger1
 
 type LogMessage struct {
 	Msg   string

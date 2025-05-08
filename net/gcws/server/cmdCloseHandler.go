@@ -2,7 +2,7 @@ package server
 
 import (
 	"github.com/vincent78/butil/global"
-	"github.com/vincent78/butil/logger"
+	"github.com/vincent78/butil/logger/logger1"
 	"github.com/vincent78/butil/net/gcws/common"
 )
 
@@ -15,6 +15,6 @@ type CloseCmdHandler struct {
 }
 
 func (h *CloseCmdHandler) DoAction(c *WSServer, _ *common.WSCmd) {
-	logger.InfoByName(global.LogFileWSSName, c.NormalLogger("do close action by client"))
+	logger1.InfoByName(global.LogFileWSSName, c.NormalLogger("do close action by client"))
 	HubManager.unregister <- c
 }

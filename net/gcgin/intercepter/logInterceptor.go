@@ -5,7 +5,7 @@ import (
 	"fmt"
 	"github.com/gin-gonic/gin"
 	"github.com/vincent78/butil/global"
-	"github.com/vincent78/butil/logger"
+	"github.com/vincent78/butil/logger/logger1"
 	"github.com/vincent78/butil/utils/mapUtil"
 	"github.com/vincent78/butil/utils/strUtil"
 	"io"
@@ -74,7 +74,7 @@ func GinLogger() gin.HandlerFunc {
 			obj["header"] = c.Request.Header
 		}
 
-		logger.InfoByName(global.LogFileHttpName, fmt.Sprintf("---> [%v][%v] :%v", GetClientIp(c), token, mapUtil.ToJsonStr(obj)))
+		logger1.InfoByName(global.LogFileHttpName, fmt.Sprintf("---> [%v][%v] :%v", GetClientIp(c), token, mapUtil.ToJsonStr(obj)))
 
 		c.Next()
 		cost := time.Since(start)
@@ -90,14 +90,14 @@ func GinLogger() gin.HandlerFunc {
 		} else {
 			respLogMap["body"] = "the path in black list,so there show nothing"
 		}
-		logger.InfoByName(global.LogFileHttpName, fmt.Sprintf("<--- [%v][%v] :%v", GetClientIp(c), token, mapUtil.ToJsonStr(respLogMap)))
+		logger1.InfoByName(global.LogFileHttpName, fmt.Sprintf("<--- [%v][%v] :%v", GetClientIp(c), token, mapUtil.ToJsonStr(respLogMap)))
 	}
 }
 
 func GenerateRequestBody(c *gin.Context) string {
 	bts, err := c.GetRawData()
 	if err != nil {
-		logger.DebugByName(global.LogFileHttpName, "failed to get request body")
+		logger1.DebugByName(global.LogFileHttpName, "failed to get request body")
 		return ""
 	}
 	c.Request.Body = io.NopCloser(bytes.NewBuffer(bts))

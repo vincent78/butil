@@ -5,7 +5,7 @@ import (
 	"context"
 	"github.com/gorilla/websocket"
 	"github.com/vincent78/butil/global"
-	"github.com/vincent78/butil/logger"
+	"github.com/vincent78/butil/logger/logger1"
 	"github.com/vincent78/butil/net/gcws/common"
 	"github.com/vincent78/butil/timewheel"
 	"github.com/vincent78/butil/token"
@@ -77,7 +77,7 @@ func (c *WSClient) Send(cmd *common.WSCmd) {
 func (c *WSClient) Conn() error {
 	common.InitTimewheel(global.LogFileWSCName)
 	urlStr := c.url.String()
-	logger.InfoByName(global.LogFileWSCName, "%v connecting to %s", c.LogPrefix(), urlStr)
+	logger1.InfoByName(global.LogFileWSCName, "%v connecting to %s", c.LogPrefix(), urlStr)
 	dialer := websocket.DefaultDialer
 	if c.ClientAddr != "" {
 		netDialer := &net.Dialer{}
@@ -96,7 +96,7 @@ func (c *WSClient) Conn() error {
 		c.ClientAddr = c.ClientAddr[strings.LastIndex(c.ClientAddr, ":"):]
 
 		c.conn.SetCloseHandler(func(code int, text string) error {
-			logger.InfoByName(global.LogFileWSCName, "%v handle close event: %v  -  %v", c.LogPrefix(), code, text)
+			logger1.InfoByName(global.LogFileWSCName, "%v handle close event: %v  -  %v", c.LogPrefix(), code, text)
 			return nil
 		})
 
@@ -105,30 +105,30 @@ func (c *WSClient) Conn() error {
 		if c.config.PingInterval > 0 {
 			c.pingTask = global.Timewheel.AddCron(pingPeriod, c.ping)
 		}
-		logger.InfoByName(global.LogFileWSCName, "%v connected: %v", c.LogPrefix(), urlStr)
+		logger1.InfoByName(global.LogFileWSCName, "%v connected: %v", c.LogPrefix(), urlStr)
 	}
 	return err
 }
 
 func (c *WSClient) sendPump() {
-	logger.DebugByName(global.LogFileWSCName, "%v: sendPump start", c.LogPrefix())
+	logger1.DebugByName(global.LogFileWSCName, "%v: sendPump start", c.LogPrefix())
 	defer func() {
-		logger.DebugByName(global.LogFileWSCName, "%v: sendPump end", c.LogPrefix())
+		logger1.DebugByName(global.LogFileWSCName, "%v: sendPump end", c.LogPrefix())
 	}()
 
 	defer func() {
 		if r := recover(); r != nil {
-			logger.Error("%v sendPump with error: %v", c.LogPrefix(), r)
+			logger1.Error("%v sendPump with error: %v", c.LogPrefix(), r)
 		}
 	}()
 	for {
 		select {
 		case bs := <-c.writeChan:
 			if bs != nil && len(bs) > 0 {
-				logger.DebugByName(global.LogFileWSCName, "%v: %v", c.LogPrefixOut(), strUtil.Bytes2String(bs))
+				logger1.DebugByName(global.LogFileWSCName, "%v: %v", c.LogPrefixOut(), strUtil.Bytes2String(bs))
 				err := c.conn.WriteMessage(websocket.TextMessage, bs)
 				if err != nil {
-					logger.ErrorByName(global.LogFileWSCName, "%v send error: %v", c.LogPrefix(), err)
+					logger1.ErrorByName(global.LogFileWSCName, "%v send error: %v", c.LogPrefix(), err)
 				}
 			}
 
@@ -139,14 +139,14 @@ func (c *WSClient) sendPump() {
 }
 
 func (c *WSClient) receivePump() {
-	logger.DebugByName(global.LogFileWSCName, "%v: receivePump start", c.LogPrefix())
+	logger1.DebugByName(global.LogFileWSCName, "%v: receivePump start", c.LogPrefix())
 	defer func() {
-		logger.DebugByName(global.LogFileWSCName, "%v: receivePump end", c.LogPrefix())
+		logger1.DebugByName(global.LogFileWSCName, "%v: receivePump end", c.LogPrefix())
 	}()
 
 	defer func() {
 		if r := recover(); r != nil {
-			logger.Error("%v receivePump with error: %v", c.LogPrefix(), r)
+			logger1.Error("%v receivePump with error: %v", c.LogPrefix(), r)
 		}
 	}()
 	for {
@@ -157,14 +157,14 @@ func (c *WSClient) receivePump() {
 				websocket.CloseGoingAway,
 				websocket.CloseAbnormalClosure,
 			) {
-				logger.ErrorByName(global.LogFileWSCName, "error: %v", err)
+				logger1.ErrorByName(global.LogFileWSCName, "error: %v", err)
 				continue
 			}
 			if c.url != nil {
 				global.Timewheel.AfterFunc(time.Second, func() {
 					_, err := c.reConn()
 					if err != nil {
-						logger.ErrorByName(global.LogFileWSCName, "reconn error: %v", err)
+						logger1.ErrorByName(global.LogFileWSCName, "reconn error: %v", err)
 					}
 				})
 			}
@@ -172,16 +172,16 @@ func (c *WSClient) receivePump() {
 		}
 
 		if mType != websocket.TextMessage {
-			logger.WarnByName(global.LogFileWSCName, "%v: receive the msg type - %v", mType)
+			logger1.WarnByName(global.LogFileWSCName, "%v: receive the msg type - %v", mType)
 			continue
 		}
 
 		message = bytes.TrimSpace(message)
-		logger.DebugByName(global.LogFileWSCName, "%v: %v", c.LogPrefixIn(), strUtil.Bytes2String(message))
+		logger1.DebugByName(global.LogFileWSCName, "%v: %v", c.LogPrefixIn(), strUtil.Bytes2String(message))
 		c.lastRespTime = timeUtil.NowMillis()
 		cmd, em := common.ParseCmd(message)
 		if em != nil {
-			logger.WarnByName(global.LogFileWSCName, "%v parseCmd[ %v ] error: %v", c.LogPrefix(), strUtil.Bytes2String(message), em)
+			logger1.WarnByName(global.LogFileWSCName, "%v parseCmd[ %v ] error: %v", c.LogPrefix(), strUtil.Bytes2String(message), em)
 			if cmd.PID == "" {
 				c.Resp(cmd.FailureByErrModel(common.ErrorWSMParseCmd("")))
 			}
@@ -195,20 +195,20 @@ func (c *WSClient) reset(dialer *websocket.Dialer, urlstr string, reqHeader http
 	conn, _, err := dialer.Dial(urlstr, reqHeader)
 	currNum := 0
 	if err != nil {
-		logger.WarnByName(global.LogFileWSCName, "%v connect error: %v ", c.LogPrefix(), err.Error())
+		logger1.WarnByName(global.LogFileWSCName, "%v connect error: %v ", c.LogPrefix(), err.Error())
 		tick := time.NewTicker(time.Duration(config.ConnRetryInterval) * time.Second)
 		for {
 			select {
 			case <-tick.C:
 				if currNum < config.ConnMaxNum {
-					logger.InfoByName(global.LogFileWSCName, "%v try connect num:[%v]", c.LogPrefix(), currNum)
+					logger1.InfoByName(global.LogFileWSCName, "%v try connect num:[%v]", c.LogPrefix(), currNum)
 					conn, _, err = dialer.Dial(urlstr, reqHeader)
 				}
 			}
 			if err != nil {
 				currNum = currNum + 1
 				if currNum >= config.ConnMaxNum {
-					logger.InfoByName(global.LogFileWSCName, "%v touch the try max num", c.LogPrefix())
+					logger1.InfoByName(global.LogFileWSCName, "%v touch the try max num", c.LogPrefix())
 					tick.Stop()
 					break
 				}
@@ -222,11 +222,11 @@ func (c *WSClient) reset(dialer *websocket.Dialer, urlstr string, reqHeader http
 }
 
 func (c *WSClient) DisConn() {
-	logger.InfoByName(global.LogFileWSCName, "%v: disconn ", c.LogPrefix())
+	logger1.InfoByName(global.LogFileWSCName, "%v: disconn ", c.LogPrefix())
 
 	defer func() {
 		if r := recover(); r != nil {
-			logger.Error("%v disconn with error: %v", c.LogPrefix(), r)
+			logger1.Error("%v disconn with error: %v", c.LogPrefix(), r)
 		}
 	}()
 	c.url = nil // 设置为nil才不会自动重联
@@ -249,7 +249,7 @@ func (c *WSClient) DisConn() {
 }
 
 func (c *WSClient) reConn() (*WSClient, error) {
-	logger.InfoByName(global.LogFileWSCName, "%v retry connect", c.LogPrefix())
+	logger1.InfoByName(global.LogFileWSCName, "%v retry connect", c.LogPrefix())
 	c.DisConn()
 	client := NewWSClientByConfig(c.url.Scheme, c.url.Host, c.url.Path, config)
 	err := client.Conn()

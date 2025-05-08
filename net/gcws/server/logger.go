@@ -3,7 +3,7 @@ package server
 import (
 	"fmt"
 	"github.com/vincent78/butil/global"
-	"github.com/vincent78/butil/logger"
+	"github.com/vincent78/butil/logger/logger1"
 )
 
 func (c *WSServer) NormalLogger(msg string, args ...interface{}) string {
@@ -12,7 +12,7 @@ func (c *WSServer) NormalLogger(msg string, args ...interface{}) string {
 }
 
 func (c *WSServer) ILog(msg string, args ...interface{}) {
-	logger.InfoByName(global.LogFileWSSName, c.InLogger(msg, args...))
+	logger1.InfoByName(global.LogFileWSSName, c.InLogger(msg, args...))
 }
 
 func (c *WSServer) InLogger(msg string, args ...interface{}) string {
@@ -21,7 +21,7 @@ func (c *WSServer) InLogger(msg string, args ...interface{}) string {
 }
 
 func (c *WSServer) OLog(msg string, args ...interface{}) {
-	logger.InfoByName(global.LogFileWSSName, c.OutLogger(msg, args...))
+	logger1.InfoByName(global.LogFileWSSName, c.OutLogger(msg, args...))
 }
 
 func (c *WSServer) OutLogger(msg string, args ...interface{}) string {

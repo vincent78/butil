@@ -2,7 +2,7 @@ package server
 
 import (
 	"github.com/vincent78/butil/global"
-	"github.com/vincent78/butil/logger"
+	"github.com/vincent78/butil/logger/logger1"
 	"github.com/vincent78/butil/net/gcgin"
 	"github.com/vincent78/butil/sys"
 	"testing"
@@ -11,18 +11,18 @@ import (
 func initServerLog() {
 	path := "/tmp/ws"
 
-	conf := logger.NewLogConfig()
+	conf := logger1.NewLogConfig()
 	conf.Path = path
-	logger.NewLogger(conf)
+	logger1.NewLogger(conf)
 
 	conf.ToConsole = false
 	conf.SimpleFile = true
 	conf.ShowStack = true
 	conf.Name = global.LogFileWSSName
-	logger.NewLogger(conf)
+	logger1.NewLogger(conf)
 
 	conf.Name = global.LogFileHttpName
-	logger.NewLogger(conf)
+	logger1.NewLogger(conf)
 }
 
 /*

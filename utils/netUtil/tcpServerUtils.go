@@ -3,7 +3,7 @@ package netUtil
 import (
 	"errors"
 	"fmt"
-	"github.com/vincent78/butil/logger"
+	"github.com/vincent78/butil/logger/logger1"
 	"github.com/vincent78/butil/utils/concurrentUtil"
 	"net"
 	"strings"
@@ -41,7 +41,7 @@ const Con_Time_Out int64 = 30000
 // param: panicHandler  panic时处理函数，传空则使用默认panic 处理函数
 // return t tcpServer 对象
 func NewTCPServer(addr string, clientMaxNum int, clientConnTimeOut int64, initHandler func(transfer *TCPTransfer) error, handler func(transfer *TCPTransfer), panicHandler func(interface{})) (t *TCPServer, err error) {
-	logger.Info("New TCPServer addr:%v", addr)
+	logger1.Info("New TCPServer addr:%v", addr)
 	// 校验地址格式是否正确
 	var tcpAddr *net.TCPAddr
 	if tcpAddr, err = ValidateTCPAddr(addr); err != nil {
@@ -64,17 +64,17 @@ func NewTCPServer(addr string, clientMaxNum int, clientConnTimeOut int64, initHa
 
 // 启动TCP 服务
 func (t *TCPServer) Run() (err error) {
-	logger.Info("tcp: TCPServer Run addr: %s", t.Addr.String())
+	logger1.Info("tcp: TCPServer Run addr: %s", t.Addr.String())
 	t.listener, err = net.Listen(TCP, t.Addr.String())
 	if err != nil {
-		logger.Error("tcp: run tcp server( %s ) failed, errMsg: %s", t.Addr.String(), err.Error())
+		logger1.Error("tcp: run tcp server( %s ) failed, errMsg: %s", t.Addr.String(), err.Error())
 		return
 	}
 
 	go func(server *TCPServer) {
 		defer func() {
 			server.CloseServer()
-			logger.Info("++++++++++++++++ PROXY TCP SERVICE END ++++++++++++++++")
+			logger1.Info("++++++++++++++++ PROXY TCP SERVICE END ++++++++++++++++")
 		}()
 		for {
 			if server.acceptAndHandle() != nil {
@@ -91,23 +91,23 @@ func (t *TCPServer) CloseServer() (err error) {
 	if t == nil {
 		return
 	}
-	logger.Info("TCPServer listener close start, addr:%v", t.Addr.String())
+	logger1.Info("TCPServer listener close start, addr:%v", t.Addr.String())
 	if t.listener == nil {
-		logger.Info("TCPServer listener not exit, close finish")
+		logger1.Info("TCPServer listener not exit, close finish")
 		return
 	}
 	// 先关闭连接
-	logger.Info("TCPServer listener close: first close client conn")
+	logger1.Info("TCPServer listener close: first close client conn")
 	transfers := syncMapSwapSlice(t.ClientConMap)
 	for _, v := range transfers {
 		t.CloseClientConn(v)
 	}
 	// 再关闭监听对象
 	if err = t.listener.Close(); err != nil {
-		logger.Error("close server: %v error,errMsg: %v", t.Addr.String(), err)
+		logger1.Error("close server: %v error,errMsg: %v", t.Addr.String(), err)
 		return err
 	}
-	logger.Info("TCPServer listener close finish")
+	logger1.Info("TCPServer listener close finish")
 	// 将监听对象置空
 	t.listener = nil
 	return
@@ -115,22 +115,22 @@ func (t *TCPServer) CloseServer() (err error) {
 
 // 关闭指定客户端
 func (t *TCPServer) CloseClientConn(client *TCPTransfer) {
-	logger.Info("TCP CloseClientConn......")
+	logger1.Info("TCP CloseClientConn......")
 	if t == nil || client == nil {
 		return
 	}
-	logger.Info("before delete clientInfo:%+v", connMapPrint(t.ClientConMap))
+	logger1.Info("before delete clientInfo:%+v", connMapPrint(t.ClientConMap))
 	t.ClientConMap.Delete(client.ConnKey)
-	logger.Info("after delete clientInfo:%+v", connMapPrint(t.ClientConMap))
+	logger1.Info("after delete clientInfo:%+v", connMapPrint(t.ClientConMap))
 	client.closeClientConn()
 }
 
 // 关闭客户端连接
 func (t *TCPTransfer) closeClientConn() (err error) {
-	logger.Info("TCPServer close clientConn , clientAddr:%v", t.Conn.RemoteAddr().String())
+	logger1.Info("TCPServer close clientConn , clientAddr:%v", t.Conn.RemoteAddr().String())
 	if t.ConnState {
 		if err := t.Conn.Close(); err != nil {
-			logger.Error("server close client conn: %v error,errMsg: %v", t.Conn.LocalAddr().String(), err)
+			logger1.Error("server close client conn: %v error,errMsg: %v", t.Conn.LocalAddr().String(), err)
 		}
 		t.ConnState = false
 	}
@@ -151,15 +151,15 @@ func (t *TCPServer) acceptAndHandle() (err error) {
 
 	// 1. 处理客户端请求：
 	if conn, err = t.listener.Accept(); err != nil {
-		logger.Error("tcp: server( %s ) listener accept failed, errMsg: %s", t.Addr.String(), err.Error())
+		logger1.Error("tcp: server( %s ) listener accept failed, errMsg: %s", t.Addr.String(), err.Error())
 		// 直接断掉server服务 不执行下一轮的
 		return
 	}
 
 	// 2. 控制客户端连接数量
 	if concurrentUtil.SyncMapSize(&t.ClientConMap) >= t.ClientMaxNum {
-		logger.Debug("refuse tcp client conn, curClinetMap:%v", connMapPrint(t.ClientConMap))
-		logger.Error("tcp: curTCPService not support client conn, clientMaxNum: %d, now has clientNum: %d", t.ClientMaxNum, concurrentUtil.SyncMapSize(&t.ClientConMap))
+		logger1.Debug("refuse tcp client conn, curClinetMap:%v", connMapPrint(t.ClientConMap))
+		logger1.Error("tcp: curTCPService not support client conn, clientMaxNum: %d, now has clientNum: %d", t.ClientMaxNum, concurrentUtil.SyncMapSize(&t.ClientConMap))
 		conn.Write([]byte("client over maxConnNum"))
 		conn.Close()
 		return
@@ -167,19 +167,19 @@ func (t *TCPServer) acceptAndHandle() (err error) {
 	// 3.将客户端放入 map 中
 	clientCon := NewTCPTransfer(conn)
 	t.ClientConMap.Store(clientCon.ConnKey, clientCon)
-	logger.Info("tcp: clientInfo -> `%#v`", t.ClientConMap)
+	logger1.Info("tcp: clientInfo -> `%#v`", t.ClientConMap)
 	//开启客户端超时处理逻辑：
 	if !t.clientConnTimeOutState {
 		t.clientConnTimeOutState = true
 		go func(t *TCPServer) {
-			logger.Info("open tcp server listener client conn timeout check.....,tcpServer:%v", t.Addr)
+			logger1.Info("open tcp server listener client conn timeout check.....,tcpServer:%v", t.Addr)
 			t.closeConnTimeOut()
 		}(t)
 	}
 
 	//4. 处理客户端逻辑
 	go func(t *TCPServer, cliConn *TCPTransfer) {
-		logger.Info("================ TCP SERVER( %s <- %s ) START ================", t.Addr.String(), cliConn.ConnKey)
+		logger1.Info("================ TCP SERVER( %s <- %s ) START ================", t.Addr.String(), cliConn.ConnKey)
 		// 1. 捕获潜在的异常 是否会退出上层的for循环是由PanicHandler决定的 默认情况不会退出for循环
 		defer func() {
 			if i := recover(); i != nil {
@@ -190,21 +190,21 @@ func (t *TCPServer) acceptAndHandle() (err error) {
 				}
 				t.CloseClientConn(cliConn)
 			}
-			logger.Info("================ TCP SERVER( %s <- %s ) END ================", t.Addr.String(), cliConn.ConnKey)
+			logger1.Info("================ TCP SERVER( %s <- %s ) END ================", t.Addr.String(), cliConn.ConnKey)
 		}()
 
 		// 用于初始化
 		if t.InitHandler != nil {
-			logger.Info("tcp: server( %s <- %s ) exec InitHandler...", t.Addr.String(), cliConn.ConnKey)
+			logger1.Info("tcp: server( %s <- %s ) exec InitHandler...", t.Addr.String(), cliConn.ConnKey)
 			if err = t.InitHandler(cliConn); err != nil {
-				logger.Info("================ TCP SERVER( %s <- %s ) INITHANDLER FAILED ================", t.Addr.String(), cliConn.ConnKey)
+				logger1.Info("================ TCP SERVER( %s <- %s ) INITHANDLER FAILED ================", t.Addr.String(), cliConn.ConnKey)
 				t.CloseClientConn(cliConn)
 				return
 			}
 		}
 		// 执行正常流程
 		if t.Handler != nil {
-			logger.Info("tcp: server( %s <- %s ) exec Handler...", t.Addr.String(), cliConn.ConnKey)
+			logger1.Info("tcp: server( %s <- %s ) exec Handler...", t.Addr.String(), cliConn.ConnKey)
 			t.Handler(cliConn)
 		}
 	}(t, clientCon)
@@ -215,7 +215,7 @@ func (t *TCPServer) acceptAndHandle() (err error) {
 // 默认是捕获panic但不会因为有panic而退出更上层的for循环
 func defaultPanicHandler(ifPanic interface{}) {
 	if ifPanic != nil {
-		logger.Error("================ TCP PANIC, errMsg: `%v` ================", ifPanic)
+		logger1.Error("================ TCP PANIC, errMsg: `%v` ================", ifPanic)
 	}
 }
 
@@ -225,7 +225,7 @@ func (t *TCPServer) FlushTcpClientActiveTime(connkey string) {
 		return
 	}
 	if clientTransfer, ok := t.ClientConMap.Load(connkey); ok {
-		logger.Debug("FlushTcpClientActiveTime, client:%v", connkey)
+		logger1.Debug("FlushTcpClientActiveTime, client:%v", connkey)
 		transfer := clientTransfer.(*TCPTransfer) //因为是指针类型，所以直接可以修改值
 		transfer.ClientLastActiveTime = time.Now().UnixMilli()
 	}
@@ -243,14 +243,14 @@ func (t *TCPServer) closeConnTimeOut() {
 		// 遍历当前ClientConMap
 		transfers := syncMapSwapSlice(t.ClientConMap)
 		if count%6 == 0 {
-			logger.Debug("interval 3 seconds, clientMap:%v", connMapPrint(t.ClientConMap))
+			logger1.Debug("interval 3 seconds, clientMap:%v", connMapPrint(t.ClientConMap))
 		}
 		for _, v := range transfers {
 			if t.clientConnTimeOut == -1 {
 				continue
 			}
 			if v.ClientLastActiveTime+t.clientConnTimeOut < time.Now().UnixMilli() {
-				logger.Info("tcp Server close timeout client %v ,lastActiveTime:%v, hasExistTime: %v(ms)", v.ConnKey, v.ClientLastActiveTime, time.Now().UnixMilli()-v.ClientLastActiveTime)
+				logger1.Info("tcp Server close timeout client %v ,lastActiveTime:%v, hasExistTime: %v(ms)", v.ConnKey, v.ClientLastActiveTime, time.Now().UnixMilli()-v.ClientLastActiveTime)
 				t.CloseClientConn(v)
 			}
 		}

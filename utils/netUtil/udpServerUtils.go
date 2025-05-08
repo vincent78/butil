@@ -1,7 +1,7 @@
 package netUtil
 
 import (
-	"github.com/vincent78/butil/logger"
+	"github.com/vincent78/butil/logger/logger1"
 	"net"
 )
 
@@ -14,7 +14,7 @@ type UDPServer struct {
 
 // NewUDPServer 创建UDP服务并返回对象
 func NewUDPServer(addr string, initHandler func(*UDPTransfer) error, handler func(transfer *UDPTransfer)) (*UDPServer, error) {
-	logger.Info("New UDPServer addr: %s", addr)
+	logger1.Info("New UDPServer addr: %s", addr)
 	// 校验地址格式是否正确
 	if udpAddr, err := ValidateUDPAddr(addr); err != nil {
 		return nil, err
@@ -31,7 +31,7 @@ func NewUDPServer(addr string, initHandler func(*UDPTransfer) error, handler fun
 // 启动UDP服务
 func (uServ *UDPServer) Run() (err error) {
 	addrStr := uServ.Addr.String()
-	logger.Info("UDPServer Run addr: %s", addrStr)
+	logger1.Info("UDPServer Run addr: %s", addrStr)
 
 	for {
 		err = uServ.acceptAndHandle()
@@ -48,9 +48,9 @@ func (uTrans *UDPTransfer) ServerCloseConn() error {
 	if uTrans.Conn == nil {
 		return nil
 	}
-	logger.Error("UDPServer close Conn, ServerAddr: %s", uTrans.Conn.LocalAddr().String())
+	logger1.Error("UDPServer close Conn, ServerAddr: %s", uTrans.Conn.LocalAddr().String())
 	if err := uTrans.Conn.Close(); err != nil {
-		logger.Error("UDPServer `%s` close conn failed, errMsg: %s", uTrans.Conn.LocalAddr().String(), err.Error())
+		logger1.Error("UDPServer `%s` close conn failed, errMsg: %s", uTrans.Conn.LocalAddr().String(), err.Error())
 		return err
 	}
 	return nil
@@ -62,25 +62,25 @@ func (uTrans *UDPTransfer) ServerCloseConn() error {
 func (uServ *UDPServer) acceptAndHandle() error {
 	defer func() {
 		if tmp := recover(); tmp != nil {
-			logger.Error("udp panic: %v", tmp)
+			logger1.Error("udp panic: %v", tmp)
 		}
-		logger.Info("====================== UDP SERVER RUN END ======================")
+		logger1.Info("====================== UDP SERVER RUN END ======================")
 	}()
 
-	logger.Info("====================== UDP SERVER RUN START ======================")
+	logger1.Info("====================== UDP SERVER RUN START ======================")
 	var (
 		conn *net.UDPConn
 		err  error
 	)
 	conn, err = net.ListenUDP(UDP, uServ.Addr)
 	if err != nil {
-		logger.Error("udp: create conn failed, errMsg: %s", err.Error())
+		logger1.Error("udp: create conn failed, errMsg: %s", err.Error())
 		return err
 	}
 	transfer := NewUDPTransfer(conn)
 	// 初始化
 	if uServ.InitHandler != nil {
-		logger.Info("udp: server( %s ) exec InitHandler...", uServ.Addr.String())
+		logger1.Info("udp: server( %s ) exec InitHandler...", uServ.Addr.String())
 		if err = uServ.InitHandler(transfer); err != nil {
 			transfer.ServerCloseConn()
 			return nil
@@ -88,7 +88,7 @@ func (uServ *UDPServer) acceptAndHandle() error {
 	}
 	// 执行正常流程
 	if uServ.Handler != nil {
-		logger.Info("udp: server( %s ) exec Handler...", uServ.Addr.String())
+		logger1.Info("udp: server( %s ) exec Handler...", uServ.Addr.String())
 		uServ.Handler(transfer)
 	}
 

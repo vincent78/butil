@@ -2,7 +2,7 @@ package mapUtil
 
 import (
 	"encoding/json"
-	"github.com/vincent78/butil/logger"
+	"github.com/vincent78/butil/logger/logger1"
 	"testing"
 )
 
@@ -11,5 +11,5 @@ func TestGetObjByAnchorFromMap(b *testing.T) {
 	str := `{"test1":{"test2":"this is the test2"}}`
 	var obj map[string]interface{}
 	_ = json.Unmarshal([]byte(str), &obj)
-	logger.Debug("--- %v", ObjByAnchorFromMap(obj, level))
+	logger1.Debug("--- %v", ObjByAnchorFromMap(obj, level))
 }

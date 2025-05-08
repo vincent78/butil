@@ -2,7 +2,7 @@ package sys
 
 import (
 	"context"
-	"github.com/vincent78/butil/logger"
+	"github.com/vincent78/butil/logger/logger1"
 	"os"
 	"os/signal"
 	"syscall"
@@ -14,10 +14,10 @@ func BlockBySignal() {
 	signal.Notify(c, os.Interrupt, os.Kill, syscall.SIGHUP, syscall.SIGQUIT, syscall.SIGTERM)
 	for {
 		s := <-c
-		logger.Info("discovery get a signal %s", s.String())
+		logger1.Info("discovery get a signal %s", s.String())
 		switch s {
 		case os.Interrupt, os.Kill, syscall.SIGQUIT, syscall.SIGTERM:
-			logger.Info("application quit !!!")
+			logger1.Info("application quit !!!")
 			return
 		case syscall.SIGHUP:
 		default:
@@ -31,14 +31,14 @@ func BlockBySignalAndCancel(cancel context.CancelFunc, duration time.Duration) {
 	signal.Notify(c, os.Interrupt, os.Kill, syscall.SIGHUP, syscall.SIGQUIT, syscall.SIGTERM)
 	for {
 		s := <-c
-		logger.Info("discovery get a signal %s", s.String())
+		logger1.Info("discovery get a signal %s", s.String())
 		switch s {
 		case os.Interrupt, os.Kill, syscall.SIGQUIT, syscall.SIGTERM:
 			if cancel != nil {
 				cancel()
 			}
 			time.Sleep(duration)
-			logger.Info("application quit !!!")
+			logger1.Info("application quit !!!")
 			return
 		case syscall.SIGHUP:
 		default:
@@ -72,7 +72,7 @@ func SignalContext() context.Context {
 	ctx, cancel := context.WithCancel(context.Background())
 	go func() {
 		<-sigs
-		logger.Info("--- receive system signal ---")
+		logger1.Info("--- receive system signal ---")
 		cancel()
 		time.Sleep(time.Second * 2)
 		os.Exit(1)

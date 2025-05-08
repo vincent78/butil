@@ -1,7 +1,7 @@
 package netUtil
 
 import (
-	"github.com/vincent78/butil/logger"
+	"github.com/vincent78/butil/logger/logger1"
 	"net"
 )
 
@@ -31,7 +31,7 @@ func (t *TCPClient) Conn() (transfer *TCPTransfer, err error) {
 	var conn net.Conn
 	// 与服务器建立连接
 	if conn, err = net.DialTCP(TCP, nil, t.Addr); err != nil {
-		logger.Error("connect server failed, err: %v", err)
+		logger1.Error("connect server failed, err: %v", err)
 		return
 	}
 	transfer = NewTCPTransfer(conn)
@@ -43,13 +43,13 @@ func (t *TCPClient) Conn() (transfer *TCPTransfer, err error) {
 
 // 与服务器断开连接
 func (t *TCPTransfer) CloseConn() (err error) {
-	logger.Info("TCPTransfer close conn")
+	logger1.Info("TCPTransfer close conn")
 	if t == nil {
 		return
 	}
 	if t.ConnState {
 		if err := t.Conn.Close(); err != nil {
-			logger.Error("close client conn: %v error,errMsg: %v", t.Conn.LocalAddr().String(), err)
+			logger1.Error("close client conn: %v error,errMsg: %v", t.Conn.LocalAddr().String(), err)
 		}
 		t.ConnState = false
 	}

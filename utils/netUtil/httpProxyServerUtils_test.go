@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"github.com/gin-gonic/gin"
 	"github.com/vincent78/butil/global"
-	"github.com/vincent78/butil/logger"
+	"github.com/vincent78/butil/logger/logger1"
 	"github.com/vincent78/butil/model"
 	"github.com/vincent78/butil/net/gchttp"
 	"github.com/vincent78/butil/utils/strUtil"
@@ -16,13 +16,13 @@ import (
 
 func initlogger() {
 	path := "/tmp/net"
-	c1 := logger.NewLogConfig()
+	c1 := logger1.NewLogConfig()
 	c1.Path = path
-	logger.NewLogger(c1)
-	c2 := logger.NewLogConfig()
+	logger1.NewLogger(c1)
+	c2 := logger1.NewLogConfig()
 	c2.Path = path
 	c2.Name = global.LogFileNetName
-	logger.NewLogger(c2)
+	logger1.NewLogger(c2)
 }
 
 func TestHttpServer(t *testing.T) {
@@ -34,25 +34,25 @@ func TestHttpServer(t *testing.T) {
 
 func proxyHandler1(c *gin.Context) {
 	accepted := c.Accepted
-	logger.InfoByName(global.LogFileNetName, "accepted :%v", accepted)
+	logger1.InfoByName(global.LogFileNetName, "accepted :%v", accepted)
 	fmt.Printf("gin.Context:%+v", c)
 	uri := c.Request.RequestURI
 	fmt.Println(uri)
 
 	header := c.Request.Header
 	for k, v := range header {
-		logger.InfoByName(global.LogFileNetName, "k: %v, v:%v", k, v)
+		logger1.InfoByName(global.LogFileNetName, "k: %v, v:%v", k, v)
 	}
 
 	questType := c.Request.Method
-	logger.InfoByName(global.LogFileNetName, "requestType: %v", questType)
+	logger1.InfoByName(global.LogFileNetName, "requestType: %v", questType)
 
 	rcsUrl := "http://172.31.239.56:9001"
 
 	resp, err := http.Post(rcsUrl+uri, c.Request.Header.Get("Content-Type"), c.Request.Body)
 
 	if err != nil {
-		logger.InfoByName(global.LogFileNetName, "err:%v", err)
+		logger1.InfoByName(global.LogFileNetName, "err:%v", err)
 	}
 	all, _ := io.ReadAll(resp.Body)
 	c.Writer.Write(all)
@@ -68,12 +68,12 @@ func proxyHandler(c *gin.Context) {
 	c.Writer.Header().Add("Content-Type", "application/json")
 	//转发post 请求
 	if requestType == "POST" {
-		logger.Info("forward post request , targetUrl: %v", targetUrl)
+		logger1.Info("forward post request , targetUrl: %v", targetUrl)
 		contentLength, _ := strconv.Atoi(c.Request.Header.Get("Content-Length"))
 		var buf = make([]byte, contentLength, contentLength)
 		read, _ := c.Request.Body.Read(buf[:contentLength])
 		receiverMes := string(buf[:read])
-		logger.Info("request para:%v", receiverMes)
+		logger1.Info("request para:%v", receiverMes)
 		var headerMap = make(map[string]string)
 		for k, v := range c.Request.Header {
 			headerMap[k] = v[0]
@@ -83,7 +83,7 @@ func proxyHandler(c *gin.Context) {
 		// 处理成功信息
 		if result.Code == model.Success {
 			str := strUtil.ToJsonStr(result.Data)
-			logger.Info("receive requestUrl: %v response str:%v", targetUrl, str)
+			logger1.Info("receive requestUrl: %v response str:%v", targetUrl, str)
 			c.Writer.Write(strUtil.String2Bytes(str))
 			return
 		}
@@ -110,21 +110,21 @@ func proxyHandler(c *gin.Context) {
 func writeSuccessResponse(targetUrl string, relHttpResp gin.ResponseWriter, proxyHttpResp *http.Response) {
 	readAll, err := io.ReadAll(proxyHttpResp.Body)
 	if err != nil {
-		logger.Error("read forward post request: %v response error,errInfo:%v ", targetUrl, err)
+		logger1.Error("read forward post request: %v response error,errInfo:%v ", targetUrl, err)
 		return
 	}
-	logger.Info("receive requestUrl: %v response result:%v", targetUrl, string(readAll))
+	logger1.Info("receive requestUrl: %v response result:%v", targetUrl, string(readAll))
 	relHttpResp.Write(readAll)
 }
 
 // 将代理Http服务出现的异常进行错误响应回复
 func writeErrorResponse(targetUrl string, relHttpResp gin.ResponseWriter, errMes string) {
-	logger.Error("receive requestUrl: %v request failed!  errInfo:%v", targetUrl, errMes)
+	logger1.Error("receive requestUrl: %v request failed!  errInfo:%v", targetUrl, errMes)
 	response := make(map[string]string)
 	response["success"] = "false"
 	response["code"] = "QSH000000"
 	response["message"] = errMes
 	resStr := strUtil.ToJsonStr(response)
-	logger.Error("receive requestUrl: %v request failed!  result:%v", targetUrl, resStr)
+	logger1.Error("receive requestUrl: %v request failed!  result:%v", targetUrl, resStr)
 	relHttpResp.Write([]byte(resStr))
 }

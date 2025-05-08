@@ -1,7 +1,7 @@
 package netUtil
 
 import (
-	"github.com/vincent78/butil/logger"
+	"github.com/vincent78/butil/logger/logger1"
 	"net"
 )
 
@@ -29,7 +29,7 @@ func NewUDPClient(addr string, handler func(*UDPTransfer)) (*UDPClient, error) {
 // 连接创建之后，进行回调处理服务器消息函数
 func (uCli *UDPClient) Conn() error {
 	if conn, err := net.DialUDP(UDP, nil, uCli.Addr); err != nil {
-		logger.Error("connect server failed, errMsg: %s", err.Error())
+		logger1.Error("connect server failed, errMsg: %s", err.Error())
 		return err
 	} else {
 		transfer := NewUDPTransfer(conn)
@@ -45,9 +45,9 @@ func (uTrans *UDPTransfer) ClientCloseConn() error {
 	if uTrans.Conn == nil {
 		return nil
 	}
-	logger.Error("UDPClient close Conn, ClientAddr: %s", uTrans.Conn.LocalAddr().String())
+	logger1.Error("UDPClient close Conn, ClientAddr: %s", uTrans.Conn.LocalAddr().String())
 	if err := uTrans.Conn.Close(); err != nil {
-		logger.Error("UDPClient `%s` close conn failed, errMsg: %s", uTrans.Conn.LocalAddr().String(), err.Error())
+		logger1.Error("UDPClient `%s` close conn failed, errMsg: %s", uTrans.Conn.LocalAddr().String(), err.Error())
 	}
 	return nil
 }

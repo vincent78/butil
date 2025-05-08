@@ -3,7 +3,7 @@ package intercepter
 import (
 	"github.com/gin-gonic/gin"
 	"github.com/vincent78/butil/global"
-	"github.com/vincent78/butil/logger"
+	"github.com/vincent78/butil/logger/logger1"
 	"github.com/vincent78/butil/model"
 	httpModel "github.com/vincent78/butil/net/gcgin/model"
 	"github.com/vincent78/butil/utils/strUtil"
@@ -25,10 +25,10 @@ func GinRecovery() gin.HandlerFunc {
 					if se, ok := ne.Err.(*os.SyscallError); ok {
 						if strings.Contains(strings.ToLower(se.Error()), "broken pipe") || strings.Contains(strings.ToLower(se.Error()), "connection reset by peer") {
 							httpRequest, _ := httputil.DumpRequest(c.Request, false)
-							logger.ErrorByName(global.LogFileHttpName, "----------------------")
-							logger.ErrorByName(global.LogFileHttpName, "path: %v", c.Request.URL.Path)
-							logger.ErrorByName(global.LogFileHttpName, "request: %v", strUtil.Bytes2String(httpRequest))
-							logger.ErrorByName(global.LogFileHttpName, "error: %v", ne.Error())
+							logger1.ErrorByName(global.LogFileHttpName, "----------------------")
+							logger1.ErrorByName(global.LogFileHttpName, "path: %v", c.Request.URL.Path)
+							logger1.ErrorByName(global.LogFileHttpName, "request: %v", strUtil.Bytes2String(httpRequest))
+							logger1.ErrorByName(global.LogFileHttpName, "error: %v", ne.Error())
 							c.JSON(http.StatusOK, model.FailureRespWithErrModel(httpModel.ErrorHttpPanic(se.Err)))
 							return
 						}

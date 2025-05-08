@@ -3,7 +3,7 @@ package client
 import (
 	"fmt"
 	"github.com/vincent78/butil/global"
-	"github.com/vincent78/butil/logger"
+	"github.com/vincent78/butil/logger/logger1"
 	"github.com/vincent78/butil/sys"
 	"github.com/vincent78/butil/utils/timeUtil"
 	"testing"
@@ -12,15 +12,15 @@ import (
 
 func initClientLog() {
 	path := "/tmp/wsc"
-	conf := logger.NewLogConfig()
+	conf := logger1.NewLogConfig()
 	conf.Path = path
-	logger.NewLogger(conf)
+	logger1.NewLogger(conf)
 
 	conf.Name = global.LogFileWSCName
-	logger.NewLogger(conf)
+	logger1.NewLogger(conf)
 
 	conf.Name = global.LogFileHttpName
-	logger.NewLogger(conf)
+	logger1.NewLogger(conf)
 }
 
 func GetWSServer() string {
@@ -114,7 +114,7 @@ func TestClientPing(t *testing.T) {
 	}
 
 	global.Timewheel.AddCron(10*time.Second, func() {
-		logger.Error("time-wheel: %v", timeUtil.NowStr())
+		logger1.Error("time-wheel: %v", timeUtil.NowStr())
 		wsClient.ping()
 	})
 

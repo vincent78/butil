@@ -1,14 +1,14 @@
 package gcnet
 
 import (
-	"github.com/vincent78/butil/logger"
+	"github.com/vincent78/butil/logger/logger1"
 	"net"
 	"testing"
 )
 
 func TestNetServer(t *testing.T) {
 	RegistNetHandler("echo", func(data interface{}, conn net.Conn) {
-		logger.Debug("echo the data:%v", data)
+		logger1.Debug("echo the data:%v", data)
 	})
 
 	ch := make(chan *ServerListener)

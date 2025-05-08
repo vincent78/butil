@@ -5,7 +5,7 @@ import (
 	"context"
 	"crypto/tls"
 	"encoding/json"
-	"github.com/vincent78/butil/logger"
+	"github.com/vincent78/butil/logger/logger1"
 	"github.com/vincent78/butil/model"
 	"github.com/vincent78/butil/token"
 	"github.com/vincent78/butil/utils/strUtil"
@@ -75,7 +75,7 @@ func PostFormData(urlStr string, header map[string]string, body map[string]inter
 
 func Request(method, url string, header map[string]string, body string) model.RespModel {
 	tk := token.UniqueId()
-	logger.Debug("-->> http[%v] method:%v url:%v header:%v body:%v", tk, method, url, header, body)
+	logger1.Debug("-->> http[%v] method:%v url:%v header:%v body:%v", tk, method, url, header, body)
 	//跳过证书校验
 	http.DefaultClient.Transport = &http.Transport{
 		TLSClientConfig: &tls.Config{
@@ -92,7 +92,7 @@ func Request(method, url string, header map[string]string, body string) model.Re
 
 	req, err := http.NewRequest(method, url, bodyReader)
 	if err != nil {
-		logger.Debug("<<-- http[%v] %v", tk, err.Error())
+		logger1.Debug("<<-- http[%v] %v", tk, err.Error())
 		return model.FailureRespWithError(4000, err)
 	}
 
@@ -110,32 +110,32 @@ func Request(method, url string, header map[string]string, body string) model.Re
 	client := &http.Client{}
 	resp, err := client.Do(req)
 	if err != nil {
-		logger.Debug("<<-- http[%v] %v", tk, err.Error())
+		logger1.Debug("<<-- http[%v] %v", tk, err.Error())
 		return model.FailureRespWithError(4000, err)
 	}
 	defer resp.Body.Close()
 	//rep, err := ioutil.ReadAll(resp.Body)
 	rep, err := io.ReadAll(resp.Body)
 	if err != nil {
-		logger.Debug("<<-- http[%v] %v", tk, err.Error())
+		logger1.Debug("<<-- http[%v] %v", tk, err.Error())
 		return model.FailureRespWithError(4000, err)
 	} else if len(rep) == 0 {
-		logger.Debug("<<-- http[%v] the response is null", tk)
+		logger1.Debug("<<-- http[%v] the response is null", tk)
 		return model.FailureRespWithError(4000, err)
 	} else if strings.HasPrefix(resp.Header.Get("content-type"), "application/json") {
 		mapv := make(map[string]interface{})
 		err = json.Unmarshal(rep, &mapv)
 		if err != nil {
-			logger.Debug("<<-- http[%v] the reponse is not json!", tk)
+			logger1.Debug("<<-- http[%v] the reponse is not json!", tk)
 			return model.FailureRespWithError(4000, err)
 		} else {
 			md := model.SuccessResp(mapv)
-			logger.Debug("<<-- http[%v] %v", tk, md)
+			logger1.Debug("<<-- http[%v] %v", tk, md)
 			return md
 		}
 	} else {
 		md := model.SuccessResp(strUtil.ToStr(rep))
-		logger.Debug("<<-- http[%v] %v", tk, md.String())
+		logger1.Debug("<<-- http[%v] %v", tk, md.String())
 		return md
 	}
 }

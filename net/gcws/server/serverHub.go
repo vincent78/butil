@@ -4,7 +4,7 @@ import (
 	"context"
 	"github.com/gin-gonic/gin"
 	"github.com/vincent78/butil/global"
-	"github.com/vincent78/butil/logger"
+	"github.com/vincent78/butil/logger/logger1"
 	"github.com/vincent78/butil/net/gcws/common"
 )
 
@@ -59,7 +59,7 @@ func newHub() *Hub {
 func (h *Hub) run() {
 	defer func() {
 		if r := recover(); r != nil {
-			logger.ErrorByName(global.LogFileWSSName, "%v", r)
+			logger1.ErrorByName(global.LogFileWSSName, "%v", r)
 		}
 	}()
 	for {
@@ -67,7 +67,7 @@ func (h *Hub) run() {
 		// 客户端连接
 		case server := <-h.register:
 			h.servers[server] = struct{}{}
-			logger.InfoByName(global.LogFileWSSName, server.NormalLogger("connected"))
+			logger1.InfoByName(global.LogFileWSSName, server.NormalLogger("connected"))
 		// 客户端断开连接
 		case server := <-h.unregister:
 			if server.ID != "" {
@@ -76,9 +76,9 @@ func (h *Hub) run() {
 			if _, ok := h.servers[server]; ok {
 				server.Dispose()
 				delete(h.servers, server)
-				logger.InfoByName(global.LogFileWSSName, server.NormalLogger("disconnected"))
+				logger1.InfoByName(global.LogFileWSSName, server.NormalLogger("disconnected"))
 			} else {
-				logger.WarnByName(global.LogFileWSSName, server.NormalLogger("can't find anonymity"))
+				logger1.WarnByName(global.LogFileWSSName, server.NormalLogger("can't find anonymity"))
 			}
 		case bytes := <-h.broadcast:
 			for server := range h.servers {
@@ -94,13 +94,13 @@ func (h *Hub) run() {
 }
 
 func (h *Hub) Login(server *WSServer) {
-	logger.InfoByName(global.LogFileWSSName, server.NormalLogger("login"))
+	logger1.InfoByName(global.LogFileWSSName, server.NormalLogger("login"))
 	h.loginServers[server.ID] = server
 	delete(h.servers, server)
 }
 
 func (h *Hub) Logout(server *WSServer) {
-	logger.InfoByName(global.LogFileWSSName, server.NormalLogger("logout"))
+	logger1.InfoByName(global.LogFileWSSName, server.NormalLogger("logout"))
 	delete(h.loginServers, server.ID)
 	server.ID = ""
 	h.servers[server] = struct{}{}
@@ -118,7 +118,7 @@ func (h *Hub) CloseServer(c *WSServer) {
 	if c != nil {
 		h.unregister <- c
 	} else {
-		logger.ErrorByName(global.LogFileWSSName, "the server is nil")
+		logger1.ErrorByName(global.LogFileWSSName, "the server is nil")
 	}
 }
 

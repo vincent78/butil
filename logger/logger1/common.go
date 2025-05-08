@@ -1,4 +1,4 @@
-package logger
+package logger1
 
 import (
 	"fmt"
@@ -91,6 +91,6 @@ func writeByLevel(name string, level int, msg string, args ...interface{}) {
 		}
 		defaultObj.Channel <- msgObj
 	} else {
-		fmt.Println(fmt.Sprintf(msg,args...))
+		fmt.Println(fmt.Sprintf(msg, args...))
 	}
 }
