@@ -12,6 +12,7 @@
 - [缓存数据2-cache2go](github.com/muesli/cache2go)
 - [日志框架-zap](https://github.com/uber-go/zap)
 - [HTTP框架-gin](https://github.com/gin-gonic/gin)
+- [Excel操作-excelize](https://github.com/qax-os/excelize)
 
 # 编译部署相关
 
