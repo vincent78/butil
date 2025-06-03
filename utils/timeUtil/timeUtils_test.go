@@ -23,5 +23,11 @@ func TestTimeFormat(t *testing.T) {
 }
 
 func TestNowFmtStr(t *testing.T) {
-	t.Logf(NowFmtStr(DateFormat))
+	t.Log(NowFmtStr(DateFormat))
+}
+
+func TestTimeStamp(t *testing.T) {
+	tt := 1747611165000
+	utc := 8 * 60 * 60 * 1000
+	println("转换成time:%v", TimeStr(TimeFromStamp(int64((tt-utc)/1000), 0)))
 }

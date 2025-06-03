@@ -61,6 +61,14 @@ func GetIntValue(src, pos string) int64 {
 	}
 }
 
+func GetFloatValue(src, pos string) float64 {
+	if gjson.Valid(src) {
+		return gjson.Get(src, pos).Float()
+	} else {
+		return -1
+	}
+}
+
 func GetValue(src, pos string) (gjson.Result, error) {
 	if gjson.Valid(src) {
 		return gjson.Get(src, pos), nil
@@ -75,4 +83,8 @@ func ExistValue(src, path string) bool {
 	} else {
 		return false
 	}
+}
+
+func Parse(bs []byte) gjson.Result {
+	return gjson.Parse(string(bs))
 }

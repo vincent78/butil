@@ -15,7 +15,8 @@ import (
 func GetCurrentAbPath() string {
 	dir := GetCurrentAbPathByExecutable()
 	if strings.Contains(dir, GetTmpDir()) {
-		return GetCurrentAbPathByCaller()
+		//return GetCurrentAbPathByCaller()
+		return GetCurrentProjectPath()
 	}
 	return dir
 }
