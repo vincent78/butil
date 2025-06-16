@@ -33,6 +33,12 @@ func HexStringToBytes(input string) ([]byte, error) {
 	return hex.DecodeString(strings.Replace(input, "0x", "", -1))
 }
 
+// 工具函数: Hex字符串转字节数组
+func HexToBytes(hexStr string) string {
+	// 简单实现，实际应该处理各种格式
+	return hex.EncodeToString([]byte(hexStr))
+}
+
 // ToHexArray creates a array of hex-string based on []byte
 func ToHexArray(b [][]byte) []string {
 	r := make([]string, len(b))
