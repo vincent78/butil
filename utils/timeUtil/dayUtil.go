@@ -33,6 +33,14 @@ func CompareDay(t1, t2 time.Time) int {
 	}
 }
 
+// 获取两个时间相差的天数，0表同一天，正数表t1>t2，负数表t1<t2
+func GetDiffDays(t1, t2 time.Time) int {
+	t1 = time.Date(t1.Year(), t1.Month(), t1.Day(), 0, 0, 0, 0, time.Local)
+	t2 = time.Date(t2.Year(), t2.Month(), t2.Day(), 0, 0, 0, 0, time.Local)
+
+	return int(t1.Sub(t2).Hours() / 24)
+}
+
 // 获取传入的时间所在月份的第一天，即某月第一天的0点。如传入time.Now(), 返回当前月份的第一天0点时间。
 func GetFirstDateOfMonth(d time.Time) time.Time {
 	d = d.AddDate(0, 0, -d.Day()+1)

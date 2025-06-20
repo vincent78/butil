@@ -15,3 +15,17 @@ func TestCompareDay(t *testing.T) {
 	r1 := CompareDay(t2, t1)
 	t.Logf("t2: %v\t\t t1: %v \t result: %v", t2, t1, r1)
 }
+
+func TestGetDiffDays(t *testing.T) {
+	t1, _ := time.Parse(TimeFormat, "2025-06-25 23:12:11")
+	t2, _ := time.Parse(TimeFormat, "2025-06-24 23:59:59")
+
+	n := GetDiffDays(t1, t2)
+	t.Logf("t1: %v\t\t t2: %v\t result: %v", t1, t2, n)
+
+	t3, _ := time.Parse(TimeFormat, "2025-06-25 00:12:11")
+	t4, _ := time.Parse(TimeFormat, "2025-06-24 23:59:59")
+
+	n = GetDiffDays(t3, t4)
+	t.Logf("t3: %v\t\t t4: %v\t result: %v", t3, t4, n)
+}
