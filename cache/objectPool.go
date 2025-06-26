@@ -9,44 +9,51 @@ type ObjPool struct {
 	sync.Mutex
 	Inuse     []interface{}
 	Available []interface{}
-	New       func() interface{}
+	new       func() interface{}
 	Reset     func(obj interface{})
+	Capacity  int
 }
 
 func NewObjPool(new func() interface{}) *ObjPool {
-	return &ObjPool{New: new}
+	op := &ObjPool{new: new}
+	op.Capacity = 100
+	op.Inuse = make([]interface{}, 0)
+	op.Available = make([]interface{}, 0)
+	return op
 }
 
 func (p *ObjPool) Acquire() interface{} {
 	p.Lock()
-	var object interface{}
+	defer p.Unlock()
+	var obj interface{}
 
-	if len(p.Inuse) != 0 {
-		object = p.Available[0]
-		// TODO: remove one of Available
+	if len(p.Inuse) != 0 && len(p.Available) > 0 {
+		obj = p.Available[0]
 		p.Available = append(p.Available[:0], p.Available[1:]...)
-		// TODO: add one in Inuse
-		p.Inuse = append(p.Inuse, object)
+		p.Inuse = append(p.Inuse, obj)
 	} else {
-		object = p.New()
-		p.Inuse = append(p.Inuse, object)
+		obj = p.new()
+		p.Inuse = append(p.Inuse, obj)
 	}
-	p.Unlock()
-	return object
+	return obj
 }
 
 func (p *ObjPool) Release(object interface{}) {
 	p.Lock()
-	if !objUtil.IsNil(object) && !objUtil.IsNil(p.Reset) {
-		p.Reset(object)
+	defer p.Unlock()
+	if (len(p.Inuse) + len(p.Available)) <= p.Capacity {
+		if !objUtil.IsNil(object) && !objUtil.IsNil(p.Reset) {
+			p.Reset(object)
+		}
+		p.Available = append(p.Available, object)
+
+	} else {
+		object = nil
 	}
-	p.Available = append(p.Available, object)
 	for i, v := range p.Inuse {
 		if v == object {
-			// TODO: remove object from available list
 			p.Inuse = append(p.Inuse[:i], p.Inuse[i+1:]...)
 			break
 		}
 	}
-	p.Unlock()
 }

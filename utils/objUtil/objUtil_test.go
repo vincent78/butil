@@ -11,7 +11,7 @@ func TestInterfaceIsNil(t *testing.T) {
 
 	t.Logf("type and data all is nil? %v", a == nil)
 	t.Logf("data is nil? %v", b == nil)
-	
+
 }
 
 func TestToInt(t *testing.T) {
@@ -59,7 +59,10 @@ func TestSimpleCopyProperties(t *testing.T) {
 		},
 	}
 	person2 := &Person2{}
-	SimpleCopyProperties(person2, person1)
+	err := SimpleCopyProperties(person2, person1)
+	if err != nil {
+		return
+	}
 	t.Logf("person1:%#v", person1)
 	t.Logf("person2:%#v", person2)
 }
