@@ -2,6 +2,8 @@ package logger4
 
 import (
 	"fmt"
+	"github.com/vincent78/butil/config"
+	"github.com/vincent78/butil/utils/fileUtil"
 	"os"
 	"strings"
 	"testing"
@@ -145,4 +147,26 @@ func Test_getLevelSize(t *testing.T) {
 	defaultLogger = nil
 	_ = GetWithSkip(5)
 	_ = Get()
+}
+
+func Test_InitConfigByFile(t *testing.T) {
+	path := fileUtil.GetCurrentProjectPath()
+	file := fileUtil.Join(path, "config", "test.yaml")
+	cfg := &config.CmdConfig{}
+	_ = config.Parse(file, cfg)
+	dfl := cfg.Logger["default"]
+	log, _ := Init(
+		WithLevel(dfl.Level),
+		WithFormat(dfl.Format),
+		WithSave(
+			dfl.IsSave,
+			WithFileName(dfl.LogFileConfig.Filename),
+			WithFileMaxSize(dfl.LogFileConfig.MaxSize),
+			WithFileMaxBackups(dfl.LogFileConfig.MaxBackups),
+			WithFileMaxAge(dfl.LogFileConfig.MaxAge),
+			WithFileIsCompression(dfl.LogFileConfig.IsCompression),
+		),
+	)
+	log.Info("this is info")
+	log.Debug("this is debug")
 }

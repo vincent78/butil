@@ -20,12 +20,14 @@ import (
 type ChangedHandler func(key string, value interface{})
 
 var (
-	GlobalConfig interface{}
+	globalConfig interface{}
 )
 
 // ParseConfig conf 必须传入指针类型
 func ParseConfig[T any](filepath string, conf T) (T, error) {
 	//configMap[filepath] = val
+	fmt.Println("configPath:", filepath)
+
 	if filepath == "" {
 		return conf, nil
 	}
@@ -49,7 +51,7 @@ func ParseConfig[T any](filepath string, conf T) (T, error) {
 	confBytes, err := json.Marshal(conf)
 	fmt.Print(strUtil.Bytes2String(confBytes))
 	fmt.Print("\n\n\n")
-	GlobalConfig = conf
+	globalConfig = conf
 	return conf, nil
 }
 

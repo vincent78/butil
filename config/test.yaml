@@ -8,13 +8,13 @@ server:
     ssl: false
 
 logger:
-  home: "./logs"
-  level: "debug"
-  format: "console"
-  isSave: false
-  logFileConfig:
-    filename: "out.log"
-    maxSize: 20
-    maxBackups: 50
-    maxAge: 15
-    isCompression: true
+  default:
+    level: "debug"
+    format: "console"
+    isSave: false
+    logFileConfig:
+      filename: "out.log"
+      maxSize: 20
+      maxBackups: 50
+      maxAge: 15
+      isCompression: true
