@@ -6,3 +6,15 @@ server:
     host: 127.0.0.1
     port: 7801
     ssl: false
+
+logger:
+  home: "./logs"
+  level: "debug"
+  format: "console"
+  isSave: false
+  logFileConfig:
+    filename: "out.log"
+    maxSize: 20
+    maxBackups: 50
+    maxAge: 15
+    isCompression: true

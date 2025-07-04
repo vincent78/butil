@@ -1,15 +1,38 @@
 package config
 
 type LoggerConfig struct {
-	Home   string `yaml:"home" json:"home"`
-	Prefix string `yaml:"prefix" json:"prefix"`
-	Level  int    `yaml:"level" json:"level"` // 0 DEBUG,1 INFO,2 WARN,3 ERROR
+	Format        string        `yaml:"format" json:"format"`
+	IsSave        bool          `yaml:"isSave" json:"isSave"`
+	Level         string        `yaml:"level" json:"level"`
+	LogFileConfig LogFileConfig `yaml:"logFileConfig" json:"logFileConfig"`
 }
 
-func NewLoggerConfig(prefix string) LoggerConfig {
+func NewLoggerConfig() LoggerConfig {
 	return LoggerConfig{
-		Home:   "./logs",
-		Prefix: prefix,
-		Level:  0,
+		Format: "console",
+		Level:  "debug",
+		IsSave: false,
+		LogFileConfig: LogFileConfig{
+			Filename:      "out.log",
+			MaxSize:       20,
+			MaxBackups:    50,
+			MaxAge:        15,
+			IsCompression: true,
+		},
 	}
+}
+
+type Logger struct {
+	Format        string        `yaml:"format" json:"format"`
+	IsSave        bool          `yaml:"isSave" json:"isSave"`
+	Level         string        `yaml:"level" json:"level"`
+	LogFileConfig LogFileConfig `yaml:"logFileConfig" json:"logFileConfig"`
+}
+
+type LogFileConfig struct {
+	Filename      string `yaml:"filename" json:"filename"`
+	IsCompression bool   `yaml:"isCompression" json:"isCompression"`
+	MaxAge        int    `yaml:"maxAge" json:"maxAge"`
+	MaxBackups    int    `yaml:"maxBackups" json:"maxBackups"`
+	MaxSize       int    `yaml:"maxSize" json:"maxSize"`
 }

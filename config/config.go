@@ -17,14 +17,14 @@ import (
 4、默认值（默认的配置文件或原始值)
 */
 
-type ConfigChangedHandler func(key string, value interface{})
+type ChangedHandler func(key string, value interface{})
 
 var (
 	GlobalConfig interface{}
 )
 
-// ParseCofnig conf 必须传入指针类型
-func ParseCofnig[T any](filepath string, conf T) (T, error) {
+// ParseConfig conf 必须传入指针类型
+func ParseConfig[T any](filepath string, conf T) (T, error) {
 	//configMap[filepath] = val
 	if filepath == "" {
 		return conf, nil
@@ -47,12 +47,12 @@ func ParseCofnig[T any](filepath string, conf T) (T, error) {
 	}
 
 	confBytes, err := json.Marshal(conf)
-	fmt.Printf(strUtil.Bytes2String(confBytes))
-	fmt.Printf("\n\n\n")
+	fmt.Print(strUtil.Bytes2String(confBytes))
+	fmt.Print("\n\n\n")
 	GlobalConfig = conf
 	return conf, nil
 }
 
-func SubscribeConfigChanged(key string, handler ConfigChangedHandler) {
+func SubscribeConfigChanged(key string, handler ChangedHandler) {
 
 }
