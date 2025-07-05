@@ -170,3 +170,26 @@ func Test_InitConfigByFile(t *testing.T) {
 	log.Info("this is info")
 	log.Debug("this is debug")
 }
+
+func Test_InitTestConfigByFile(t *testing.T) {
+	path := fileUtil.GetCurrentProjectPath()
+	file := fileUtil.Join(path, "config", "test.yaml")
+	cfg := &config.CmdConfig{}
+	_ = config.Parse(file, cfg)
+	dfl := cfg.Logger["test"]
+	log, _ := Init(
+		WithLevel(dfl.Level),
+		WithFormat(dfl.Format),
+		WithDisableCaller(dfl.DisableCaller),
+		WithSave(
+			dfl.IsSave,
+			WithFileName(dfl.LogFileConfig.Filename),
+			WithFileMaxSize(dfl.LogFileConfig.MaxSize),
+			WithFileMaxBackups(dfl.LogFileConfig.MaxBackups),
+			WithFileMaxAge(dfl.LogFileConfig.MaxAge),
+			WithFileIsCompression(dfl.LogFileConfig.IsCompression),
+		),
+	)
+	log.Info("this is info")
+	log.Debug("this is debug")
+}

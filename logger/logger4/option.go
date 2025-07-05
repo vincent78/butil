@@ -10,6 +10,7 @@ var (
 	defaultLevel    = "debug" // output log levels debug, info, warn, error, default is debug
 	defaultEncoding = formatConsole
 	defaultIsSave   = false // false:output to terminal, true:output to file, default is false
+	defaultCaller   = false
 
 	defaultFilename      = "out.log" // file name
 	defaultMaxSize       = 10        // maximum file size (MB)
@@ -20,9 +21,10 @@ var (
 )
 
 type options struct {
-	level    string
-	encoding string
-	isSave   bool
+	level         string
+	encoding      string
+	isSave        bool
+	disableCaller bool
 
 	fileConfig *fileOptions
 
@@ -31,9 +33,10 @@ type options struct {
 
 func defaultOptions() *options {
 	return &options{
-		level:    defaultLevel,
-		encoding: defaultEncoding,
-		isSave:   defaultIsSave,
+		level:         defaultLevel,
+		encoding:      defaultEncoding,
+		disableCaller: defaultCaller,
+		isSave:        defaultIsSave,
 	}
 }
 
@@ -65,6 +68,13 @@ func WithFormat(format string) Option {
 		if strings.ToLower(format) == formatJSON {
 			o.encoding = formatJSON
 		}
+	}
+}
+
+// WithFormat set the output log format, console or json
+func WithDisableCaller(disalbeCaller bool) Option {
+	return func(o *options) {
+		o.disableCaller = disalbeCaller
 	}
 }
 

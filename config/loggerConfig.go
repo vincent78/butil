@@ -4,6 +4,7 @@ type LoggerConfig struct {
 	Format        string        `yaml:"format" json:"format"`
 	IsSave        bool          `yaml:"isSave" json:"isSave"`
 	Level         string        `yaml:"level" json:"level"`
+	DisableCaller bool          `yaml:"disableCaller" json:"disableCaller"`
 	LogFileConfig LogFileConfig `yaml:"logFileConfig" json:"logFileConfig"`
 }
 

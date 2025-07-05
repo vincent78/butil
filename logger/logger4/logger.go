@@ -64,12 +64,13 @@ func Init(opts ...Option) (*zap.Logger, error) {
 	isSave := o.isSave
 	levelName := o.level
 	encoding := o.encoding
+	disableCaller := o.disableCaller
 
 	var err error
 	var zapLog *zap.Logger
 	var str string
 	if !isSave {
-		zapLog, err = log2Terminal(levelName, encoding)
+		zapLog, err = log2Terminal(levelName, encoding, disableCaller)
 		if err != nil {
 			panic(err)
 		}
@@ -90,13 +91,14 @@ func Init(opts ...Option) (*zap.Logger, error) {
 	return defaultLogger, err
 }
 
-func log2Terminal(levelName string, encoding string) (*zap.Logger, error) {
+func log2Terminal(levelName string, encoding string, disableCaller bool) (*zap.Logger, error) {
 	js := fmt.Sprintf(`{
       		"level": "%s",
             "encoding": "%s",
       		"outputPaths": ["stdout"],
-            "errorOutputPaths": ["stdout"]
-		}`, levelName, encoding)
+            "errorOutputPaths": ["stdout"],
+			"disableCaller": %v
+		}`, levelName, encoding, disableCaller)
 
 	var config zap.Config
 	err := json.Unmarshal([]byte(js), &config)

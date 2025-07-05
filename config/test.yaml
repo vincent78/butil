@@ -12,8 +12,20 @@ logger:
     level: "debug"
     format: "console"
     isSave: false
+    disableCaller: true
     logFileConfig:
-      filename: "out.log"
+      filename: "./out.log"
+      maxSize: 20
+      maxBackups: 50
+      maxAge: 15
+      isCompression: true
+  test:
+    level: "test"
+    format: "console"
+    isSave: false
+    disableCaller: true
+    logFileConfig:
+      filename: "test.log"
       maxSize: 20
       maxBackups: 50
       maxAge: 15
