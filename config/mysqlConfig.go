@@ -61,3 +61,11 @@ func (conf *MySqlConfig) UrlStr() string {
 		)
 	}
 }
+
+type Mysql struct {
+	Dsn             string `yaml:"dsn" json:"dsn"`
+	ConnMaxLifetime int    `yaml:"connMaxLifetime" json:"connMaxLifetime"`
+	EnableLog       bool   `yaml:"enableLog" json:"enableLog"`
+	MaxIdleConns    int    `yaml:"maxIdleConns" json:"maxIdleConns"`
+	MaxOpenConns    int    `yaml:"maxOpenConns" json:"maxOpenConns"`
+}

@@ -10,9 +10,10 @@ type LoggerConfig struct {
 
 func NewLoggerConfig() LoggerConfig {
 	return LoggerConfig{
-		Format: "console",
-		Level:  "debug",
-		IsSave: false,
+		Format:        "console",
+		Level:         "debug",
+		IsSave:        false,
+		DisableCaller: true,
 		LogFileConfig: LogFileConfig{
 			Filename:      "out.log",
 			MaxSize:       20,

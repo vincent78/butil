@@ -5,6 +5,7 @@ type ServerConfig struct {
 	Ws   *ServerDetailConfig `yaml:"ws" json:"ws,omitempty"`
 	Tcp  *ServerDetailConfig `yaml:"tcp" json:"tcp,omitempty"`
 	Udp  *ServerDetailConfig `yaml:"udp" json:"udp,omitempty"`
+	Ext  string              `yaml:"ext" json:"ext,omitempty"`
 }
 
 type ServerDetailConfig struct {

@@ -53,3 +53,39 @@ func (conf *RedisConfig) UrlStr() string {
 		conf.Db,
 	)
 }
+
+/**
+redis:
+  dsn: "vincent:qt%402023@127.0.0.1:6379/0"
+  dialTimeout: 10
+  readTimeout: 2
+  writeTimeout: 2
+  queueConfig:
+    stream: "order_events"
+    group: "order_processing_group"
+    dlqStream: "order_dlq"
+    maxRetries: 3
+    consumerName: "consumer-"
+    blockTimeout: 5
+    pendingCheckInterval: 5
+    maxPendingAge: 30
+ */
+type Redis struct {
+	DialTimeout  int         `yaml:"dialTimeout" json:"dialTimeout"`
+	Dsn          string      `yaml:"dsn" json:"dsn"`
+	QueueConfig  QueueConfig `yaml:"queueConfig" json:"queueConfig"`
+	ReadTimeout  int         `yaml:"readTimeout" json:"readTimeout"`
+	WriteTimeout int         `yaml:"writeTimeout" json:"writeTimeout"`
+}
+
+
+type QueueConfig struct {
+	BlockTimeout         int    `yaml:"blockTimeout" json:"blockTimeout"`
+	ConsumerName         string `yaml:"consumerName" json:"consumerName"`
+	DlqStream            string `yaml:"dlqStream" json:"dlqStream"`
+	Group                string `yaml:"group" json:"group"`
+	MaxPendingAge        int    `yaml:"maxPendingAge" json:"maxPendingAge"`
+	MaxRetries           int    `yaml:"maxRetries" json:"maxRetries"`
+	PendingCheckInterval int    `yaml:"pendingCheckInterval" json:"pendingCheckInterval"`
+	Stream               string `yaml:"stream" json:"stream"`
+}
