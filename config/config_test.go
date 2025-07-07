@@ -24,5 +24,5 @@ func TestParseConfig2(t *testing.T) {
 	if err != nil {
 		t.Errorf("parse the config error: %v", err.Error())
 	}
-	t.Logf("the config : %+v", conf)
+	t.Logf("the config : %v", conf)
 }

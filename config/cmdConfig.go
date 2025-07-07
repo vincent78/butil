@@ -9,6 +9,5 @@ type CmdConfig struct {
 }
 
 type Database struct {
-	Type string `json:"type" yaml:"type"`
-	Dev  Mysql  `json:"dev" yaml:"dev"`
+	Mysql map[string]Mysql `yaml:"mysql" json:"mysql"`
 }

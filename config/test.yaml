@@ -24,17 +24,17 @@ logger:
       maxBackups: 50
       maxAge: 15
       isCompression: true
-  test:
-    level: "debug"
-    format: "json"
-    isSave: false
-    disableCaller: true
-    logFileConfig:
-      filename: "test.log"
-      maxSize: 20
-      maxBackups: 50
-      maxAge: 15
-      isCompression: true
+#  test:
+#    level: "debug"
+#    format: "json"
+#    isSave: false
+#    disableCaller: true
+#    logFileConfig:
+#      filename: "test.log"
+#      maxSize: 20
+#      maxBackups: 50
+#      maxAge: 15
+#      isCompression: true
 
 
 redis:
@@ -53,13 +53,13 @@ redis:
     maxPendingAge: 30
 
 database:
-  type: mysql
-  dev:
-    dsn: "root:Lanto@1122@(sh-cdb-dbupw87c.sql.tencentcdb.com:60842)/dev?parseTime=true&loc=Local&charset=utf8,utf8mb4&useSSL=false"
-    enableLog: true
-    maxIdleConns: 10
-    maxOpenConns: 100
-    connMaxLifetime: 30
+  mysql:
+    dev:
+      dsn: "root:Lanto@1122@(sh-cdb-dbupw87c.sql.tencentcdb.com:60842)/dev?parseTime=true&loc=Local&charset=utf8,utf8mb4&useSSL=false"
+      enableLog: true
+      maxIdleConns: 10
+      maxOpenConns: 100
+      connMaxLifetime: 30
 
 chain:
   tron:
