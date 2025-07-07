@@ -9,6 +9,7 @@ package logger4
 import (
 	"encoding/json"
 	"fmt"
+	"github.com/vincent78/butil/config"
 	"strings"
 	"time"
 
@@ -27,15 +28,19 @@ const (
 	levelError = "ERROR"
 )
 
-var defaultLogger *zap.Logger
-var defaultSugaredLogger *zap.SugaredLogger
+type Logger = zap.Logger
+type SugaredLogger = zap.SugaredLogger
 
-func getLogger() *zap.Logger {
+var defaultLogger *Logger
+var defaultSugaredLogger *SugaredLogger
+var loggerMap = make(map[string]*Logger)
+
+func getLogger() *Logger {
 	checkNil()
 	return defaultLogger.WithOptions(zap.AddCallerSkip(1))
 }
 
-func getSugaredLogger() *zap.SugaredLogger {
+func getSugaredLogger() *SugaredLogger {
 	checkNil()
 	return defaultSugaredLogger.WithOptions(zap.AddCallerSkip(1))
 }
@@ -58,7 +63,7 @@ func getSugaredLogger() *zap.SugaredLogger {
 //			WithFileMaxAge(10),
 //			WithFileIsCompression(true),
 //		))
-func Init(opts ...Option) (*zap.Logger, error) {
+func Init(opts ...Option) (*Logger, error) {
 	o := defaultOptions()
 	o.apply(opts...)
 	isSave := o.isSave
@@ -67,7 +72,7 @@ func Init(opts ...Option) (*zap.Logger, error) {
 	disableCaller := o.disableCaller
 
 	var err error
-	var zapLog *zap.Logger
+	var zapLog *Logger
 	var str string
 	if !isSave {
 		zapLog, err = log2Terminal(levelName, encoding, disableCaller)
@@ -91,7 +96,7 @@ func Init(opts ...Option) (*zap.Logger, error) {
 	return defaultLogger, err
 }
 
-func log2Terminal(levelName string, encoding string, disableCaller bool) (*zap.Logger, error) {
+func log2Terminal(levelName string, encoding string, disableCaller bool) (*Logger, error) {
 	js := fmt.Sprintf(`{
       		"level": "%s",
             "encoding": "%s",
@@ -116,7 +121,7 @@ func log2Terminal(levelName string, encoding string, disableCaller bool) (*zap.L
 	return config.Build()
 }
 
-func log2File(encoding string, levelName string, fo *fileOptions) *zap.Logger {
+func log2File(encoding string, levelName string, fo *fileOptions) *Logger {
 	encoderConfig := zap.NewProductionEncoderConfig()
 	encoderConfig.EncodeTime = zapcore.ISO8601TimeEncoder   // modify Time Encoder
 	encoderConfig.EncodeLevel = zapcore.CapitalLevelEncoder // logging levels in the log file using upper case letters
@@ -161,13 +166,13 @@ func timeFormatter(t time.Time, enc zapcore.PrimitiveArrayEncoder) {
 }
 
 // GetWithSkip get defaultLogger, set the skipped caller value, customize the number of lines of code displayed
-func GetWithSkip(skip int) *zap.Logger {
+func GetWithSkip(skip int) *Logger {
 	checkNil()
 	return defaultLogger.WithOptions(zap.AddCallerSkip(skip))
 }
 
 // Get logger
-func Get() *zap.Logger {
+func Get() *Logger {
 	checkNil()
 	return defaultLogger
 }
@@ -179,4 +184,39 @@ func checkNil() {
 			panic(err)
 		}
 	}
+}
+
+func InitLoggerByConfig(cfgs map[string]config.LoggerConfig) {
+	for name, cfg := range cfgs {
+
+		log, err := Init(
+			WithLevel(cfg.Level),
+			WithFormat(cfg.Format),
+			WithSave(
+				cfg.IsSave,
+				WithFileName(cfg.LogFileConfig.Filename),
+				WithFileMaxSize(cfg.LogFileConfig.MaxSize),
+				WithFileMaxBackups(cfg.LogFileConfig.MaxBackups),
+				WithFileMaxAge(cfg.LogFileConfig.MaxAge),
+				WithFileIsCompression(cfg.LogFileConfig.IsCompression),
+			),
+		)
+		if err != nil {
+			panic("init logger error:" + err.Error())
+		}
+
+		loggerMap[name] = log
+	}
+}
+
+func GetLogger(name string) *Logger {
+	if logger, ok := loggerMap[name]; ok {
+		return logger
+	} else {
+		panic("logger not found: " + name)
+	}
+}
+
+func SetDefaultLogger(name string) {
+	defaultLogger = GetLogger(name)
 }

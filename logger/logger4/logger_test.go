@@ -3,6 +3,7 @@ package logger4
 import (
 	"fmt"
 	"github.com/vincent78/butil/config"
+	logger "github.com/vincent78/butil/logger/logger2/logger"
 	"github.com/vincent78/butil/utils/fileUtil"
 	"os"
 	"strings"
@@ -149,35 +150,13 @@ func Test_getLevelSize(t *testing.T) {
 	_ = Get()
 }
 
-func Test_InitConfigByFile(t *testing.T) {
-	path := fileUtil.GetCurrentProjectPath()
-	file := fileUtil.Join(path, "config", "test.yaml")
-	cfg := &config.CmdConfig{}
-	_ = config.Parse(file, cfg)
-	dfl := cfg.Logger["default"]
-	log, _ := Init(
-		WithLevel(dfl.Level),
-		WithFormat(dfl.Format),
-		WithSave(
-			dfl.IsSave,
-			WithFileName(dfl.LogFileConfig.Filename),
-			WithFileMaxSize(dfl.LogFileConfig.MaxSize),
-			WithFileMaxBackups(dfl.LogFileConfig.MaxBackups),
-			WithFileMaxAge(dfl.LogFileConfig.MaxAge),
-			WithFileIsCompression(dfl.LogFileConfig.IsCompression),
-		),
-	)
-	log.Info("this is info")
-	log.Debug("this is debug")
-}
-
 func Test_InitTestConfigByFile(t *testing.T) {
 	path := fileUtil.GetCurrentProjectPath()
 	file := fileUtil.Join(path, "config", "test.yaml")
 	cfg := &config.CmdConfig{}
 	_ = config.Parse(file, cfg)
 	dfl := cfg.Logger["test"]
-	log, _ := Init(
+	l, _ := Init(
 		WithLevel(dfl.Level),
 		WithFormat(dfl.Format),
 		WithDisableCaller(dfl.DisableCaller),
@@ -190,6 +169,17 @@ func Test_InitTestConfigByFile(t *testing.T) {
 			WithFileIsCompression(dfl.LogFileConfig.IsCompression),
 		),
 	)
-	log.Info("this is info")
-	log.Debug("this is debug")
+	l.Info("this is info")
+	l.Debug("this is debug")
+}
+
+func Test_InitConfigByFile(t *testing.T) {
+	path := fileUtil.GetCurrentProjectPath()
+	file := fileUtil.Join(path, "config", "test.yaml")
+	cfgs := &config.CmdConfig{}
+	_ = config.Parse(file, cfgs)
+	InitLoggerByConfig(cfgs.Logger)
+	SetDefaultLogger("default")
+	logger.Info("this is info")
+	logger.Debug("this is debug")
 }

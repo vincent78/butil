@@ -24,12 +24,12 @@ func NewLoggerConfig() LoggerConfig {
 	}
 }
 
-type Logger struct {
-	Format        string        `yaml:"format" json:"format"`
-	IsSave        bool          `yaml:"isSave" json:"isSave"`
-	Level         string        `yaml:"level" json:"level"`
-	LogFileConfig LogFileConfig `yaml:"logFileConfig" json:"logFileConfig"`
-}
+//type Logger struct {
+//	Format        string        `yaml:"format" json:"format"`
+//	IsSave        bool          `yaml:"isSave" json:"isSave"`
+//	Level         string        `yaml:"level" json:"level"`
+//	LogFileConfig LogFileConfig `yaml:"logFileConfig" json:"logFileConfig"`
+//}
 
 type LogFileConfig struct {
 	Filename      string `yaml:"filename" json:"filename"`

@@ -57,6 +57,8 @@ database:
     dev:
       dsn: "root:rootpassword@(127.0.0.1:3306)/dev?parseTime=true&loc=Local&charset=utf8,utf8mb4&useSSL=false"
       enableLog: true
+      logLevel: debug
+      logger: mysql,default
       maxIdleConns: 10
       maxOpenConns: 100
       connMaxLifetime: 30

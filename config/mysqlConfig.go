@@ -66,6 +66,8 @@ type Mysql struct {
 	Dsn             string `yaml:"dsn" json:"dsn"`
 	ConnMaxLifetime int    `yaml:"connMaxLifetime" json:"connMaxLifetime"`
 	EnableLog       bool   `yaml:"enableLog" json:"enableLog"`
+	Logger          string `yaml:"logger" json:"logger"`
+	LogLevel        string `yaml:"logLevel" json:"logLevel"`
 	MaxIdleConns    int    `yaml:"maxIdleConns" json:"maxIdleConns"`
 	MaxOpenConns    int    `yaml:"maxOpenConns" json:"maxOpenConns"`
 }
