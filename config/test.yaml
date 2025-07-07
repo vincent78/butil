@@ -1,5 +1,5 @@
 app:
-  name: adapter
+  name: test
   debug: true
 
 
@@ -24,17 +24,17 @@ logger:
       maxBackups: 50
       maxAge: 15
       isCompression: true
-#  test:
-#    level: "debug"
-#    format: "json"
-#    isSave: false
-#    disableCaller: true
-#    logFileConfig:
-#      filename: "test.log"
-#      maxSize: 20
-#      maxBackups: 50
-#      maxAge: 15
-#      isCompression: true
+  mysql:
+    level: "debug"
+    format: "json"
+    isSave: false
+    disableCaller: true
+    logFileConfig:
+      filename: "mysql.log"
+      maxSize: 20
+      maxBackups: 50
+      maxAge: 15
+      isCompression: true
 
 
 redis:
@@ -55,47 +55,11 @@ redis:
 database:
   mysql:
     dev:
-      dsn: "root:Lanto@1122@(sh-cdb-dbupw87c.sql.tencentcdb.com:60842)/dev?parseTime=true&loc=Local&charset=utf8,utf8mb4&useSSL=false"
+      dsn: "root:rootpassword@(127.0.0.1:3306)/dev?parseTime=true&loc=Local&charset=utf8,utf8mb4&useSSL=false"
       enableLog: true
       maxIdleConns: 10
       maxOpenConns: 100
       connMaxLifetime: 30
 
-chain:
-  tron:
-    runType: daemon
-    callbacks:
-      - name: transaction
-        url:
-        ext: >-
-          {}
-    apis:
-      tronGrip:
-        - name: vincent01
-          key: fbd596f1-08c9-4e35-8396-f8d4a2af6d36
-          token: ""
-          weight: 1
-    accounts:
-      - name: dev01
-        address: TXWKjciNtyVPXbpfnHEdGo63GgEdv5MtXx
-        priKey: lPzJcx5uNwd7j2UKRmpbMNAS-1u5gzzxvcx9DK4GvQMfk3mccTn54iSZANRkka6XOoVwZwVT0qo2dO7K6UMf2WmNI2rqnlo_GhXiYB80Rs0
-    url: >-
-      {
-          "Grpc1": "grpc.shasta.trongrid.io:50051",
-          "Grpc2": "grpc.shasta.trongrid.io:50052",
-          "BaseUrl1": "https://api.shasta.trongrid.io",
-          "BaseUrl2": "https://api.shasta.trongrid.io",
-          "BaseUrl3": "https://api.shasta.trongrid.io",
-      }
-    ext: >-
-      {        
-      }
-    contracts:
-      - name: USDT
-        address: TLn9Yh5vRKUkbFygHwtPhnuwjeZoxwjgXM
-        decimal: 6
-  ext: >-
-    {        
-    }
 
 
