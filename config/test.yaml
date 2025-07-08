@@ -59,6 +59,7 @@ database:
       enableLog: true
       logLevel: debug
       logger: mysql,default
+      cacheType: memory
       maxIdleConns: 10
       maxOpenConns: 100
       connMaxLifetime: 30

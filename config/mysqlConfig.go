@@ -68,6 +68,7 @@ type Mysql struct {
 	EnableLog       bool   `yaml:"enableLog" json:"enableLog"`
 	Logger          string `yaml:"logger" json:"logger"`
 	LogLevel        string `yaml:"logLevel" json:"logLevel"`
+	CacheType       string `yaml:"cacheType" json:"cacheType"`
 	MaxIdleConns    int    `yaml:"maxIdleConns" json:"maxIdleConns"`
 	MaxOpenConns    int    `yaml:"maxOpenConns" json:"maxOpenConns"`
 }
