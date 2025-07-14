@@ -4,10 +4,10 @@ import (
 	"bytes"
 	"context"
 	"crypto/tls"
-	"encoding/json"
-	"github.com/vincent78/butil/logger/logger1"
+	logger "github.com/vincent78/butil/logger/logger4"
 	"github.com/vincent78/butil/model"
 	"github.com/vincent78/butil/token"
+	"github.com/vincent78/butil/utils/jsonUtil"
 	"github.com/vincent78/butil/utils/strUtil"
 	"io"
 	"net/http"
@@ -16,10 +16,10 @@ import (
 	"time"
 )
 
-var timeout = 3 * time.Second
+var defaultTimeout = 3 * time.Second
 
-func GetRequest(url string) model.RespModel {
-	return Request("GET", url, nil, "")
+func GetRequest(url string, header map[string]string, timeout time.Duration) model.RespModel {
+	return Request("GET", url, header, "", timeout)
 }
 
 func HeadRequest(url string) model.RespModel {
@@ -33,12 +33,12 @@ func HeadRequest(url string) model.RespModel {
 	}
 }
 
-func PostRequest(url string, header map[string]string, body string) model.RespModel {
+func PostRequest(url string, header map[string]string, body string, timeout time.Duration) model.RespModel {
 	if header == nil {
 		header = make(map[string]string)
 	}
 	header["Content-Type"] = "application/json"
-	return Request("POST", url, header, body)
+	return Request("POST", url, header, body, timeout)
 }
 
 func PostFormData(urlStr string, header map[string]string, body map[string]interface{}) model.RespModel {
@@ -73,9 +73,34 @@ func PostFormData(urlStr string, header map[string]string, body map[string]inter
 
 }
 
-func Request(method, url string, header map[string]string, body string) model.RespModel {
-	tk := token.UniqueId()
-	logger1.Debug("-->> http[%v] method:%v url:%v header:%v body:%v", tk, method, url, header, body)
+func Request(method, url string, header map[string]string, body string, timeout time.Duration) model.RespModel {
+	tk := ""
+	//hjs, _ := json.Marshal(header)
+	logInFields := make([]logger.Field, 0)
+
+	if v, ok := header["Bus_Token"]; ok {
+		tk = v
+	} else {
+		tk = token.UniqueId()
+	}
+	logInFields = append(logInFields, logger.String("token", tk))
+
+	logInFields = append(logInFields, logger.String("method", method),
+		logger.String("url", url))
+
+	if _, ok := header["Api-Key"]; ok {
+		logInFields = append(logInFields, logger.String("apiKey", header["Api-Key"]))
+	}
+
+	if len(body) > 0 {
+		logInFields = append(logInFields, logger.String("body", body))
+	}
+
+	logOutFields := []logger.Field{
+		logger.String("token", tk),
+	}
+
+	logger.Debug("-->> http", logInFields...)
 	//跳过证书校验
 	http.DefaultClient.Transport = &http.Transport{
 		TLSClientConfig: &tls.Config{
@@ -92,7 +117,8 @@ func Request(method, url string, header map[string]string, body string) model.Re
 
 	req, err := http.NewRequest(method, url, bodyReader)
 	if err != nil {
-		logger1.Debug("<<-- http[%v] %v", tk, err.Error())
+		logOutFields = append(logOutFields, logger.String("error", err.Error()))
+		logger.Error("<<-- http", logOutFields...)
 		return model.FailureRespWithError(4000, err)
 	}
 
@@ -110,32 +136,32 @@ func Request(method, url string, header map[string]string, body string) model.Re
 	client := &http.Client{}
 	resp, err := client.Do(req)
 	if err != nil {
-		logger1.Debug("<<-- http[%v] %v", tk, err.Error())
+		logOutFields = append(logOutFields, logger.String("error", err.Error()))
+		logger.Error("<<-- http", logOutFields...)
 		return model.FailureRespWithError(4000, err)
 	}
-	defer resp.Body.Close()
+	defer func(Body io.ReadCloser) {
+		err := Body.Close()
+		if err != nil {
+			logOutFields = append(logOutFields, logger.String("error", err.Error()))
+			logger.Error("<<-- http: close the body err", logOutFields...)
+		}
+	}(resp.Body)
 	//rep, err := ioutil.ReadAll(resp.Body)
 	rep, err := io.ReadAll(resp.Body)
-	if err != nil {
-		logger1.Debug("<<-- http[%v] %v", tk, err.Error())
-		return model.FailureRespWithError(4000, err)
-	} else if len(rep) == 0 {
-		logger1.Debug("<<-- http[%v] the response is null", tk)
+	if err != nil || len(rep) == 0 {
+		logOutFields = append(logOutFields, logger.String("error", err.Error()))
+		logger.Error("<<-- http", logOutFields...)
 		return model.FailureRespWithError(4000, err)
 	} else if strings.HasPrefix(resp.Header.Get("content-type"), "application/json") {
-		mapv := make(map[string]interface{})
-		err = json.Unmarshal(rep, &mapv)
-		if err != nil {
-			logger1.Debug("<<-- http[%v] the reponse is not json!", tk)
-			return model.FailureRespWithError(4000, err)
-		} else {
-			md := model.SuccessResp(mapv)
-			logger1.Debug("<<-- http[%v] %v", tk, md)
-			return md
-		}
+		r := jsonUtil.Parse(rep)
+		logOutFields = append(logOutFields, logger.Any("response", r))
+		logger.Debug("<<-- http", logOutFields...)
+		return model.SuccessResp(r)
 	} else {
-		md := model.SuccessResp(strUtil.ToStr(rep))
-		logger1.Debug("<<-- http[%v] %v", tk, md.String())
+		//rs := ToStr(resp)
+		md := model.SuccessResp(resp)
+		logger.Debug("<<-- http", logOutFields...)
 		return md
 	}
 }
