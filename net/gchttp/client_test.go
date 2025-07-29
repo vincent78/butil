@@ -1,32 +1,92 @@
 package gchttp
 
 import (
-	"github.com/vincent78/butil/logger/logger1"
+	"context"
+	"fmt"
 	"github.com/vincent78/butil/model"
+	"github.com/vincent78/butil/utils/netUtil"
+	"io/ioutil"
+	"net/http"
+	"net/url"
+	"strings"
 	"testing"
 )
 
-func TestGetHttp(t *testing.T) {
-	r := GetRequest("https://api-cn.etherscan.com/api?module=stats&action=ethprice&apikey=351ZSP4VXJANR8VRAN4D9C22TSN9BQXQP9")
-
-	if r.Code == model.Success {
-		logger1.Debug("http get result. %+v ", r.Data)
-	} else {
-		logger1.Error("http get error: %+v", r.Message)
-	}
-
+func TestGetBaseUrl(t *testing.T) {
+	urlstr := "https://api-cn.etherscan.com/api?module=stats&action=ethprice&apikey=351ZSP4VXJANR8VRAN4D9C22TSN9BQXQP9"
+	t.Logf("url prefix: %s", netUtil.GetUrlPrefix(urlstr))
+	urlstr = "https://api-cn.etherscan.com:909/api?module=stats&action=ethprice&apikey=351ZSP4VXJANR8VRAN4D9C22TSN9BQXQP9"
+	t.Logf("url prefix: %s", netUtil.GetUrlPrefix(urlstr))
+	urlstr = "https://api-cn.etherscan.com:909"
+	t.Logf("url prefix: %s", netUtil.GetUrlPrefix(urlstr))
 }
 
-func TestPostHttp(t *testing.T) {
-	r := PostRequest("http://10.4.62.243:6666", nil, `{"jsonrpc":"2.0","method":"web3_clientVersion","params":[],"id":67}`)
-	logger1.Debug("http post result. %v ", r.Message)
+func TestProxyDone(t *testing.T) {
+	urlstr := "http://ipinfo.io"
+	//urlstr := "http://cip.cc"
+	proxy := "http://127.0.0.1:7897"
+	proxyClient := NewHttpClient(urlstr, WithProxy(proxy))
+	task := NewTask(context.Background(), urlstr, nil)
+	proxyResp := done(task, proxyClient)
+	t.Log(proxyResp.Data)
+
+	client := NewHttpClient(urlstr)
+	resp := done(task, client)
+	t.Log(resp.Data)
 }
 
-func TestHeadRequest(t *testing.T) {
-	r := HeadRequest("https://api-cn.etherscan.com/api?module=stats&action=ethprice&apikey=351ZSP4VXJANR8VRAN4D9C22TSN9BQXQP9")
-	if r.IsSuccess() {
-		logger1.Info("%v", r.String())
-	} else {
-		logger1.Error("%v", r.String())
+func TestDoneInChannel(t *testing.T) {
+	urlstr := "https://red-solitary-valley.quiknode.pro/954951fe5e8f41b83d503bf29450307900fd4a6c"
+	proxy := "http://127.0.0.1:7897"
+	client := NewHttpClient(urlstr, WithProxy(proxy))
+	respChan := make(chan *model.RespModel)
+	task := NewTask(context.Background(), urlstr, respChan,
+		WithMethod("POST"),
+		WithHeader("Content-Type", "application/json"),
+		WithBody(`{"method":"eth_blockNumber","params":[],"id":1,"jsonrpc":"2.0"}`),
+	)
+	doneInChannel(task, client)
+	resp := <-respChan
+	t.Log(resp.Data)
+}
+
+func TestP2(t *testing.T) {
+	urlApi := "http://localhost:8080/v1/discovery"
+	var contentType string = "application/x-www-form-urlencoded"
+
+	formParam := url.Values{}
+	formParam.Add("id", "1010")
+	formParam.Add("test", "test")
+	body := strings.NewReader(formParam.Encode())
+	// 或者 body = strings.NewReader("id=1010&test=test")
+
+	resp, err := http.Post(urlApi, contentType, body)
+	if err != nil {
+
 	}
+	defer resp.Body.Close()
+	respBody, err := ioutil.ReadAll(resp.Body)
+	if err != nil {
+		fmt.Println(err)
+		// handle error
+	}
+	t.Log(string(respBody))
+}
+
+func TestP3(t *testing.T) {
+	urlApi := "http://localhost:8080/v1/discovery"
+	var contentType string = "application/json"
+
+	jsonParam := `{"id":"1010"}`
+	resp, err := http.Post(urlApi, contentType, strings.NewReader(jsonParam))
+	if err != nil {
+
+	}
+	defer resp.Body.Close()
+	respBody, err := ioutil.ReadAll(resp.Body)
+	if err != nil {
+		fmt.Println(err)
+		// handle error
+	}
+	t.Log(string(respBody))
 }

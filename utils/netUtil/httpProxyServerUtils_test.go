@@ -5,8 +5,6 @@ import (
 	"github.com/gin-gonic/gin"
 	"github.com/vincent78/butil/global"
 	"github.com/vincent78/butil/logger/logger1"
-	"github.com/vincent78/butil/model"
-	"github.com/vincent78/butil/net/gchttp"
 	"github.com/vincent78/butil/utils/strUtil"
 	io "io"
 	"net/http"
@@ -79,16 +77,16 @@ func proxyHandler(c *gin.Context) {
 			headerMap[k] = v[0]
 		}
 		// 发送POST 请求
-		result := gchttp.PostRequest(targetUrl, headerMap, receiverMes)
+		//result := gchttp.PostRequest(targetUrl, headerMap, receiverMes)
 		// 处理成功信息
-		if result.Code == model.Success {
-			str := strUtil.ToJsonStr(result.Data)
-			logger1.Info("receive requestUrl: %v response str:%v", targetUrl, str)
-			c.Writer.Write(strUtil.String2Bytes(str))
-			return
-		}
+		//if result.Code == model.Success {
+		//	str := strUtil.ToJsonStr(result.Data)
+		//	logger1.Info("receive requestUrl: %v response str:%v", targetUrl, str)
+		//	c.Writer.Write(strUtil.String2Bytes(str))
+		//	return
+		//}
 		// 处理失败信息
-		writeErrorResponse(targetUrl, c.Writer, result.Message)
+		//writeErrorResponse(targetUrl, c.Writer, result.Message)
 		return
 	}
 	//转发GET 请求
