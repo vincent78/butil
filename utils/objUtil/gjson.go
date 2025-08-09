@@ -1,4 +1,4 @@
-package jsonUtil
+package objUtil
 
 import (
 	"fmt"

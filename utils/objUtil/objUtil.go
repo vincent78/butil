@@ -38,7 +38,10 @@ func ObjToMap(obj interface{}) map[string]interface{} {
 	var r = make(map[string]interface{})
 	switch obj.(type) {
 	case string:
-		strUtil.Parse(obj.(string), &r)
+		err := strUtil.Parse(obj.(string), &r)
+		if err != nil {
+			return nil
+		}
 	case []interface{}:
 		t := obj.([]interface{})
 		for i := 0; i < len(t); i++ {
@@ -184,7 +187,7 @@ func SimpleCopyProperties(target, src interface{}) (err error) {
 }
 
 // 此时 T 不能为指针
-func Parse[T any](list []interface{}) ([]T, error) {
+func ParseList[T any](list []interface{}) ([]T, error) {
 	r := make([]T, 0, len(list))
 	for _, o := range list {
 		s := strUtil.ToJsonStr(o)

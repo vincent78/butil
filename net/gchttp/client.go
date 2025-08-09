@@ -6,8 +6,8 @@ import (
 	logger "github.com/vincent78/butil/logger/logger4"
 	"github.com/vincent78/butil/model"
 	"github.com/vincent78/butil/token"
-	"github.com/vincent78/butil/utils/jsonUtil"
 	"github.com/vincent78/butil/utils/netUtil"
+	"github.com/vincent78/butil/utils/objUtil"
 	"github.com/vincent78/butil/utils/strUtil"
 	"io"
 	"net/http"
@@ -235,7 +235,7 @@ func done(task *Task, client *HttpClient) model.RespModel {
 		logger.Error("<<-- http", logOutFields...)
 		return model.FailureRespWithError(4000, err)
 	} else if strings.HasPrefix(resp.Header.Get("content-type"), "application/json") {
-		r := jsonUtil.Parse(rep)
+		r := objUtil.Parse(rep)
 		logOutFields = append(logOutFields, logger.Any("response", r))
 		logger.Debug("<<-- http", logOutFields...)
 		return model.SuccessResp(r)

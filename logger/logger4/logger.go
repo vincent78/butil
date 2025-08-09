@@ -88,12 +88,12 @@ func Init(opts ...Option) (*Logger, error) {
 	if len(o.hooks) > 0 {
 		zapLog = zapLog.WithOptions(zap.Hooks(o.hooks...))
 	}
-
-	defaultLogger = zapLog
-	defaultSugaredLogger = defaultLogger.Sugar()
-	Info(str)
-
-	return defaultLogger, err
+	if defaultLogger == nil {
+		defaultLogger = zapLog
+		defaultSugaredLogger = zapLog.Sugar()
+	}
+	zapLog.Info(str)
+	return zapLog, err
 }
 
 func log2Terminal(levelName string, encoding string, disableCaller bool) (*Logger, error) {
@@ -219,4 +219,20 @@ func GetLogger(name string) *Logger {
 
 func SetDefaultLogger(name string) {
 	defaultLogger = GetLogger(name)
+}
+
+func InitByConf(cfg config.LoggerConfig) (*Logger, error) {
+	// initializing log
+	return Init(
+		WithLevel(cfg.Level),
+		WithFormat(cfg.Format),
+		WithSave(
+			cfg.IsSave,
+			WithFileName(cfg.LogFileConfig.Filename),
+			WithFileMaxSize(cfg.LogFileConfig.MaxSize),
+			WithFileMaxBackups(cfg.LogFileConfig.MaxBackups),
+			WithFileMaxAge(cfg.LogFileConfig.MaxAge),
+			WithFileIsCompression(cfg.LogFileConfig.IsCompression),
+		),
+	)
 }
