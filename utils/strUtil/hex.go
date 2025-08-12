@@ -2,6 +2,7 @@ package strUtil
 
 import (
 	"encoding/hex"
+	"math/big"
 	"strconv"
 )
 
@@ -24,3 +25,15 @@ func Hex2Byte(str string) []byte {
 	}
 	return bHex
 }
+
+func HexStr2BigInt(str string) (*big.Int, error) {
+	if byteValue, err := hex.DecodeString(str); err == nil {
+		return new(big.Int).SetBytes(byteValue), nil
+	} else {
+		return nil, err
+	}
+}
+
+//func Int2HexStr(n *big.Int) string {
+//
+//}
