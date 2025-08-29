@@ -1,9 +1,10 @@
 package angleUtil
 
 import (
+	"math"
+
 	"github.com/vincent78/butil/logger/logger1"
 	"github.com/vincent78/butil/utils/mathUtil"
-	"math"
 )
 
 const (

@@ -2,9 +2,10 @@ package numberUtil
 
 import (
 	sj "encoding/json"
+	"strconv"
+
 	j "github.com/json-iterator/go"
 	"github.com/vincent78/butil/logger/logger1"
-	"strconv"
 )
 
 func Int64ToInt(n1 int64) int {

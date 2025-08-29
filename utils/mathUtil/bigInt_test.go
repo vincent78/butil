@@ -102,3 +102,9 @@ func TestSuoJinSuanFa2Reverse(t *testing.T) {
 		//}
 	}
 }
+
+func TestConvertFloat2BigInt(t *testing.T) {
+	s := "7357499.492611614930156458"
+	r := ConvertFloat2BigInt(s, 19)
+	t.Log(r)
+}

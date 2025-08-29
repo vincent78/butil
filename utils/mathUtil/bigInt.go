@@ -138,3 +138,20 @@ func SuoJinSuanFa2Reverse(formatted string) (string, error) {
 func SuoJinSuanFa3(numStr string) string {
 	return "0.001" // 直接拼接
 }
+
+func ConvertFloat2BigInt(num string, decimals int) *big.Int {
+	s := num
+	l := len(s)
+	for i := 0; i < decimals; i++ {
+		p := strings.Index(s, ".")
+		if p < 0 {
+			s = s + "0"
+		} else if p >= l-2 {
+			s = s[:p] + s[p+1:p+2]
+		} else {
+			s = s[:p] + s[p+1:p+2] + "." + s[p+2:]
+		}
+	}
+	r, _ := new(big.Int).SetString(s, 10)
+	return r
+}

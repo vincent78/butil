@@ -3,21 +3,22 @@ package gchttp
 import (
 	"bytes"
 	"crypto/tls"
-	logger "github.com/vincent78/butil/logger/logger4"
-	"github.com/vincent78/butil/model"
-	"github.com/vincent78/butil/token"
-	"github.com/vincent78/butil/utils/netUtil"
-	"github.com/vincent78/butil/utils/objUtil"
-	"github.com/vincent78/butil/utils/strUtil"
 	"io"
 	"net/http"
 	"net/url"
 	"strings"
 	"sync"
 	"time"
+
+	logger "github.com/vincent78/butil/logger/logger4"
+	"github.com/vincent78/butil/model"
+	"github.com/vincent78/butil/token"
+	"github.com/vincent78/butil/utils/netUtil"
+	"github.com/vincent78/butil/utils/objUtil"
+	"github.com/vincent78/butil/utils/strUtil"
 )
 
-var defaultTimeout = 3 * time.Second
+var defaultTimeout = 60 * time.Second
 
 var clientCache = make(map[string]*HttpClient)
 
@@ -34,7 +35,7 @@ func init() {
 func GetRequest(task *Task) model.RespModel {
 	task.Method = "GET"
 	client := NewHttpClient("")
-	return done(task, client)
+	return Done(task, client)
 }
 
 func HeadRequest(task *Task) model.RespModel {
@@ -55,7 +56,7 @@ func PostRequest(task *Task) model.RespModel {
 		task.Header = make(map[string]string)
 	}
 	task.Header["Content-Type"] = "application/json"
-	return done(task, nil)
+	return Done(task, nil)
 }
 
 /************************************************************************
@@ -145,9 +146,9 @@ func GetClient(baseUrl string, opt ...ClientOption) *HttpClient {
  *  core
  *
  **************************************************************************/
-func doneInChannel(task *Task, client *HttpClient) {
+func DoneInChannel(task *Task, client *HttpClient) {
 	go func() {
-		resp := done(task, client)
+		resp := Done(task, client)
 		if task.RespChan != nil {
 			task.RespChan <- &resp
 		} else {
@@ -156,7 +157,7 @@ func doneInChannel(task *Task, client *HttpClient) {
 	}()
 }
 
-func done(task *Task, client *HttpClient) model.RespModel {
+func Done(task *Task, client *HttpClient) model.RespModel {
 	if client == nil {
 		client = NewHttpClient(task.Url)
 	}

@@ -3,13 +3,14 @@ package gchttp
 import (
 	"context"
 	"fmt"
-	"github.com/vincent78/butil/model"
-	"github.com/vincent78/butil/utils/netUtil"
 	"io/ioutil"
 	"net/http"
 	"net/url"
 	"strings"
 	"testing"
+
+	"github.com/vincent78/butil/model"
+	"github.com/vincent78/butil/utils/netUtil"
 )
 
 func TestGetBaseUrl(t *testing.T) {
@@ -27,11 +28,11 @@ func TestProxyDone(t *testing.T) {
 	proxy := "http://127.0.0.1:7897"
 	proxyClient := NewHttpClient(urlstr, WithProxy(proxy))
 	task := NewTask(context.Background(), urlstr, nil)
-	proxyResp := done(task, proxyClient)
+	proxyResp := Done(task, proxyClient)
 	t.Log(proxyResp.Data)
 
 	client := NewHttpClient(urlstr)
-	resp := done(task, client)
+	resp := Done(task, client)
 	t.Log(resp.Data)
 }
 
@@ -45,7 +46,7 @@ func TestDoneInChannel(t *testing.T) {
 		WithHeader("Content-Type", "application/json"),
 		WithBody(`{"method":"eth_blockNumber","params":[],"id":1,"jsonrpc":"2.0"}`),
 	)
-	doneInChannel(task, client)
+	DoneInChannel(task, client)
 	resp := <-respChan
 	t.Log(resp.Data)
 }
