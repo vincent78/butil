@@ -2,10 +2,11 @@ package gcnet
 
 import (
 	"fmt"
+	"testing"
+
 	"github.com/vincent78/butil/net/gcnet/proto.pb"
 	"github.com/vincent78/butil/utils/strUtil"
 	"google.golang.org/protobuf/proto"
-	"testing"
 )
 
 func TestProto(t *testing.T) {

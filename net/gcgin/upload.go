@@ -3,14 +3,15 @@ package gcgin
 import (
 	"errors"
 	"fmt"
-	"github.com/gin-gonic/gin"
-	"github.com/vincent78/butil/utils/objUtil"
-	"github.com/vincent78/butil/utils/timeUtil"
 	"log"
 	"net/http"
 	"os"
 	"path/filepath"
 	"strings"
+
+	"github.com/gin-gonic/gin"
+	"github.com/vincent78/butil/utils/objUtil"
+	"github.com/vincent78/butil/utils/timeUtil"
 )
 
 var extArray = []string{"jpg", "png"}

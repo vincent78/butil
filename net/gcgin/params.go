@@ -5,10 +5,11 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
-	"github.com/gin-gonic/gin"
-	"github.com/gin-gonic/gin/binding"
 	"io/ioutil"
 	"strconv"
+
+	"github.com/gin-gonic/gin"
+	"github.com/gin-gonic/gin/binding"
 )
 
 // ParseJSON 解析请求JSON

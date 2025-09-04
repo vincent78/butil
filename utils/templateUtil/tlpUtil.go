@@ -3,8 +3,9 @@ package templateUtil
 import (
 	"bytes"
 	"fmt"
-	"github.com/vincent78/butil/utils/fileUtil"
 	"text/template"
+
+	"github.com/vincent78/butil/utils/fileUtil"
 )
 
 func GenFile(tf, target string, d interface{}) error {

@@ -2,9 +2,10 @@ package dup
 
 import (
 	"fmt"
-	"github.com/jinzhu/copier"
 	"math/rand"
 	"testing"
+
+	"github.com/jinzhu/copier"
 )
 
 type User struct {

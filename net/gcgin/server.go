@@ -2,6 +2,12 @@ package gcgin
 
 import (
 	"fmt"
+	"net"
+	"net/http"
+	"os"
+	"sync"
+	"time"
+
 	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
 	"github.com/vincent78/butil/global"
@@ -11,11 +17,6 @@ import (
 	"github.com/vincent78/butil/sys"
 	"github.com/vincent78/butil/token"
 	"github.com/vincent78/butil/utils/timeUtil"
-	"net"
-	"net/http"
-	"os"
-	"sync"
-	"time"
 )
 
 // http 监听map,用于外面获取监听对象

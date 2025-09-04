@@ -4,10 +4,11 @@ import (
 	"encoding/base32"
 	"encoding/hex"
 	"fmt"
-	"github.com/rs/xid"
 	"os"
 	"strings"
 	"testing"
+
+	"github.com/rs/xid"
 )
 
 func TestUId(t *testing.T) {

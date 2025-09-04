@@ -2,13 +2,14 @@ package logger4
 
 import (
 	"fmt"
-	"github.com/vincent78/butil/config"
-	logger "github.com/vincent78/butil/logger/logger2/logger"
-	"github.com/vincent78/butil/utils/fileUtil"
 	"os"
 	"strings"
 	"testing"
 	"time"
+
+	"github.com/vincent78/butil/config"
+	logger "github.com/vincent78/butil/logger/logger2/logger"
+	"github.com/vincent78/butil/utils/fileUtil"
 
 	"go.uber.org/zap/zapcore"
 )

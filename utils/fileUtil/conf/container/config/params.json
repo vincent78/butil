@@ -1,998 +1,1125 @@
-[{
-	"params": [{
-		"description": {
-			"jp": "rcsサーバーIP",
-			"de": "rcs сервер ip",
-			"en": "The rcs's ip",
-			"cn": "rcs服务器ip"
-		},
-		"default": "127.0.0.1",
-		"value": "127.0.0.1",
-		"type": "str",
-		"hot_update": "False",
-		"name": {
-			"en": "rcs_ip",
-			"cn": "rcs ip"
-		}
-	}, {
-		"description": {
-			"en": "The rcs's http port",
-			"cn": "与rcs进行http交互默认端口"
-		},
-		"default": 9001,
-		"value": "9001",
-		"type": "int",
-		"hot_update": "False",
-		"name": {
-			"en": "rcs_data_port",
-			"cn": "rcs http 端口"
-		}
-	}, {
-		"description": {
-			"cn": "与rcs进行tcp交互默认端口"
-		},
-		"default": 7070,
-		"value": "7070",
-		"type": "int",
-		"hot_update": "False",
-		"name": {
-			"en": "rcs_socket_port",
-			"cn": "rcs socket 端口"
-		}
-	}, {
-		"description": {
-			"cn": "rcs仓库名"
-		},
-		"default": 1,
-		"value": "1",
-		"type": "int",
-		"hot_update": "False",
-		"name": {
-			"en": "warehouseid",
-			"cn": "rcs 仓库 id"
-		}
-	}, {
-		"comment": "组成形式：车型名(大写)_车ip(去掉.不足三位以0补在前)",
-		"description": {
-			"cn": "rcs数据库中被添加车型编号"
-		},
-		"default": "ROLLER_192169002002",
-		"value": "${agvCode}",
-		"type": "str",
-		"hot_update": "False",
-		"name": {
-			"en": "agvCode",
-			"cn": "rcs 中的车型编号"
-		}
-	}, {
-		"description": {
-			"cn": "开机是否自动上线"
-		},
-		"default": "False",
-		"value": "True",
-		"hot_update": "False",
-		"type": "select",
-		"options": ["True", "False"],
-		"name": {
-			"en": "AudioRegister",
-			"cn": "开机是否自动上线"
-		}
-	}, {
-		"description": {
-			"cn": "rcs版本"
-		},
-		"default": 2.8,
-		"value": "2.8",
-		"type": "str",
-		"hot_update": "False",
-		"name": {
-			"en": "quicktron_rcs_version",
-			"cn": "rcs 版本"
-		}
-	}, {
-		"comment": "部分车型可用(带上视摄像的CARRIER车型)",
-		"description": {
-			"cn": "上线前检查是否开启上视摄像头"
-		},
-		"default": "False",
-		"value": "True",
-		"hot_update": "False",
-		"type": "select",
-		"options": ["True", "False"],
-		"name": {
-			"en": "CheckRegisterOpenCamera",
-			"cn": "上线前检查是否开启上视摄像头"
-		}
-	}, {
-		"description": {
-			"cn": "开机是否自动拉取rcs地图"
-		},
-		"default": "False",
-		"value": "True",
-		"hot_update": "False",
-		"type": "select",
-		"options": ["True", "False"],
-		"name": {
-			"en": "AudioUpdateMap",
-			"cn": "开机是否自动拉取 rcs 地图"
-		}
-	}, {
-		"description": {
-			"cn": "rcs指令集版本"
-		},
-		"default": "crarrier_2020032001",
-		"value": "forklift_2020070101",
-		"type": "str",
-		"hot_update": "False",
-		"name": {
-			"en": "cmdsVersion",
-			"cn": "rcs 指令集版本"
-		}
-	}, {
-		"description": {
-			"cn": "对接的rcs厂商"
-		},
-		"default": "QuickTron",
-		"value": "QuickTron",
-		"type": "str",
-		"hot_update": "False",
-		"name": {
-			"en": "rcs_type",
-			"cn": "对接的 rcs 厂商"
-		}
-	}],
-	"language": {
-		"en": "rcs's settings",
-		"cn": "rcs 配置"
-	}
-}, {
-	"params": [{
-		"description": {
-			"cn": "串口名"
-		},
-		"default": "/dev/ttyTHS1",
-		"value": "/dev/ttyTHS1",
-		"type": "str",
-		"hot_update": "False",
-		"name": {
-			"en": "serial_port_name",
-			"cn": "串口名"
-		}
-	}, {
-		"description": {
-			"cn": "波特率"
-		},
-		"default": 115200,
-		"value": "115200",
-		"type": "int",
-		"hot_update": "False",
-		"name": {
-			"en": "serial_baudrate",
-			"cn": "波特率"
-		}
-	}, {
-		"description": {
-			"cn": "车的ip，与rcs交互时使用"
-		},
-		"default": "127.0.0.1",
-		"value": "127.0.0.1",
-		"type": "str",
-		"hot_update": "False",
-		"name": {
-			"en": "agv_ip",
-			"cn": "小车ip"
-		}
-	}, {
-		"comment": "qs基本信息中有显示",
-		"description": {
-			"cn": "对应车壳上编号"
-		},
-		"default": "0001",
-		"value": "0001",
-		"type": "str",
-		"hot_update": "False",
-		"name": {
-			"en": "agvNO",
-			"cn": "对应车壳上编号"
-		}
-	}, {
-		"comment": "潜伏式:CARRIER;辊筒:ROLLER;堆高车:FORKLIFT;料箱车:WORKBIN",
-		"description": {
-			"en": "agv's type",
-			"cn": "车型大类"
-		},
-		"default": "CARRIER",
-		"value": "CARRIER",
-		"hot_update": "False",
-		"type": "select",
-		"options": ["CARRIER", "ROLLER", "FORKLIFT", "WORKBIN"],
-		"name": {
-			"en": "agvType",
-			"cn": "小车类型"
-		}
-	}, {
-		"comment": "青鸾车:QINGLUAN",
-		"description": {
-			"cn": "车型小类"
-		},
-		"default": "",
-		"value": "",
-		"hot_update": "False",
-		"type": "select",
-		"options": ["", "QINGLUAN"],
-		"name": {
-			"en": "SubagvType",
-			"cn": "车型小类"
-		}
-	}, {
-		"comment": "复合指令引导时设置的引导距离",
-		"description": {
-			"cn": "引导距离"
-		},
-		"default": 1.2,
-		"value": 1.2,
-		"type": "float",
-		"hot_update": "False",
-		"unit": "m",
-		"name": {
-			"en": "guide_distance",
-			"cn": "引导距离"
-		}
-	}, {
-		"description": {
-			"cn": "青鸾车带载上线默认顶升的高度"
-		},
-		"default": 300,
-		"value": 300,
-		"type": "int",
-		"hot_update": "False",
-		"unit": "mm",
-		"name": {
-			"en": "targetZHeight",
-			"cn": "青鸾车带载上线默认顶升的高度"
-		}
-	}, {
-		"comment": "slam充电时小车停车的位置距离充电桩的距离",
-		"description": {
-			"cn": "车底盘半径长"
-		},
-		"default": 0.52,
-		"value": 0.52,
-		"type": "float",
-		"hot_update": "False",
-		"unit": "m",
-		"name": {
-			"en": "agvHalfLength",
-			"cn": "车底盘半径长"
-		}
-	}, {
-		"description": {
-			"cn": "货叉进入托盘后，抬升托盘的高度"
-		},
-		"default": 0.05,
-		"value": 0.05,
-		"type": "float",
-		"hot_update": "False",
-		"unit": "m",
-		"name": {
-			"en": "fork_lifting_height_param",
-			"cn": "货叉进入托盘后，抬升托盘的高度"
-		}
-	}, {
-		"description": {
-			"cn": "运货过程中需要保持的货叉高度"
-		},
-		"default": 0.32,
-		"value": 0.32,
-		"type": "float",
-		"hot_update": "False",
-		"unit": "m",
-		"name": {
-			"en": "fork_init_height_param",
-			"cn": "运货过程中需要保持的货叉高度"
-		}
-	}, {
-		"comment": "实际测量值",
-		"description": {
-			"cn": "木托盘自身的高度值"
-		},
-		"default": 0.1,
-		"value": 0.1,
-		"type": "float",
-		"hot_update": "False",
-		"unit": "m",
-		"name": {
-			"en": "pallet_block_height_param",
-			"cn": "木托盘自身的高度值"
-		}
-	}, {
-		"comment": "华为车为0.4,企标车需要实际测量",
-		"description": {
-			"cn": "托盘限位压片距离车体中心距离"
-		},
-		"default": 0.4,
-		"value": 0.4,
-		"type": "float",
-		"hot_update": "False",
-		"unit": "m",
-		"name": {
-			"en": "path_planner_end_fork_length_param",
-			"cn": "托盘限位压片距离车体中心距离"
-		}
-	}, {
-		"comment": "超限直接任务失败而停止当前任务",
-		"description": {
-			"cn": "托盘识别一级阈值"
-		},
-		"default": -0.7,
-		"value": -0.7,
-		"type": "float",
-		"hot_update": "False",
-		"unit": "m",
-		"name": {
-			"en": "max_offset_x",
-			"cn": "托盘识别一级阈值"
-		}
-	}, {
-		"description": {
-			"cn": "托盘识别一级阈值"
-		},
-		"default": -1.5,
-		"value": -1.5,
-		"type": "float",
-		"hot_update": "False",
-		"unit": "m",
-		"name": {
-			"en": "min_offset_x",
-			"cn": "托盘识别一级阈值"
-		}
-	}, {
-		"description": {
-			"cn": "托盘识别一级阈值"
-		},
-		"default": 0.3,
-		"value": 0.3,
-		"type": "float",
-		"hot_update": "False",
-		"unit": "m",
-		"name": {
-			"en": "max_offset_y",
-			"cn": "托盘识别一级阈值"
-		}
-	}, {
-		"description": {
-			"cn": "托盘识别一级阈值"
-		},
-		"default": -0.3,
-		"value": -0.3,
-		"type": "float",
-		"hot_update": "False",
-		"unit": "m",
-		"name": {
-			"en": "min_offset_y",
-			"cn": "托盘识别一级阈值"
-		}
-	}, {
-		"description": {
-			"cn": "托盘识别一级阈值"
-		},
-		"default": 15,
-		"value": 15,
-		"type": "int",
-		"hot_update": "False",
-		"unit": "degree",
-		"name": {
-			"en": "max_offset_angle",
-			"cn": "托盘识别一级阈值"
-		}
-	}, {
-		"description": {
-			"cn": "托盘识别一级阈值"
-		},
-		"default": -15,
-		"value": -15,
-		"type": "int",
-		"hot_update": "False",
-		"unit": "degree",
-		"name": {
-			"en": "min_offset_angle",
-			"cn": "托盘识别一级阈值"
-		}
-	}, {
-		"description": {
-			"cn": "托盘识别二级阈值"
-		},
-		"default": 2,
-		"value": 2,
-		"type": "int",
-		"hot_update": "False",
-		"unit": "degree",
-		"name": {
-			"en": "second_abs_offset_angle",
-			"cn": "托盘识别二级阈值"
-		}
-	}, {
-		"description": {
-			"cn": "托盘识别二级阈值"
-		},
-		"default": -0.015,
-		"value": -0.015,
-		"type": "float",
-		"hot_update": "False",
-		"unit": "m",
-		"name": {
-			"en": "second_abs_offset_y",
-			"cn": "托盘识别二级阈值"
-		}
-	}, {
-		"description": {
-			"cn": "是否需要操作叉间避障"
-		},
-		"default": 1,
-		"value": 1,
-		"type": "int",
-		"hot_update": "False",
-		"name": {
-			"en": "need_opeartion_fork_camera",
-			"cn": "是否需要操作叉间避障"
-		}
-	}, {
-		"comment": "与rcs下发线叉取指令中线体高度需保持一致",
-		"description": {
-			"cn": "货叉联动要抬升的高度值"
-		},
-		"default": 174,
-		"value": 174,
-		"type": "int",
-		"hot_update": "False",
-		"unit": "mm",
-		"name": {
-			"en": "link_action_fork_height",
-			"cn": "货叉联动要抬升的高度值"
-		}
-	}, {
-		"comment": "收到至目标点x值，移动指令时触发联动",
-		"description": {
-			"cn": "联动标记坐标点"
-		},
-		"default": 127625,
-		"value": 127625,
-		"type": "int",
-		"hot_update": "False",
-		"unit": "mm",
-		"name": {
-			"en": "link_action_point_x",
-			"cn": "联动标记坐标点x"
-		}
-	}, {
-		"comment": "收到至目标点y值，移动指令时触发联动",
-		"description": {
-			"cn": "联动标记坐标点"
-		},
-		"default": 23975,
-		"value": 23975,
-		"type": "int",
-		"hot_update": "False",
-		"unit": "mm",
-		"name": {
-			"en": "link_action_point_y",
-			"cn": "联动标记坐标点y"
-		}
-	}, {
-		"comment": "距离标记联动点1m内开始触发联动",
-		"description": {
-			"cn": "联动触发的距离"
-		},
-		"default": 1,
-		"value": 1,
-		"type": "float",
-		"hot_update": "False",
-		"unit": "m",
-		"name": {
-			"en": "link_dis",
-			"cn": "联动触发的距离"
-		}
-	}, {
-		"description": {
-			"cn": "横移速度"
-		},
-		"default": 0.3,
-		"value": 0.3,
-		"type": "float",
-		"hot_update": "False",
-		"unit": "m/s",
-		"name": {
-			"en": "sidesway_speed",
-			"cn": "横移速度"
-		}
-	}, {
-		"description": {
-			"cn": "倒车速度"
-		},
-		"default": 0.3,
-		"value": 0.3,
-		"type": "float",
-		"hot_update": "False",
-		"unit": "m/s",
-		"name": {
-			"en": "back_speed",
-			"cn": "倒车速度"
-		}
-	}, {
-		"comment": "监听slam导航位置数据帧前后偏差阈值,超限写急停指令至下位机",
-		"description": {
-			"cn": "slam导航位置数据帧前后偏差阈值"
-		},
-		"default": 0.2,
-		"value": 0.2,
-		"type": "float",
-		"hot_update": "False",
-		"unit": "m",
-		"name": {
-			"en": "monitor_slam_miss_dis_need_restart",
-			"cn": "slam导航位置数据帧前后偏差阈值"
-		}
-	}, {
-		"comment": "监听纯反光桶导航位置数据帧前后偏差阈值,超限写急停指令至下位机",
-		"description": {
-			"cn": "纯反光桶导航位置数据帧前后偏差阈值"
-		},
-		"default": 0.3,
-		"value": 0.3,
-		"type": "float",
-		"hot_update": "False",
-		"unit": "m",
-		"name": {
-			"en": "monitor_slam_reflector_dis_need_restart",
-			"cn": "纯反光桶导航位置数据帧前后偏差阈值"
-		}
-	}, {
-		"comment": "监听slam导航位置数据帧前后偏差阈值,超限写急停指令至下位机",
-		"description": {
-			"cn": "slam导航位置数据帧前后偏差阈值"
-		},
-		"default": 30,
-		"value": 30,
-		"type": "float",
-		"hot_update": "False",
-		"unit": "degree",
-		"name": {
-			"en": "monitor_slam_miss_angle_need_restart",
-			"cn": "slam导航位置数据帧前后偏差阈值"
-		}
-	}, {
-		"comment": "监听纯反光桶导航位置数据帧前后偏差阈值,超限写急停指令至下位机",
-		"description": {
-			"cn": "纯反光桶导航位置数据帧前后偏差阈值"
-		},
-		"default": 31,
-		"value": 31,
-		"type": "float",
-		"hot_update": "False",
-		"unit": "degree",
-		"name": {
-			"en": "monitor_reflector_miss_angle_need_restart",
-			"cn": "纯反光桶导航位置数据帧前后偏差阈值"
-		}
-	}, {
-		"description": {
-			"cn": "避障区域参数"
-		},
-		"default": "1,2.6,-0.7,0.7,0.15,1.7",
-		"value": "1,2.6,-0.7,0.7,0.15,1.7",
-		"type": "str",
-		"hot_update": "False",
-		"name": {
-			"en": "up_tof_camera_barrier_area_base",
-			"cn": "避障区域参数"
-		}
-	}, {
-		"description": {
-			"cn": "嘉达现场充电桩处距离及近，仅切为0，才可进入充电"
-		},
-		"default": "0,0,0,0,0,0",
-		"value": "0,0,0,0,0,0",
-		"type": "str",
-		"hot_update": "False",
-		"name": {
-			"en": "up_tof_camera_barrier_switch",
-			"cn": "充电桩处距离及近"
-		}
-	}, {
-		"description": {
-			"cn": "切避障区域阈值"
-		},
-		"default": 3,
-		"value": 3,
-		"type": "float",
-		"hot_update": "False",
-		"unit": "m",
-		"name": {
-			"en": "switch_barrier_dis",
-			"cn": "切避障区域阈值"
-		}
-	}, {
-		"description": {
-			"cn": "充电桩点位"
-		},
-		"default": ["(222076", "15375)", "(224050", "15375)"],
-		"value": ["(222076", "15375)", "(224050", "15375)"],
-		"type": "str",
-		"hot_update": "False",
-		"name": {
-			"en": "charge_point",
-			"cn": "充电桩点位"
-		}
-	}, {
-		"description": {
-			"cn": "是否采用托盘识别 1是 0否"
-		},
-		"default": 0,
-		"value": 0,
-		"type": "str",
-		"hot_update": "False",
-		"name": {
-			"en": "use_pallet_recognition",
-			"cn": "是否采用托盘识别"
-		}
-	}, {
-		"description": {
-			"cn": "托盘角度"
-		},
-		"default": 90,
-		"value": 90,
-		"type": "float",
-		"hot_update": "False",
-		"unit": "degree",
-		"name": {
-			"en": "pallet_angle",
-			"cn": "托盘角度"
-		}
-	}, {
-		"description": {
-			"cn": "盲叉时校验车旋转至指定角度后角度偏差阈值"
-		},
-		"default": 1,
-		"value": 1,
-		"type": "float",
-		"hot_update": "False",
-		"unit": "degree",
-		"name": {
-			"en": "check_angle_before_pick_param",
-			"cn": "盲叉时校验车旋转至指定角度后角度偏差阈值"
-		}
-	}, {
-		"description": {
-			"cn": "rcs下发托盘坐标(倒退叉取)与实际差值"
-		},
-		"default": -0.15,
-		"value": -0.15,
-		"type": "float",
-		"hot_update": "False",
-		"unit": "m",
-		"name": {
-			"en": "offset_pallet_target_y",
-			"cn": "rcs下发托盘坐标(倒退叉取)与实际差值"
-		}
-	}, {
-		"comment": "左负 右正",
-		"description": {
-			"cn": "盲叉时在x轴补偿距离"
-		},
-		"default": 0,
-		"value": 0,
-		"type": "float",
-		"hot_update": "False",
-		"unit": "m",
-		"name": {
-			"en": "not_use_pallet_recognition_offset_x",
-			"cn": "盲叉时在x轴补偿距离"
-		}
-	}, {
-		"description": {
-			"cn": "是否华为车"
-		},
-		"default": "0",
-		"value": "0",
-		"type": "str",
-		"hot_update": "False",
-		"name": {
-			"en": "is_hua_wei",
-			"cn": "是否华为车"
-		}
-	}, {
-		"comment": "是否打开音乐播放 默认为上位机控制， 部分车型有由下位机控制",
-		"description": {
-			"cn": "是否打开音乐播放"
-		},
-		"default": "True",
-		"value": "True",
-		"hot_update": "False",
-		"type": "select",
-		"options": ["True", "False"],
-		"name": {
-			"en": "OpenMusic",
-			"cn": "是否打开音乐播放"
-		}
-	}, {
-		"description": {
-			"cn": "是否自动一键启动"
-		},
-		"default": "False",
-		"value": "False",
-		"hot_update": "False",
-		"type": "select",
-		"options": ["True", "False"],
-		"name": {
-			"en": "AudioOneKeyStart",
-			"cn": "是否自动一键启动"
-		}
-	}, {
-		"description": {
-			"cn": "板卡类型"
-		},
-		"default": "BL",
-		"value": "BH",
-		"hot_update": "False",
-		"type": "select",
-		"options": ["BL", "BH"],
-		"name": {
-			"en": "CardType",
-			"cn": "板卡类型"
-		}
-	}, {
-		"comment": "slam车:slam;二维码车:normal",
-		"description": {
-			"cn": "充电类型"
-		},
-		"default": "normal",
-		"value": "nomal",
-		"hot_update": "False",
-		"type": "select",
-		"options": ["normal", "slam"],
-		"name": {
-			"en": "ChargeType",
-			"cn": "充电类型"
-		}
-	}, {
-		"description": {
-			"cn": "导航方式"
-		},
-		"default": "slam",
-		"value": "slam",
-		"hot_update": "False",
-		"type": "select",
-		"options": ["slam", "qrcode"],
-		"name": {
-			"en": "navigation_type",
-			"cn": "导航方式"
-		}
-	}, {
-		"description": {
-			"cn": "是否打开急停恢复"
-		},
-		"default": "False",
-		"value": "False",
-		"hot_update": "False",
-		"type": "select",
-		"options": ["True", "False"],
-		"name": {
-			"en": "open_emergency_stop_recover",
-			"cn": "是否打开急停恢复"
-		}
-	}, {
-		"comment": null,
-		"name": {
-			"en": "agv_length",
-			"cn": null
-		},
-		"min": null,
-		"default": null,
-		"max": null,
-		"value": 940,
-		"type": "int",
-		"hot_update": "False",
-		"unit": null,
-		"description": {
-			"en": null,
-			"jp": null,
-			"cn": "AGV的车长"
-		}
-	}, {
-		"comment": null,
-		"name": {
-			"en": "agv_width",
-			"cn": null
-		},
-		"min": null,
-		"default": null,
-		"max": null,
-		"value": 714,
-		"type": "int",
-		"hot_update": "False",
-		"unit": null,
-		"description": {
-			"en": null,
-			"jp": null,
-			"cn": "AGV的车宽"
-		}
-	}, {
-		"comment": null,
-		"name": {
-			"en": "rcs_jobs_num",
-			"cn": null
-		},
-		"min": null,
-		"default": 10,
-		"max": null,
-		"value": 10,
-		"type": "int",
-		"hot_update": "True",
-		"unit": null,
-		"description": {
-			"en": null,
-			"jp": null,
-			"cn": "rcs 任务缓存个数"
-		}
-	}, {
-		"comment": null,
-		"name": {
-			"en": "shelf_leg_diameter",
-			"cn": null
-		},
-		"min": null,
-		"default": 0.035,
-		"max": null,
-		"value": 0.035,
-		"type": "float",
-		"hot_update": "True",
-		"unit": null,
-		"description": {
-			"en": null,
-			"jp": null,
-			"cn": "货架引导的货架腿直径"
-		}
-	}, {
-		"comment": null,
-		"name": {
-			"en": "simulation_server_ip",
-			"cn": null
-		},
-		"min": null,
-		"default": "127.0.0.1",
-		"max": null,
-		"value": "${simulation_server_ip}",
-		"type": "str",
-		"hot_update": "False",
-		"unit": null,
-		"description": {
-			"en": null,
-			"jp": null,
-			"cn": "仿真服务ip"
-		}
-	}, {
-		"comment": null,
-		"name": {
-			"en": "simulation_server_port",
-			"cn": null
-		},
-		"min": null,
-		"default": "9999",
-		"max": null,
-		"value": "${simulation_server_port}",
-		"type": "int",
-		"hot_update": "False",
-		"unit": null,
-		"description": {
-			"en": null,
-			"jp": null,
-			"cn": "仿真服务ip端口"
-		}
-	}, {
-		"comment": null,
-		"name": {
-			"en": "simulation",
-			"cn": null
-		},
-		"min": null,
-		"default": "False",
-		"max": null,
-		"value": "True",
-		"options": ["False", "True"],
-		"type": "select",
-		"hot_update": "False",
-		"unit": null,
-		"description": {
-			"en": null,
-			"jp": null,
-			"cn": "是否是仿真模式"
-		}
-	}],
-	"language": {
-		"en": "upper_computer's settings",
-		"cn": "上位机配置"
-	}
-}, {
-	"params": [{
-		"comment": "末端识别时,反光板中心的距离",
-		"description": {
-			"en": "The distance of two reflectors",
-			"cn": "两个反光板中心距离"
-		},
-		"default": 0.585,
-		"value": 0.585,
-		"type": "int",
-		"hot_update": "False",
-		"name": {
-			"en": "distance_of_two_reflectors",
-			"cn": "两个反光板中心距离"
-		}
-	}, {
-		"description": {
-			"cn": "最小雷达强度(800~1200)"
-		},
-		"default": 1200,
-		"value": 1200,
-		"type": "int",
-		"hot_update": "False",
-		"name": {
-			"en": "min_laser_intensity",
-			"cn": "最小雷达强度(800~1200)"
-		}
-	}, {
-		"description": {
-			"cn": "最大雷达强度(2500~3000)"
-		},
-		"default": 3000,
-		"value": 3000,
-		"type": "int",
-		"hot_update": "False",
-		"unit": "m",
-		"name": {
-			"en": "max_laser_intensity",
-			"cn": "最大雷达强度(2500~3000)"
-		}
-	}, {
-		"description": {
-			"cn": "雷达探测深度"
-		},
-		"default": 3,
-		"value": 3,
-		"type": "int",
-		"hot_update": "False",
-		"unit": "m",
-		"name": {
-			"en": "detect_depth",
-			"cn": "雷达探测深度"
-		}
-	}, {
-		"description": {
-			"cn": "雷达探测宽度"
-		},
-		"default": 2,
-		"value": 2,
-		"type": "int",
-		"hot_update": "False",
-		"unit": "m",
-		"name": {
-			"en": "detect_width",
-			"cn": "雷达探测宽度"
-		}
-	}, {
-		"description": {
-			"cn": "slam坐标与rcs二维码坐标互转的参数"
-		},
-		"default": "1000.409171,-0.00236540,83978.5669, 26966.17502",
-		"value": "1000.409171,-0.00236540,83978.5669, 26966.17502",
-		"type": "str",
-		"hot_update": "False",
-		"name": {
-			"en": "slam2code_transform_param",
-			"cn": "slam 坐标与 rcs 二维码坐标互转的参数"
-		}
-	}],
-	"language": {
-		"en": "slam's settings",
-		"cn": "slam 配置"
-	}
-}]
+[
+  {
+    "params": [
+      {
+        "description": {
+          "jp": "rcsサーバーIP",
+          "de": "rcs сервер ip",
+          "en": "The rcs's ip",
+          "cn": "rcs服务器ip"
+        },
+        "default": "127.0.0.1",
+        "value": "127.0.0.1",
+        "type": "str",
+        "hot_update": "False",
+        "name": {
+          "en": "rcs_ip",
+          "cn": "rcs ip"
+        }
+      },
+      {
+        "description": {
+          "en": "The rcs's http port",
+          "cn": "与rcs进行http交互默认端口"
+        },
+        "default": 9001,
+        "value": "9001",
+        "type": "int",
+        "hot_update": "False",
+        "name": {
+          "en": "rcs_data_port",
+          "cn": "rcs http 端口"
+        }
+      },
+      {
+        "description": {
+          "cn": "与rcs进行tcp交互默认端口"
+        },
+        "default": 7070,
+        "value": "7070",
+        "type": "int",
+        "hot_update": "False",
+        "name": {
+          "en": "rcs_socket_port",
+          "cn": "rcs socket 端口"
+        }
+      },
+      {
+        "description": {
+          "cn": "rcs仓库名"
+        },
+        "default": 1,
+        "value": "1",
+        "type": "int",
+        "hot_update": "False",
+        "name": {
+          "en": "warehouseid",
+          "cn": "rcs 仓库 id"
+        }
+      },
+      {
+        "comment": "组成形式：车型名(大写)_车ip(去掉.不足三位以0补在前)",
+        "description": {
+          "cn": "rcs数据库中被添加车型编号"
+        },
+        "default": "ROLLER_192169002002",
+        "value": "${agvCode}",
+        "type": "str",
+        "hot_update": "False",
+        "name": {
+          "en": "agvCode",
+          "cn": "rcs 中的车型编号"
+        }
+      },
+      {
+        "description": {
+          "cn": "开机是否自动上线"
+        },
+        "default": "False",
+        "value": "True",
+        "hot_update": "False",
+        "type": "select",
+        "options": [
+          "True",
+          "False"
+        ],
+        "name": {
+          "en": "AudioRegister",
+          "cn": "开机是否自动上线"
+        }
+      },
+      {
+        "description": {
+          "cn": "rcs版本"
+        },
+        "default": 2.8,
+        "value": "2.8",
+        "type": "str",
+        "hot_update": "False",
+        "name": {
+          "en": "quicktron_rcs_version",
+          "cn": "rcs 版本"
+        }
+      },
+      {
+        "comment": "部分车型可用(带上视摄像的CARRIER车型)",
+        "description": {
+          "cn": "上线前检查是否开启上视摄像头"
+        },
+        "default": "False",
+        "value": "True",
+        "hot_update": "False",
+        "type": "select",
+        "options": [
+          "True",
+          "False"
+        ],
+        "name": {
+          "en": "CheckRegisterOpenCamera",
+          "cn": "上线前检查是否开启上视摄像头"
+        }
+      },
+      {
+        "description": {
+          "cn": "开机是否自动拉取rcs地图"
+        },
+        "default": "False",
+        "value": "True",
+        "hot_update": "False",
+        "type": "select",
+        "options": [
+          "True",
+          "False"
+        ],
+        "name": {
+          "en": "AudioUpdateMap",
+          "cn": "开机是否自动拉取 rcs 地图"
+        }
+      },
+      {
+        "description": {
+          "cn": "rcs指令集版本"
+        },
+        "default": "crarrier_2020032001",
+        "value": "forklift_2020070101",
+        "type": "str",
+        "hot_update": "False",
+        "name": {
+          "en": "cmdsVersion",
+          "cn": "rcs 指令集版本"
+        }
+      },
+      {
+        "description": {
+          "cn": "对接的rcs厂商"
+        },
+        "default": "QuickTron",
+        "value": "QuickTron",
+        "type": "str",
+        "hot_update": "False",
+        "name": {
+          "en": "rcs_type",
+          "cn": "对接的 rcs 厂商"
+        }
+      }
+    ],
+    "language": {
+      "en": "rcs's settings",
+      "cn": "rcs 配置"
+    }
+  },
+  {
+    "params": [
+      {
+        "description": {
+          "cn": "串口名"
+        },
+        "default": "/dev/ttyTHS1",
+        "value": "/dev/ttyTHS1",
+        "type": "str",
+        "hot_update": "False",
+        "name": {
+          "en": "serial_port_name",
+          "cn": "串口名"
+        }
+      },
+      {
+        "description": {
+          "cn": "波特率"
+        },
+        "default": 115200,
+        "value": "115200",
+        "type": "int",
+        "hot_update": "False",
+        "name": {
+          "en": "serial_baudrate",
+          "cn": "波特率"
+        }
+      },
+      {
+        "description": {
+          "cn": "车的ip，与rcs交互时使用"
+        },
+        "default": "127.0.0.1",
+        "value": "127.0.0.1",
+        "type": "str",
+        "hot_update": "False",
+        "name": {
+          "en": "agv_ip",
+          "cn": "小车ip"
+        }
+      },
+      {
+        "comment": "qs基本信息中有显示",
+        "description": {
+          "cn": "对应车壳上编号"
+        },
+        "default": "0001",
+        "value": "0001",
+        "type": "str",
+        "hot_update": "False",
+        "name": {
+          "en": "agvNO",
+          "cn": "对应车壳上编号"
+        }
+      },
+      {
+        "comment": "潜伏式:CARRIER;辊筒:ROLLER;堆高车:FORKLIFT;料箱车:WORKBIN",
+        "description": {
+          "en": "agv's type",
+          "cn": "车型大类"
+        },
+        "default": "CARRIER",
+        "value": "CARRIER",
+        "hot_update": "False",
+        "type": "select",
+        "options": [
+          "CARRIER",
+          "ROLLER",
+          "FORKLIFT",
+          "WORKBIN"
+        ],
+        "name": {
+          "en": "agvType",
+          "cn": "小车类型"
+        }
+      },
+      {
+        "comment": "青鸾车:QINGLUAN",
+        "description": {
+          "cn": "车型小类"
+        },
+        "default": "",
+        "value": "",
+        "hot_update": "False",
+        "type": "select",
+        "options": [
+          "",
+          "QINGLUAN"
+        ],
+        "name": {
+          "en": "SubagvType",
+          "cn": "车型小类"
+        }
+      },
+      {
+        "comment": "复合指令引导时设置的引导距离",
+        "description": {
+          "cn": "引导距离"
+        },
+        "default": 1.2,
+        "value": 1.2,
+        "type": "float",
+        "hot_update": "False",
+        "unit": "m",
+        "name": {
+          "en": "guide_distance",
+          "cn": "引导距离"
+        }
+      },
+      {
+        "description": {
+          "cn": "青鸾车带载上线默认顶升的高度"
+        },
+        "default": 300,
+        "value": 300,
+        "type": "int",
+        "hot_update": "False",
+        "unit": "mm",
+        "name": {
+          "en": "targetZHeight",
+          "cn": "青鸾车带载上线默认顶升的高度"
+        }
+      },
+      {
+        "comment": "slam充电时小车停车的位置距离充电桩的距离",
+        "description": {
+          "cn": "车底盘半径长"
+        },
+        "default": 0.52,
+        "value": 0.52,
+        "type": "float",
+        "hot_update": "False",
+        "unit": "m",
+        "name": {
+          "en": "agvHalfLength",
+          "cn": "车底盘半径长"
+        }
+      },
+      {
+        "description": {
+          "cn": "货叉进入托盘后，抬升托盘的高度"
+        },
+        "default": 0.05,
+        "value": 0.05,
+        "type": "float",
+        "hot_update": "False",
+        "unit": "m",
+        "name": {
+          "en": "fork_lifting_height_param",
+          "cn": "货叉进入托盘后，抬升托盘的高度"
+        }
+      },
+      {
+        "description": {
+          "cn": "运货过程中需要保持的货叉高度"
+        },
+        "default": 0.32,
+        "value": 0.32,
+        "type": "float",
+        "hot_update": "False",
+        "unit": "m",
+        "name": {
+          "en": "fork_init_height_param",
+          "cn": "运货过程中需要保持的货叉高度"
+        }
+      },
+      {
+        "comment": "实际测量值",
+        "description": {
+          "cn": "木托盘自身的高度值"
+        },
+        "default": 0.1,
+        "value": 0.1,
+        "type": "float",
+        "hot_update": "False",
+        "unit": "m",
+        "name": {
+          "en": "pallet_block_height_param",
+          "cn": "木托盘自身的高度值"
+        }
+      },
+      {
+        "comment": "华为车为0.4,企标车需要实际测量",
+        "description": {
+          "cn": "托盘限位压片距离车体中心距离"
+        },
+        "default": 0.4,
+        "value": 0.4,
+        "type": "float",
+        "hot_update": "False",
+        "unit": "m",
+        "name": {
+          "en": "path_planner_end_fork_length_param",
+          "cn": "托盘限位压片距离车体中心距离"
+        }
+      },
+      {
+        "comment": "超限直接任务失败而停止当前任务",
+        "description": {
+          "cn": "托盘识别一级阈值"
+        },
+        "default": -0.7,
+        "value": -0.7,
+        "type": "float",
+        "hot_update": "False",
+        "unit": "m",
+        "name": {
+          "en": "max_offset_x",
+          "cn": "托盘识别一级阈值"
+        }
+      },
+      {
+        "description": {
+          "cn": "托盘识别一级阈值"
+        },
+        "default": -1.5,
+        "value": -1.5,
+        "type": "float",
+        "hot_update": "False",
+        "unit": "m",
+        "name": {
+          "en": "min_offset_x",
+          "cn": "托盘识别一级阈值"
+        }
+      },
+      {
+        "description": {
+          "cn": "托盘识别一级阈值"
+        },
+        "default": 0.3,
+        "value": 0.3,
+        "type": "float",
+        "hot_update": "False",
+        "unit": "m",
+        "name": {
+          "en": "max_offset_y",
+          "cn": "托盘识别一级阈值"
+        }
+      },
+      {
+        "description": {
+          "cn": "托盘识别一级阈值"
+        },
+        "default": -0.3,
+        "value": -0.3,
+        "type": "float",
+        "hot_update": "False",
+        "unit": "m",
+        "name": {
+          "en": "min_offset_y",
+          "cn": "托盘识别一级阈值"
+        }
+      },
+      {
+        "description": {
+          "cn": "托盘识别一级阈值"
+        },
+        "default": 15,
+        "value": 15,
+        "type": "int",
+        "hot_update": "False",
+        "unit": "degree",
+        "name": {
+          "en": "max_offset_angle",
+          "cn": "托盘识别一级阈值"
+        }
+      },
+      {
+        "description": {
+          "cn": "托盘识别一级阈值"
+        },
+        "default": -15,
+        "value": -15,
+        "type": "int",
+        "hot_update": "False",
+        "unit": "degree",
+        "name": {
+          "en": "min_offset_angle",
+          "cn": "托盘识别一级阈值"
+        }
+      },
+      {
+        "description": {
+          "cn": "托盘识别二级阈值"
+        },
+        "default": 2,
+        "value": 2,
+        "type": "int",
+        "hot_update": "False",
+        "unit": "degree",
+        "name": {
+          "en": "second_abs_offset_angle",
+          "cn": "托盘识别二级阈值"
+        }
+      },
+      {
+        "description": {
+          "cn": "托盘识别二级阈值"
+        },
+        "default": -0.015,
+        "value": -0.015,
+        "type": "float",
+        "hot_update": "False",
+        "unit": "m",
+        "name": {
+          "en": "second_abs_offset_y",
+          "cn": "托盘识别二级阈值"
+        }
+      },
+      {
+        "description": {
+          "cn": "是否需要操作叉间避障"
+        },
+        "default": 1,
+        "value": 1,
+        "type": "int",
+        "hot_update": "False",
+        "name": {
+          "en": "need_opeartion_fork_camera",
+          "cn": "是否需要操作叉间避障"
+        }
+      },
+      {
+        "comment": "与rcs下发线叉取指令中线体高度需保持一致",
+        "description": {
+          "cn": "货叉联动要抬升的高度值"
+        },
+        "default": 174,
+        "value": 174,
+        "type": "int",
+        "hot_update": "False",
+        "unit": "mm",
+        "name": {
+          "en": "link_action_fork_height",
+          "cn": "货叉联动要抬升的高度值"
+        }
+      },
+      {
+        "comment": "收到至目标点x值，移动指令时触发联动",
+        "description": {
+          "cn": "联动标记坐标点"
+        },
+        "default": 127625,
+        "value": 127625,
+        "type": "int",
+        "hot_update": "False",
+        "unit": "mm",
+        "name": {
+          "en": "link_action_point_x",
+          "cn": "联动标记坐标点x"
+        }
+      },
+      {
+        "comment": "收到至目标点y值，移动指令时触发联动",
+        "description": {
+          "cn": "联动标记坐标点"
+        },
+        "default": 23975,
+        "value": 23975,
+        "type": "int",
+        "hot_update": "False",
+        "unit": "mm",
+        "name": {
+          "en": "link_action_point_y",
+          "cn": "联动标记坐标点y"
+        }
+      },
+      {
+        "comment": "距离标记联动点1m内开始触发联动",
+        "description": {
+          "cn": "联动触发的距离"
+        },
+        "default": 1,
+        "value": 1,
+        "type": "float",
+        "hot_update": "False",
+        "unit": "m",
+        "name": {
+          "en": "link_dis",
+          "cn": "联动触发的距离"
+        }
+      },
+      {
+        "description": {
+          "cn": "横移速度"
+        },
+        "default": 0.3,
+        "value": 0.3,
+        "type": "float",
+        "hot_update": "False",
+        "unit": "m/s",
+        "name": {
+          "en": "sidesway_speed",
+          "cn": "横移速度"
+        }
+      },
+      {
+        "description": {
+          "cn": "倒车速度"
+        },
+        "default": 0.3,
+        "value": 0.3,
+        "type": "float",
+        "hot_update": "False",
+        "unit": "m/s",
+        "name": {
+          "en": "back_speed",
+          "cn": "倒车速度"
+        }
+      },
+      {
+        "comment": "监听slam导航位置数据帧前后偏差阈值,超限写急停指令至下位机",
+        "description": {
+          "cn": "slam导航位置数据帧前后偏差阈值"
+        },
+        "default": 0.2,
+        "value": 0.2,
+        "type": "float",
+        "hot_update": "False",
+        "unit": "m",
+        "name": {
+          "en": "monitor_slam_miss_dis_need_restart",
+          "cn": "slam导航位置数据帧前后偏差阈值"
+        }
+      },
+      {
+        "comment": "监听纯反光桶导航位置数据帧前后偏差阈值,超限写急停指令至下位机",
+        "description": {
+          "cn": "纯反光桶导航位置数据帧前后偏差阈值"
+        },
+        "default": 0.3,
+        "value": 0.3,
+        "type": "float",
+        "hot_update": "False",
+        "unit": "m",
+        "name": {
+          "en": "monitor_slam_reflector_dis_need_restart",
+          "cn": "纯反光桶导航位置数据帧前后偏差阈值"
+        }
+      },
+      {
+        "comment": "监听slam导航位置数据帧前后偏差阈值,超限写急停指令至下位机",
+        "description": {
+          "cn": "slam导航位置数据帧前后偏差阈值"
+        },
+        "default": 30,
+        "value": 30,
+        "type": "float",
+        "hot_update": "False",
+        "unit": "degree",
+        "name": {
+          "en": "monitor_slam_miss_angle_need_restart",
+          "cn": "slam导航位置数据帧前后偏差阈值"
+        }
+      },
+      {
+        "comment": "监听纯反光桶导航位置数据帧前后偏差阈值,超限写急停指令至下位机",
+        "description": {
+          "cn": "纯反光桶导航位置数据帧前后偏差阈值"
+        },
+        "default": 31,
+        "value": 31,
+        "type": "float",
+        "hot_update": "False",
+        "unit": "degree",
+        "name": {
+          "en": "monitor_reflector_miss_angle_need_restart",
+          "cn": "纯反光桶导航位置数据帧前后偏差阈值"
+        }
+      },
+      {
+        "description": {
+          "cn": "避障区域参数"
+        },
+        "default": "1,2.6,-0.7,0.7,0.15,1.7",
+        "value": "1,2.6,-0.7,0.7,0.15,1.7",
+        "type": "str",
+        "hot_update": "False",
+        "name": {
+          "en": "up_tof_camera_barrier_area_base",
+          "cn": "避障区域参数"
+        }
+      },
+      {
+        "description": {
+          "cn": "嘉达现场充电桩处距离及近，仅切为0，才可进入充电"
+        },
+        "default": "0,0,0,0,0,0",
+        "value": "0,0,0,0,0,0",
+        "type": "str",
+        "hot_update": "False",
+        "name": {
+          "en": "up_tof_camera_barrier_switch",
+          "cn": "充电桩处距离及近"
+        }
+      },
+      {
+        "description": {
+          "cn": "切避障区域阈值"
+        },
+        "default": 3,
+        "value": 3,
+        "type": "float",
+        "hot_update": "False",
+        "unit": "m",
+        "name": {
+          "en": "switch_barrier_dis",
+          "cn": "切避障区域阈值"
+        }
+      },
+      {
+        "description": {
+          "cn": "充电桩点位"
+        },
+        "default": [
+          "(222076",
+          "15375)",
+          "(224050",
+          "15375)"
+        ],
+        "value": [
+          "(222076",
+          "15375)",
+          "(224050",
+          "15375)"
+        ],
+        "type": "str",
+        "hot_update": "False",
+        "name": {
+          "en": "charge_point",
+          "cn": "充电桩点位"
+        }
+      },
+      {
+        "description": {
+          "cn": "是否采用托盘识别 1是 0否"
+        },
+        "default": 0,
+        "value": 0,
+        "type": "str",
+        "hot_update": "False",
+        "name": {
+          "en": "use_pallet_recognition",
+          "cn": "是否采用托盘识别"
+        }
+      },
+      {
+        "description": {
+          "cn": "托盘角度"
+        },
+        "default": 90,
+        "value": 90,
+        "type": "float",
+        "hot_update": "False",
+        "unit": "degree",
+        "name": {
+          "en": "pallet_angle",
+          "cn": "托盘角度"
+        }
+      },
+      {
+        "description": {
+          "cn": "盲叉时校验车旋转至指定角度后角度偏差阈值"
+        },
+        "default": 1,
+        "value": 1,
+        "type": "float",
+        "hot_update": "False",
+        "unit": "degree",
+        "name": {
+          "en": "check_angle_before_pick_param",
+          "cn": "盲叉时校验车旋转至指定角度后角度偏差阈值"
+        }
+      },
+      {
+        "description": {
+          "cn": "rcs下发托盘坐标(倒退叉取)与实际差值"
+        },
+        "default": -0.15,
+        "value": -0.15,
+        "type": "float",
+        "hot_update": "False",
+        "unit": "m",
+        "name": {
+          "en": "offset_pallet_target_y",
+          "cn": "rcs下发托盘坐标(倒退叉取)与实际差值"
+        }
+      },
+      {
+        "comment": "左负 右正",
+        "description": {
+          "cn": "盲叉时在x轴补偿距离"
+        },
+        "default": 0,
+        "value": 0,
+        "type": "float",
+        "hot_update": "False",
+        "unit": "m",
+        "name": {
+          "en": "not_use_pallet_recognition_offset_x",
+          "cn": "盲叉时在x轴补偿距离"
+        }
+      },
+      {
+        "description": {
+          "cn": "是否华为车"
+        },
+        "default": "0",
+        "value": "0",
+        "type": "str",
+        "hot_update": "False",
+        "name": {
+          "en": "is_hua_wei",
+          "cn": "是否华为车"
+        }
+      },
+      {
+        "comment": "是否打开音乐播放 默认为上位机控制， 部分车型有由下位机控制",
+        "description": {
+          "cn": "是否打开音乐播放"
+        },
+        "default": "True",
+        "value": "True",
+        "hot_update": "False",
+        "type": "select",
+        "options": [
+          "True",
+          "False"
+        ],
+        "name": {
+          "en": "OpenMusic",
+          "cn": "是否打开音乐播放"
+        }
+      },
+      {
+        "description": {
+          "cn": "是否自动一键启动"
+        },
+        "default": "False",
+        "value": "False",
+        "hot_update": "False",
+        "type": "select",
+        "options": [
+          "True",
+          "False"
+        ],
+        "name": {
+          "en": "AudioOneKeyStart",
+          "cn": "是否自动一键启动"
+        }
+      },
+      {
+        "description": {
+          "cn": "板卡类型"
+        },
+        "default": "BL",
+        "value": "BH",
+        "hot_update": "False",
+        "type": "select",
+        "options": [
+          "BL",
+          "BH"
+        ],
+        "name": {
+          "en": "CardType",
+          "cn": "板卡类型"
+        }
+      },
+      {
+        "comment": "slam车:slam;二维码车:normal",
+        "description": {
+          "cn": "充电类型"
+        },
+        "default": "normal",
+        "value": "nomal",
+        "hot_update": "False",
+        "type": "select",
+        "options": [
+          "normal",
+          "slam"
+        ],
+        "name": {
+          "en": "ChargeType",
+          "cn": "充电类型"
+        }
+      },
+      {
+        "description": {
+          "cn": "导航方式"
+        },
+        "default": "slam",
+        "value": "slam",
+        "hot_update": "False",
+        "type": "select",
+        "options": [
+          "slam",
+          "qrcode"
+        ],
+        "name": {
+          "en": "navigation_type",
+          "cn": "导航方式"
+        }
+      },
+      {
+        "description": {
+          "cn": "是否打开急停恢复"
+        },
+        "default": "False",
+        "value": "False",
+        "hot_update": "False",
+        "type": "select",
+        "options": [
+          "True",
+          "False"
+        ],
+        "name": {
+          "en": "open_emergency_stop_recover",
+          "cn": "是否打开急停恢复"
+        }
+      },
+      {
+        "comment": null,
+        "name": {
+          "en": "agv_length",
+          "cn": null
+        },
+        "min": null,
+        "default": null,
+        "max": null,
+        "value": 940,
+        "type": "int",
+        "hot_update": "False",
+        "unit": null,
+        "description": {
+          "en": null,
+          "jp": null,
+          "cn": "AGV的车长"
+        }
+      },
+      {
+        "comment": null,
+        "name": {
+          "en": "agv_width",
+          "cn": null
+        },
+        "min": null,
+        "default": null,
+        "max": null,
+        "value": 714,
+        "type": "int",
+        "hot_update": "False",
+        "unit": null,
+        "description": {
+          "en": null,
+          "jp": null,
+          "cn": "AGV的车宽"
+        }
+      },
+      {
+        "comment": null,
+        "name": {
+          "en": "rcs_jobs_num",
+          "cn": null
+        },
+        "min": null,
+        "default": 10,
+        "max": null,
+        "value": 10,
+        "type": "int",
+        "hot_update": "True",
+        "unit": null,
+        "description": {
+          "en": null,
+          "jp": null,
+          "cn": "rcs 任务缓存个数"
+        }
+      },
+      {
+        "comment": null,
+        "name": {
+          "en": "shelf_leg_diameter",
+          "cn": null
+        },
+        "min": null,
+        "default": 0.035,
+        "max": null,
+        "value": 0.035,
+        "type": "float",
+        "hot_update": "True",
+        "unit": null,
+        "description": {
+          "en": null,
+          "jp": null,
+          "cn": "货架引导的货架腿直径"
+        }
+      },
+      {
+        "comment": null,
+        "name": {
+          "en": "simulation_server_ip",
+          "cn": null
+        },
+        "min": null,
+        "default": "127.0.0.1",
+        "max": null,
+        "value": "${simulation_server_ip}",
+        "type": "str",
+        "hot_update": "False",
+        "unit": null,
+        "description": {
+          "en": null,
+          "jp": null,
+          "cn": "仿真服务ip"
+        }
+      },
+      {
+        "comment": null,
+        "name": {
+          "en": "simulation_server_port",
+          "cn": null
+        },
+        "min": null,
+        "default": "9999",
+        "max": null,
+        "value": "${simulation_server_port}",
+        "type": "int",
+        "hot_update": "False",
+        "unit": null,
+        "description": {
+          "en": null,
+          "jp": null,
+          "cn": "仿真服务ip端口"
+        }
+      },
+      {
+        "comment": null,
+        "name": {
+          "en": "simulation",
+          "cn": null
+        },
+        "min": null,
+        "default": "False",
+        "max": null,
+        "value": "True",
+        "options": [
+          "False",
+          "True"
+        ],
+        "type": "select",
+        "hot_update": "False",
+        "unit": null,
+        "description": {
+          "en": null,
+          "jp": null,
+          "cn": "是否是仿真模式"
+        }
+      }
+    ],
+    "language": {
+      "en": "upper_computer's settings",
+      "cn": "上位机配置"
+    }
+  },
+  {
+    "params": [
+      {
+        "comment": "末端识别时,反光板中心的距离",
+        "description": {
+          "en": "The distance of two reflectors",
+          "cn": "两个反光板中心距离"
+        },
+        "default": 0.585,
+        "value": 0.585,
+        "type": "int",
+        "hot_update": "False",
+        "name": {
+          "en": "distance_of_two_reflectors",
+          "cn": "两个反光板中心距离"
+        }
+      },
+      {
+        "description": {
+          "cn": "最小雷达强度(800~1200)"
+        },
+        "default": 1200,
+        "value": 1200,
+        "type": "int",
+        "hot_update": "False",
+        "name": {
+          "en": "min_laser_intensity",
+          "cn": "最小雷达强度(800~1200)"
+        }
+      },
+      {
+        "description": {
+          "cn": "最大雷达强度(2500~3000)"
+        },
+        "default": 3000,
+        "value": 3000,
+        "type": "int",
+        "hot_update": "False",
+        "unit": "m",
+        "name": {
+          "en": "max_laser_intensity",
+          "cn": "最大雷达强度(2500~3000)"
+        }
+      },
+      {
+        "description": {
+          "cn": "雷达探测深度"
+        },
+        "default": 3,
+        "value": 3,
+        "type": "int",
+        "hot_update": "False",
+        "unit": "m",
+        "name": {
+          "en": "detect_depth",
+          "cn": "雷达探测深度"
+        }
+      },
+      {
+        "description": {
+          "cn": "雷达探测宽度"
+        },
+        "default": 2,
+        "value": 2,
+        "type": "int",
+        "hot_update": "False",
+        "unit": "m",
+        "name": {
+          "en": "detect_width",
+          "cn": "雷达探测宽度"
+        }
+      },
+      {
+        "description": {
+          "cn": "slam坐标与rcs二维码坐标互转的参数"
+        },
+        "default": "1000.409171,-0.00236540,83978.5669, 26966.17502",
+        "value": "1000.409171,-0.00236540,83978.5669, 26966.17502",
+        "type": "str",
+        "hot_update": "False",
+        "name": {
+          "en": "slam2code_transform_param",
+          "cn": "slam 坐标与 rcs 二维码坐标互转的参数"
+        }
+      }
+    ],
+    "language": {
+      "en": "slam's settings",
+      "cn": "slam 配置"
+    }
+  }
+]

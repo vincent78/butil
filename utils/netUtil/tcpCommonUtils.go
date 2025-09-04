@@ -1,9 +1,10 @@
 package netUtil
 
 import (
-	"github.com/vincent78/butil/logger/logger1"
 	"net"
 	"time"
+
+	"github.com/vincent78/butil/logger/logger1"
 )
 
 // 常量

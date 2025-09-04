@@ -2,9 +2,10 @@ package zap
 
 import (
 	"fmt"
+	"testing"
+
 	logger2 "github.com/vincent78/butil/logger/logger2/logger"
 	"github.com/vincent78/butil/logger/logger2/writer"
-	"testing"
 )
 
 func TestName(t *testing.T) {

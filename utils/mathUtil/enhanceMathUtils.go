@@ -1,7 +1,7 @@
-//math 的增强功能
+// math 的增强功能
 package mathUtil
 
-//int 类型取绝对值
+// int 类型取绝对值
 func Abs(x int) int {
 	if x < 0 {
 		return -x
@@ -9,7 +9,7 @@ func Abs(x int) int {
 	return x
 }
 
-//int 类型取绝对值
+// int 类型取绝对值
 func AbsInt16(x int16) int16 {
 	if x < 0 {
 		return -x

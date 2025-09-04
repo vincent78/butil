@@ -2,8 +2,9 @@ package strUtil
 
 import (
 	"fmt"
-	"github.com/stretchr/testify/assert"
 	"testing"
+
+	"github.com/stretchr/testify/assert"
 )
 
 func TestFormatString(t *testing.T) {

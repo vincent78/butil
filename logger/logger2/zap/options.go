@@ -1,8 +1,9 @@
 package zap
 
 import (
-	"github.com/vincent78/butil/logger/logger2/logger"
 	"io"
+
+	"github.com/vincent78/butil/logger/logger2/logger"
 
 	"go.uber.org/zap"
 	"go.uber.org/zap/zapcore"

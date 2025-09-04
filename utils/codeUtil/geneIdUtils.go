@@ -1,8 +1,9 @@
 package codeUtil
 
 import (
-	"github.com/vincent78/butil/token"
 	"strings"
+
+	"github.com/vincent78/butil/token"
 )
 
 func GeneMesId() string {

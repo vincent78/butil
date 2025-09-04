@@ -1,7 +1,7 @@
 # source: go-admin
 
-
 # 配置文件
+
 ```yaml
 settings:
   logger:
@@ -16,7 +16,9 @@ settings:
 ```
 
 # 使用
+
 ## 入口初始化
+
 ```go 
 	log.SetupLogger(
 		logger.WithType(e.Type),

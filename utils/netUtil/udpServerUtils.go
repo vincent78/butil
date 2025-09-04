@@ -1,8 +1,9 @@
 package netUtil
 
 import (
-	"github.com/vincent78/butil/logger/logger1"
 	"net"
+
+	"github.com/vincent78/butil/logger/logger1"
 )
 
 type UDPServer struct {

@@ -2,11 +2,12 @@ package sys
 
 import (
 	"context"
-	"github.com/vincent78/butil/logger/logger1"
 	"os"
 	"os/signal"
 	"syscall"
 	"time"
+
+	"github.com/vincent78/butil/logger/logger1"
 )
 
 func BlockBySignal() {

@@ -1,6 +1,10 @@
 package token
 
 import (
+	"math/rand"
+	"strconv"
+	"time"
+
 	"github.com/chilts/sid"
 	"github.com/kjk/betterguid"
 	"github.com/oklog/ulid"
@@ -8,9 +12,6 @@ import (
 	"github.com/segmentio/ksuid"
 	"github.com/sony/sonyflake"
 	"github.com/vincent78/butil/logger/logger1"
-	"math/rand"
-	"strconv"
-	"time"
 )
 
 func GenXid() string {

@@ -2,10 +2,11 @@ package main
 
 import (
 	"fmt"
-	"github.com/vincent78/butil/timewheel"
 	"sync"
 	"sync/atomic"
 	"time"
+
+	"github.com/vincent78/butil/timewheel"
 )
 
 var (

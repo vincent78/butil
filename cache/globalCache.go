@@ -1,10 +1,11 @@
 package cache
 
 import (
-	"github.com/muesli/cache2go"
 	"os"
 	"sync"
 	"time"
+
+	"github.com/muesli/cache2go"
 )
 
 var once sync.Once

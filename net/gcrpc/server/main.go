@@ -1,12 +1,13 @@
 package main
 
 import (
+	"log"
+	"net"
+
 	pb "github.com/vincent78/butil/net/gcrpc/proto.pb"
 	"golang.org/x/net/context"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/reflection"
-	"log"
-	"net"
 )
 
 type server struct{}

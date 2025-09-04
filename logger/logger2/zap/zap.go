@@ -3,10 +3,11 @@ package zap
 import (
 	"context"
 	"fmt"
-	logger2 "github.com/vincent78/butil/logger/logger2/logger"
 	"io"
 	"os"
 	"sync"
+
+	logger2 "github.com/vincent78/butil/logger/logger2/logger"
 
 	"go.uber.org/zap"
 	"go.uber.org/zap/zapcore"

@@ -1,9 +1,10 @@
 package common
 
 import (
-	"github.com/vincent78/butil/utils/timeUtil"
 	"testing"
 	"time"
+
+	"github.com/vincent78/butil/utils/timeUtil"
 )
 
 func TestPingCmdCreate(t *testing.T) {

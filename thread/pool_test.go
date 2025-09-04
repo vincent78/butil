@@ -2,9 +2,10 @@ package thread
 
 import (
 	"fmt"
-	"github.com/vincent78/butil/logger/logger1"
 	"testing"
 	"time"
+
+	"github.com/vincent78/butil/logger/logger1"
 )
 
 func TestPool(t *testing.T) {

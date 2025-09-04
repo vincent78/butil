@@ -3,9 +3,10 @@ package byteUtil
 import (
 	"encoding/hex"
 	"fmt"
-	"golang.org/x/text/encoding/simplifiedchinese"
 	"strconv"
 	"strings"
+
+	"golang.org/x/text/encoding/simplifiedchinese"
 )
 
 type Charset string

@@ -2,10 +2,11 @@ package gcgin
 
 import (
 	"fmt"
-	"github.com/vincent78/butil/global"
-	"github.com/vincent78/butil/logger/logger1"
 	"regexp"
 	"testing"
+
+	"github.com/vincent78/butil/global"
+	"github.com/vincent78/butil/logger/logger1"
 )
 
 func initLogger() {

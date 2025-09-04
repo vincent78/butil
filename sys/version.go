@@ -2,9 +2,10 @@ package sys
 
 import (
 	"fmt"
-	"github.com/vincent78/butil/model"
 	"os"
 	"runtime"
+
+	"github.com/vincent78/butil/model"
 )
 
 var (

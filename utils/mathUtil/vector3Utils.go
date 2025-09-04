@@ -139,9 +139,9 @@ func (v Vector3) SmallestComponent() Axis {
 
 // Cmp compares v and ov lexicographically and returns:
 //
-//   -1 if v <  ov
-//    0 if v == ov
-//   +1 if v >  ov
+//	-1 if v <  ov
+//	 0 if v == ov
+//	+1 if v >  ov
 //
 // This method is based on C++'s std::lexicographical_compare. Two entities
 // are compared element by element with the given operator. The first mismatch

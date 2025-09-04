@@ -2,14 +2,15 @@ package gchttp
 
 import (
 	"fmt"
-	"github.com/vincent78/butil/logger/logger1"
-	"github.com/vincent78/butil/model"
-	"github.com/vincent78/butil/token"
-	gctime "github.com/vincent78/butil/utils/timeUtil"
 	"io"
 	"net"
 	"net/http"
 	"time"
+
+	"github.com/vincent78/butil/logger/logger1"
+	"github.com/vincent78/butil/model"
+	"github.com/vincent78/butil/token"
+	gctime "github.com/vincent78/butil/utils/timeUtil"
 )
 
 type HttpHandler func(w http.ResponseWriter, r *http.Request)

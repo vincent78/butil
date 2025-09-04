@@ -4,9 +4,10 @@ import (
 	"bufio"
 	"encoding/hex"
 	"fmt"
-	"github.com/vincent78/butil/logger/logger1"
 	"io"
 	"net"
+
+	"github.com/vincent78/butil/logger/logger1"
 )
 
 func Server(conf *NetConfig, c chan *ServerListener) error {

@@ -1,9 +1,10 @@
 package log
 
 import (
-	"github.com/vincent78/butil/logger/logger2/logger"
 	"testing"
 	"time"
+
+	"github.com/vincent78/butil/logger/logger2/logger"
 )
 
 func TestSetupLogger(t *testing.T) {

@@ -9,9 +9,10 @@ package logger4
 import (
 	"encoding/json"
 	"fmt"
-	"github.com/vincent78/butil/config"
 	"strings"
 	"time"
+
+	"github.com/vincent78/butil/config"
 
 	"github.com/natefinch/lumberjack"
 	"go.uber.org/zap"

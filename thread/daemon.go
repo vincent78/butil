@@ -7,7 +7,7 @@ import (
 
 var daemonQueue = make(map[string]Daemon)
 
-//var logger = logs.GetLogger(logs.LG_DAEMON)
+// var logger = logs.GetLogger(logs.LG_DAEMON)
 var tmp int
 
 type Daemon interface {

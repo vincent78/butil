@@ -3,6 +3,7 @@ package common
 import (
 	"encoding/json"
 	"fmt"
+
 	"github.com/vincent78/butil/model"
 	"github.com/vincent78/butil/token"
 	"github.com/vincent78/butil/utils/strUtil"

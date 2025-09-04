@@ -3,9 +3,10 @@ package work
 import (
 	"context"
 	"fmt"
-	"github.com/vincent78/butil/utils/timeUtil"
 	"testing"
 	"time"
+
+	"github.com/vincent78/butil/utils/timeUtil"
 )
 
 func TestDoneWithRetry(t *testing.T) {

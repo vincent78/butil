@@ -2,8 +2,9 @@ package config
 
 import (
 	"encoding/json"
-	"github.com/vincent78/butil/utils/fileUtil"
 	"testing"
+
+	"github.com/vincent78/butil/utils/fileUtil"
 )
 
 func TestParseConfig(t *testing.T) {

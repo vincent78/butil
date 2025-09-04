@@ -2,8 +2,9 @@ package main
 
 import (
 	"fmt"
-	"github.com/vincent78/butil/timewheel"
 	"time"
+
+	"github.com/vincent78/butil/timewheel"
 )
 
 func main() {

@@ -2,9 +2,10 @@ package main
 
 import (
 	"context"
+	"log"
+
 	pb "github.com/vincent78/butil/net/gcrpc/proto.pb"
 	"google.golang.org/grpc"
-	"log"
 )
 
 func main() {

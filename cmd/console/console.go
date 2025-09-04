@@ -2,11 +2,6 @@ package console
 
 import (
 	"fmt"
-	"github.com/mattn/go-colorable"
-	"github.com/peterh/liner"
-	"github.com/vincent78/butil/logger/logger1"
-	"github.com/vincent78/butil/model"
-	"github.com/vincent78/butil/utils/fileUtil"
 	"io"
 	"os"
 	"os/signal"
@@ -16,6 +11,12 @@ import (
 	"sync"
 	"syscall"
 	"time"
+
+	"github.com/mattn/go-colorable"
+	"github.com/peterh/liner"
+	"github.com/vincent78/butil/logger/logger1"
+	"github.com/vincent78/butil/model"
+	"github.com/vincent78/butil/utils/fileUtil"
 )
 
 var (

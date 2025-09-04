@@ -7,7 +7,6 @@ import (
 	"encoding/hex"
 	"errors"
 	"fmt"
-	imgext "github.com/shamsher31/goimgext"
 	"io"
 	"io/fs"
 	"log"
@@ -19,6 +18,8 @@ import (
 	"runtime"
 	"strconv"
 	"strings"
+
+	imgext "github.com/shamsher31/goimgext"
 )
 
 func Join(str ...string) string {

@@ -1,11 +1,12 @@
 package fileUtil
 
 import (
-	log "github.com/vincent78/butil/logger/logger2/logger"
-	"github.com/vincent78/butil/utils/strUtil"
 	"os"
 	"path"
 	"path/filepath"
+
+	log "github.com/vincent78/butil/logger/logger2/logger"
+	"github.com/vincent78/butil/utils/strUtil"
 
 	"runtime"
 	"strings"

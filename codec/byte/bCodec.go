@@ -3,10 +3,11 @@ package codec
 import (
 	"errors"
 	"fmt"
-	"github.com/vincent78/butil/utils/byteUtil"
-	"github.com/vincent78/butil/utils/reflectx"
 	"reflect"
 	"strconv"
+
+	"github.com/vincent78/butil/utils/byteUtil"
+	"github.com/vincent78/butil/utils/reflectx"
 )
 
 /************************************************************************

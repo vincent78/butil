@@ -2,9 +2,10 @@ package logger3
 
 import (
 	"fmt"
+	"sync"
+
 	"github.com/vincent78/butil/utils/strUtil"
 	"github.com/vincent78/butil/utils/timeUtil"
-	"sync"
 )
 
 type MessageFormat string

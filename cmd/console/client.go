@@ -3,10 +3,11 @@ package console
 import (
 	"context"
 	"fmt"
-	"github.com/vincent78/butil/logger/logger1"
-	"github.com/vincent78/butil/model"
 	"io"
 	"strings"
+
+	"github.com/vincent78/butil/logger/logger1"
+	"github.com/vincent78/butil/model"
 )
 
 type ApiHandleFunc func(ctx context.Context, ch chan string, params ...string) model.RespModel

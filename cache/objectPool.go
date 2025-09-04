@@ -1,8 +1,9 @@
 package cache
 
 import (
-	"github.com/vincent78/butil/utils/objUtil"
 	"sync"
+
+	"github.com/vincent78/butil/utils/objUtil"
 )
 
 type ObjPool struct {

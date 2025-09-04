@@ -4,10 +4,11 @@ import (
 	"bufio"
 	"bytes"
 	"encoding/binary"
+	"net"
+
 	"github.com/golang/protobuf/proto"
 	"github.com/vincent78/butil/logger/logger1"
 	gcnet "github.com/vincent78/butil/net/gcnet/proto.pb"
-	"net"
 )
 
 type NetHandler func(data interface{}, conn net.Conn)

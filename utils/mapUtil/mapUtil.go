@@ -3,8 +3,9 @@ package mapUtil
 import (
 	"encoding/json"
 	"fmt"
-	"github.com/goinggo/mapstructure"
 	"reflect"
+
+	"github.com/goinggo/mapstructure"
 )
 
 /*

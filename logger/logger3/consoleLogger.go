@@ -3,10 +3,11 @@ package logger3
 import (
 	"context"
 	"fmt"
+	"runtime/debug"
+
 	"github.com/vincent78/butil/cmd/console"
 	"github.com/vincent78/butil/config"
 	"github.com/vincent78/butil/thread"
-	"runtime/debug"
 )
 
 type ConsoleLogger struct {

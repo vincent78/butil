@@ -1,9 +1,10 @@
 package sys
 
 import (
-	"github.com/vincent78/butil/utils/fileUtil"
 	"os"
 	"strconv"
+
+	"github.com/vincent78/butil/utils/fileUtil"
 )
 
 func GeneratePID(path, name string) (string, error) {

@@ -2,8 +2,9 @@ package token
 
 import (
 	"encoding/hex"
-	"golang.org/x/crypto/scrypt"
 	"math/rand"
+
+	"golang.org/x/crypto/scrypt"
 )
 
 const (

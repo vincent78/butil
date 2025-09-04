@@ -3,6 +3,12 @@ package client
 import (
 	"bytes"
 	"context"
+	"net"
+	"net/http"
+	"net/url"
+	"strings"
+	"time"
+
 	"github.com/gorilla/websocket"
 	"github.com/vincent78/butil/global"
 	"github.com/vincent78/butil/logger/logger1"
@@ -11,11 +17,6 @@ import (
 	"github.com/vincent78/butil/token"
 	"github.com/vincent78/butil/utils/strUtil"
 	"github.com/vincent78/butil/utils/timeUtil"
-	"net"
-	"net/http"
-	"net/url"
-	"strings"
-	"time"
 )
 
 type WSClient struct {

@@ -2,8 +2,9 @@ package cache
 
 import (
 	"context"
-	"github.com/vincent78/butil/thread"
 	"sync"
+
+	"github.com/vincent78/butil/thread"
 )
 
 type routineCtx func(ctx context.Context)

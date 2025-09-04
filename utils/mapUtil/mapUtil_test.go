@@ -2,8 +2,9 @@ package mapUtil
 
 import (
 	"encoding/json"
-	"github.com/vincent78/butil/logger/logger1"
 	"testing"
+
+	"github.com/vincent78/butil/logger/logger1"
 )
 
 func TestGetObjByAnchorFromMap(b *testing.T) {

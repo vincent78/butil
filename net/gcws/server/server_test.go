@@ -1,11 +1,12 @@
 package server
 
 import (
+	"testing"
+
 	"github.com/vincent78/butil/global"
 	"github.com/vincent78/butil/logger/logger1"
 	"github.com/vincent78/butil/net/gcgin"
 	"github.com/vincent78/butil/sys"
-	"testing"
 )
 
 func initServerLog() {

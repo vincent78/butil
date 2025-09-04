@@ -3,6 +3,9 @@ package server
 import (
 	"context"
 	"fmt"
+	"net/http"
+	"time"
+
 	"github.com/gorilla/websocket"
 	"github.com/vincent78/butil/global"
 	"github.com/vincent78/butil/logger/logger1"
@@ -11,8 +14,6 @@ import (
 	"github.com/vincent78/butil/token"
 	"github.com/vincent78/butil/utils/strUtil"
 	"github.com/vincent78/butil/utils/timeUtil"
-	"net/http"
-	"time"
 )
 
 // WSServer is a middleman between the websocket connection and the Hub.

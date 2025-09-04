@@ -2,10 +2,11 @@ package server
 
 import (
 	"fmt"
-	"github.com/gorilla/websocket"
-	"github.com/vincent78/butil/net/gcws/common"
 	"net/http"
 	"time"
+
+	"github.com/gorilla/websocket"
+	"github.com/vincent78/butil/net/gcws/common"
 )
 
 const (

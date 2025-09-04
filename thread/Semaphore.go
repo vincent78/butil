@@ -1,6 +1,5 @@
 package thread
 
-
 import "sync"
 
 // Semaphore implements the signal mechanism management

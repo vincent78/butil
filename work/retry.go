@@ -3,8 +3,9 @@ package work
 import (
 	"context"
 	"fmt"
-	"github.com/vincent78/butil/logger/logger2/logger"
 	"time"
+
+	"github.com/vincent78/butil/logger/logger2/logger"
 )
 
 const MaxRetries = 3

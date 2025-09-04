@@ -6,7 +6,7 @@ import (
 	"strconv"
 )
 
-//获取GOROUTINE的ID
+// 获取GOROUTINE的ID
 func GetGID() uint64 {
 	b := make([]byte, 64)
 	b = b[:runtime.Stack(b, false)]

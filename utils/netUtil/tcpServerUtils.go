@@ -3,12 +3,13 @@ package netUtil
 import (
 	"errors"
 	"fmt"
-	"github.com/vincent78/butil/logger/logger1"
-	"github.com/vincent78/butil/utils/concurrentUtil"
 	"net"
 	"strings"
 	"sync"
 	"time"
+
+	"github.com/vincent78/butil/logger/logger1"
+	"github.com/vincent78/butil/utils/concurrentUtil"
 )
 
 const (

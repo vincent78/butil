@@ -3,15 +3,16 @@ package intercepter
 import (
 	"bytes"
 	"fmt"
+	"io"
+	"regexp"
+	"strings"
+	"time"
+
 	"github.com/gin-gonic/gin"
 	"github.com/vincent78/butil/global"
 	"github.com/vincent78/butil/logger/logger1"
 	"github.com/vincent78/butil/utils/mapUtil"
 	"github.com/vincent78/butil/utils/strUtil"
-	"io"
-	"regexp"
-	"strings"
-	"time"
 )
 
 const MaxPrintBodyLen = 512

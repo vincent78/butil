@@ -1,17 +1,18 @@
 package intercepter
 
 import (
+	"net"
+	"net/http"
+	"net/http/httputil"
+	"os"
+	"strings"
+
 	"github.com/gin-gonic/gin"
 	"github.com/vincent78/butil/global"
 	"github.com/vincent78/butil/logger/logger1"
 	"github.com/vincent78/butil/model"
 	httpModel "github.com/vincent78/butil/net/gcgin/model"
 	"github.com/vincent78/butil/utils/strUtil"
-	"net"
-	"net/http"
-	"net/http/httputil"
-	"os"
-	"strings"
 )
 
 // GinRecovery recover掉项目可能出现的panic，并使用zap记录相关日志

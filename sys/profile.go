@@ -16,10 +16,10 @@ var meminterval = flag.Int("meminterval", 10, "the interval of get mem info ,def
 // RunCPUProfile Run starts up stuff at the beginning of a main function, and returns a
 // function to defer until the function completes.  It should be used like this:
 //
-//   func main() {
-//     defer sys.RunCPUProfile()()
-//     ... stuff ...
-//   }
+//	func main() {
+//	  defer sys.RunCPUProfile()()
+//	  ... stuff ...
+//	}
 func RunCPUProfile() func() {
 	flag.Parse()
 	if *cpuprofile != "" {

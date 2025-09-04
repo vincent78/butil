@@ -5,7 +5,6 @@ import (
 	"encoding/hex"
 	"encoding/json"
 	"fmt"
-	"github.com/ghodss/yaml"
 	"io"
 	"math"
 	"math/rand"
@@ -14,6 +13,8 @@ import (
 	"strings"
 	"time"
 	"unsafe"
+
+	"github.com/ghodss/yaml"
 )
 
 // CompareVersion 版本比较，

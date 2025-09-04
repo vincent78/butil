@@ -2,11 +2,12 @@ package fileUtil
 
 import (
 	"fmt"
-	"github.com/vincent78/butil/utils/strUtil"
 	"os"
 	"path/filepath"
 	"strconv"
 	"testing"
+
+	"github.com/vincent78/butil/utils/strUtil"
 )
 
 func TestReadFile(t *testing.T) {

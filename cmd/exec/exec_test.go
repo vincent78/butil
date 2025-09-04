@@ -2,9 +2,10 @@ package exec
 
 import (
 	"context"
-	"github.com/vincent78/butil/model"
 	"testing"
 	"time"
+
+	"github.com/vincent78/butil/model"
 )
 
 func TestExec(t *testing.T) {

@@ -2,9 +2,10 @@ package dup
 
 import (
 	"fmt"
+	"reflect"
+
 	"github.com/jinzhu/copier"
 	"github.com/mitchellh/mapstructure"
-	"reflect"
 )
 
 // Copy deepcopier(v0.0.0-20200430083143-45decc6639b6) 库封装
@@ -28,7 +29,6 @@ import (
 //
 // src 中 empty, dst中的ptr会赋值为empty. str="" -> *str="" (如果需要nil不能使用这个方法)
 // FIXME : 不能解决 empty -> ptr 复制后 ptr为empty, copier新版本v0.1.0 使用 option 解决
-//
 func Copy(src, dst interface{}) {
 	err := CopyIgnoreEmpty(src, dst)
 	_ = err
@@ -65,7 +65,7 @@ func CopyWithFieldStr(src, dst interface{}, fs ...string) error {
 
 	sv := reflect.ValueOf(src).Elem()
 	dv := reflect.ValueOf(dst).Elem()
-	for _,f := range fs {
+	for _, f := range fs {
 		sf := sv.FieldByName(f)
 		// src没有指定的属性
 		if sf == reflect.Zero(reflect.TypeOf(stt)) {
@@ -102,9 +102,9 @@ func Decode(src interface{}, dst interface{}) error {
 
 func DecodeSpec(data interface{}, out interface{}) error {
 	decoder, err := mapstructure.NewDecoder(&mapstructure.DecoderConfig{
-		Metadata:   nil,
+		Metadata: nil,
 		//DecodeHook: ToTimeHookFunc(),
-		Result:     out,
+		Result: out,
 	})
 	if err != nil {
 		return err

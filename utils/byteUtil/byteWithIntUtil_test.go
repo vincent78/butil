@@ -3,9 +3,10 @@ package byteUtil
 import (
 	"encoding/binary"
 	"encoding/hex"
-	"github.com/imroc/biu"
 	"testing"
 	"unsafe"
+
+	"github.com/imroc/biu"
 )
 
 func TestSizeOfType(t *testing.T) {

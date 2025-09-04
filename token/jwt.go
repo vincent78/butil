@@ -2,8 +2,9 @@ package token
 
 import (
 	"errors"
-	"github.com/golang-jwt/jwt/v4"
 	"time"
+
+	"github.com/golang-jwt/jwt/v4"
 )
 
 const (

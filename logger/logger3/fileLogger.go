@@ -3,13 +3,14 @@ package logger3
 import (
 	"context"
 	"fmt"
+	"os"
+	"runtime/debug"
+
 	"github.com/vincent78/butil/cmd/console"
 	"github.com/vincent78/butil/config"
 	"github.com/vincent78/butil/thread"
 	"github.com/vincent78/butil/utils/fileUtil"
 	"github.com/vincent78/butil/utils/timeUtil"
-	"os"
-	"runtime/debug"
 )
 
 type FileLogger struct {

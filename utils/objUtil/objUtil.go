@@ -3,11 +3,12 @@ package objUtil
 import (
 	"errors"
 	"fmt"
-	"github.com/vincent78/butil/utils/mapUtil"
-	"github.com/vincent78/butil/utils/strUtil"
 	"reflect"
 	"strconv"
 	"strings"
+
+	"github.com/vincent78/butil/utils/mapUtil"
+	"github.com/vincent78/butil/utils/strUtil"
 )
 
 func ToString(obj interface{}) string {

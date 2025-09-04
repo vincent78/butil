@@ -1,8 +1,9 @@
 package pinyin_test
 
 import (
-	"github.com/vincent78/butil/utils/pinyin"
 	"testing"
+
+	"github.com/vincent78/butil/utils/pinyin"
 )
 
 func TestExamplePinyin_default(t *testing.T) {

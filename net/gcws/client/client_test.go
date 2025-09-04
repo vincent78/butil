@@ -2,12 +2,13 @@ package client
 
 import (
 	"fmt"
+	"testing"
+	"time"
+
 	"github.com/vincent78/butil/global"
 	"github.com/vincent78/butil/logger/logger1"
 	"github.com/vincent78/butil/sys"
 	"github.com/vincent78/butil/utils/timeUtil"
-	"testing"
-	"time"
 )
 
 func initClientLog() {

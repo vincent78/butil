@@ -3,7 +3,6 @@ package logger
 import (
 	"context"
 	"fmt"
-	dlog "github.com/vincent78/butil/logger/logger2/log2"
 	"log"
 	"os"
 	"runtime"
@@ -11,6 +10,8 @@ import (
 	"strings"
 	"sync"
 	"time"
+
+	dlog "github.com/vincent78/butil/logger/logger2/log2"
 )
 
 func init() {

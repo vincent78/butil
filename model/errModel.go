@@ -2,6 +2,7 @@ package model
 
 import (
 	"fmt"
+
 	"github.com/vincent78/butil/global"
 )
 

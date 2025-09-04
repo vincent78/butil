@@ -1,9 +1,10 @@
 package token
 
 import (
-	utime "github.com/vincent78/butil/utils/timeUtil"
 	"testing"
 	"time"
+
+	utime "github.com/vincent78/butil/utils/timeUtil"
 )
 
 func TestToken(t *testing.T) {

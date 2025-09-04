@@ -2,8 +2,9 @@ package plugins
 
 import (
 	"fmt"
-	"github.com/vincent78/butil/model"
 	"plugin"
+
+	"github.com/vincent78/butil/model"
 )
 
 var PluginMap map[string]PluginModel

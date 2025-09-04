@@ -1,8 +1,9 @@
 package client
 
 import (
-	"github.com/vincent78/butil/net/gcws/common"
 	"time"
+
+	"github.com/vincent78/butil/net/gcws/common"
 )
 
 const (

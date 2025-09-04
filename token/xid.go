@@ -1,7 +1,5 @@
 package token
 
-
-
 import (
 	"github.com/rs/xid"
 )

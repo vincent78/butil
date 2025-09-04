@@ -4,11 +4,12 @@ import (
 	"bufio"
 	"context"
 	"fmt"
-	"github.com/vincent78/butil/model"
-	"golang.org/x/text/encoding/simplifiedchinese"
 	"io"
 	"os"
 	"strings"
+
+	"github.com/vincent78/butil/model"
+	"golang.org/x/text/encoding/simplifiedchinese"
 )
 
 //func run(name string, arg ...string) *Cmd {

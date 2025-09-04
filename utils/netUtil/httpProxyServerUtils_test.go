@@ -2,14 +2,15 @@ package netUtil
 
 import (
 	"fmt"
-	"github.com/gin-gonic/gin"
-	"github.com/vincent78/butil/global"
-	"github.com/vincent78/butil/logger/logger1"
-	"github.com/vincent78/butil/utils/strUtil"
 	io "io"
 	"net/http"
 	"strconv"
 	"testing"
+
+	"github.com/gin-gonic/gin"
+	"github.com/vincent78/butil/global"
+	"github.com/vincent78/butil/logger/logger1"
+	"github.com/vincent78/butil/utils/strUtil"
 )
 
 func initlogger() {

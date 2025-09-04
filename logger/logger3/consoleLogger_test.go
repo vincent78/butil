@@ -2,10 +2,11 @@ package logger3
 
 import (
 	"context"
-	"github.com/vincent78/butil/config"
-	"github.com/vincent78/butil/utils/timeUtil"
 	"testing"
 	"time"
+
+	"github.com/vincent78/butil/config"
+	"github.com/vincent78/butil/utils/timeUtil"
 )
 
 func TestNewConsoleLogger(t *testing.T) {

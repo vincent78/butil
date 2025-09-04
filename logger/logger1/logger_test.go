@@ -1,10 +1,11 @@
 package logger1
 
 import (
-	"github.com/vincent78/butil/utils/strUtil"
 	"sync"
 	"testing"
 	"time"
+
+	"github.com/vincent78/butil/utils/strUtil"
 )
 
 func TestCopyLoggerConfig(t *testing.T) {

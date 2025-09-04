@@ -2,12 +2,13 @@
 package log
 
 import (
+	"io"
+	"os"
+
 	logger2 "github.com/vincent78/butil/logger/logger2/logger"
 	writer2 "github.com/vincent78/butil/logger/logger2/writer"
 	zap2 "github.com/vincent78/butil/logger/logger2/zap"
 	"github.com/vincent78/butil/utils/fileUtil"
-	"io"
-	"os"
 )
 
 // SetupLogger 日志 cap 单位为kb

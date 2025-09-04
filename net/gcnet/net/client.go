@@ -4,11 +4,12 @@ import (
 	"bytes"
 	"encoding/binary"
 	"fmt"
-	"github.com/golang/protobuf/proto"
-	"github.com/vincent78/butil/net/gcnet/proto.pb"
 	"net"
 	"strconv"
 	"time"
+
+	"github.com/golang/protobuf/proto"
+	"github.com/vincent78/butil/net/gcnet/proto.pb"
 )
 
 func Client() {

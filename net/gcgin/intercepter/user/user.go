@@ -2,6 +2,7 @@ package user
 
 import (
 	"fmt"
+
 	"github.com/gin-gonic/gin"
 	"github.com/vincent78/butil/net/gcgin/intercepter"
 	"github.com/vincent78/butil/utils/mathUtil/numberUtil"

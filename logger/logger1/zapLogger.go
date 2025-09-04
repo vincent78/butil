@@ -2,12 +2,13 @@ package logger1
 
 import (
 	"fmt"
-	"go.uber.org/zap"
-	"go.uber.org/zap/zapcore"
-	"gopkg.in/natefinch/lumberjack.v2"
 	"os"
 	"path"
 	"time"
+
+	"go.uber.org/zap"
+	"go.uber.org/zap/zapcore"
+	"gopkg.in/natefinch/lumberjack.v2"
 )
 
 func genZapLogger(obj *Logger) *zap.Logger {

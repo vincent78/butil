@@ -2,11 +2,12 @@ package gcgin
 
 import (
 	"context"
+	"net/http"
+
 	"github.com/gin-gonic/gin"
 	"github.com/go-playground/validator/v10"
 	"github.com/vincent78/butil/model"
 	model2 "github.com/vincent78/butil/net/gcgin/model"
-	"net/http"
 )
 
 func DoBusAction[T any](g *gin.Context, req T, action func(ctx context.Context, req T) (interface{}, *model.ErrorModel)) {

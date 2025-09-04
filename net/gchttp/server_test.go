@@ -2,9 +2,10 @@ package gchttp
 
 import (
 	"context"
+	"testing"
+
 	"github.com/vincent78/butil/logger/logger1"
 	"github.com/vincent78/butil/model"
-	"testing"
 )
 
 func initLogger() {

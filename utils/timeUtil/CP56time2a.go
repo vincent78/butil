@@ -5,8 +5,9 @@ import (
 	"encoding/hex"
 	"errors"
 	"fmt"
-	"github.com/vincent78/butil/utils/byteUtil"
 	"time"
+
+	"github.com/vincent78/butil/utils/byteUtil"
 )
 
 /*

@@ -5,7 +5,8 @@ Logger library wrapped in [zap](https://github.com/uber-go/zap).
 - Support for terminal printing and log saving.
 - Support for automatic log file cutting.
 - Support for json format and console log format output.
-- Support Debug, Info, Warn, Error, Panic, Fatal, also supports fmt.Printf-like log printing, Debugf, Infof, Warnf, Errorf, Panicf, Fatalf.
+- Support Debug, Info, Warn, Error, Panic, Fatal, also supports fmt.Printf-like log printing, Debugf, Infof, Warnf,
+  Errorf, Panicf, Fatalf.
 
 <br>
 

@@ -1,9 +1,10 @@
 package gcnet
 
 import (
-	"github.com/vincent78/butil/logger/logger1"
 	"net"
 	"testing"
+
+	"github.com/vincent78/butil/logger/logger1"
 )
 
 func TestNetServer(t *testing.T) {
