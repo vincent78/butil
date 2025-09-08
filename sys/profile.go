@@ -7,6 +7,8 @@ import (
 	"runtime"
 	"runtime/pprof"
 	"time"
+
+	"github.com/vincent78/butil/logger/logger4"
 )
 
 var cpuprofile = flag.String("cpuprofile", "", "Where to write CPU profile")
@@ -27,10 +29,13 @@ func RunCPUProfile() func() {
 		if err != nil {
 			log.Fatalf("could not open cpu profile file %q", *cpuprofile)
 		}
-		pprof.WriteHeapProfile(f)
+		err = pprof.WriteHeapProfile(f)
+		if err != nil {
+			return nil
+		}
 		return func() {
 			pprof.StopCPUProfile()
-			f.Close()
+			_ = f.Close()
 		}
 	}
 	return func() {}
@@ -44,7 +49,10 @@ func RunMemProfile() func() {
 			log.Fatalf("could not open mem profile file %q", *memprofile)
 		}
 		runtime.GC()
-		pprof.WriteHeapProfile(f)
+		err = pprof.WriteHeapProfile(f)
+		if err != nil {
+			return nil
+		}
 		tmi := time.Duration(*meminterval)
 		ticker := time.NewTicker(tmi * time.Second)
 		ch := make(chan bool)
@@ -53,7 +61,7 @@ func RunMemProfile() func() {
 			for {
 				select {
 				case <-ticker.C:
-					pprof.WriteHeapProfile(f)
+					_ = pprof.WriteHeapProfile(f)
 				case stop := <-ch:
 					if stop {
 						return
@@ -63,10 +71,38 @@ func RunMemProfile() func() {
 		}(ticker, f)
 		return func() {
 			ticker.Stop()
-			pprof.WriteHeapProfile(f)
+			_ = pprof.WriteHeapProfile(f)
 			ch <- true
-			f.Close()
+			_ = f.Close()
 		}
 	}
 	return func() {}
+}
+
+// 计算运行f前后内存信息
+func MemoryShow(f func(), log logger4.Logger) {
+	// 启用内存分配统计
+	runtime.MemProfileRate = 1 // 每分配1次就记录一次
+	runtime.GC()               // 强制进行垃圾回收
+
+	// 获取内存统计信息
+	var mem runtime.MemStats
+	runtime.ReadMemStats(&mem)
+
+	log.Info("memory show: begin",
+		logger4.Any("totalAlloc", mem.TotalAlloc),
+		logger4.Any("heapInuse", mem.HeapInuse),
+		logger4.Any("stackInuse", mem.StackInuse),
+	)
+
+	if f != nil {
+		f()
+	}
+
+	runtime.ReadMemStats(&mem)
+	log.Info("memory show: end",
+		logger4.Any("totalAlloc", mem.TotalAlloc),
+		logger4.Any("heapInuse", mem.HeapInuse),
+		logger4.Any("stackInuse", mem.StackInuse),
+	)
 }
