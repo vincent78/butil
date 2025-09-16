@@ -2,8 +2,10 @@ package strUtil
 
 import (
 	"encoding/hex"
+	"fmt"
 	"math/big"
 	"strconv"
+	"strings"
 )
 
 func Hex2Str(b []byte) string {
@@ -34,6 +36,12 @@ func HexStr2BigInt(str string) (*big.Int, error) {
 	}
 }
 
-//func Int2HexStr(n *big.Int) string {
-//
-//}
+func HexStr2Int64(str string) (int64, error) {
+	numberStr := strings.Replace(str, "0x", "", -1)
+	numberStr = strings.Replace(numberStr, "0X", "", -1)
+	return strconv.ParseInt(numberStr, 16, 64)
+}
+
+func Int642HexStr(i int64) string {
+	return fmt.Sprintf("0x%v", strconv.FormatInt(i, 16))
+}
