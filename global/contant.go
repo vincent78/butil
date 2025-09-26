@@ -3,11 +3,8 @@ package global
 import (
 	"os"
 
-	"github.com/urfave/cli/v2"
 	"github.com/vincent78/butil/timewheel"
 )
-
-var CliContext *cli.Context
 
 var Timewheel *timewheel.TimeWheel
 

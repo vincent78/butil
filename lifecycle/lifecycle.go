@@ -1,8 +1,10 @@
 package lifecycle
 
+import "context"
+
 var AppLifecycleInit = make(chan *AppLifecycleInitModel)
-var AppLifecyclePrepared = make(chan interface{})
-var AppLifecycleWorkBegin = make(chan interface{})
-var AppLifecycleActived = make(chan interface{})
-var AppLifecyclePaused = make(chan interface{})
-var AppLifecycleDestroy = make(chan interface{})
+var AppLifecyclePrepared = make(chan context.Context)
+var AppLifecycleWorkBegin = make(chan context.Context)
+var AppLifecycleActived = make(chan context.Context)
+var AppLifecyclePaused = make(chan context.Context)
+var AppLifecycleDestroy = make(chan context.Context)

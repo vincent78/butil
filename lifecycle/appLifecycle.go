@@ -1,13 +1,13 @@
 package lifecycle
 
 import (
-	"github.com/urfave/cli/v2"
+	"context"
+
 	"github.com/vincent78/butil/logger/logger1"
 	"github.com/vincent78/butil/sys"
 )
 
 type AppLifecycleInitModel struct {
-	Ctx      *cli.Context
 	Finished chan bool
 }
 
@@ -20,11 +20,11 @@ func init() {
 			case <-AppLifecyclePrepared:
 				AppPrepare()
 			case ctx := <-AppLifecycleActived:
-				AppPause(ctx.(*cli.Context))
+				AppPause(ctx)
 			case ctx := <-AppLifecyclePaused:
-				AppActive(ctx.(*cli.Context))
+				AppActive(ctx)
 			case ctx := <-AppLifecycleDestroy:
-				AppDestroy(ctx.(*cli.Context))
+				AppDestroy(ctx)
 			}
 		}
 	}()
@@ -42,23 +42,25 @@ func AppPrepare() {
 	if AppBasePrepared() {
 		sys.ManualGC()
 		logger1.Info("App Has Prepared")
-		AppLifecycleWorkBegin <- true
+		ctx := context.Background()
+		ctx = context.WithValue(ctx, "result", true)
+		AppLifecycleWorkBegin <- ctx
 	}
 }
 
-func AppPause(ctx *cli.Context) {
+func AppPause(ctx context.Context) {
 	logger1.Info("---- appPause ----")
 	AppBasePause()
 	sys.ManualGC()
 }
 
-func AppActive(ctx *cli.Context) {
+func AppActive(ctx context.Context) {
 	logger1.Info("---- appActive ----")
 	AppBaseActive()
 	sys.ManualGC()
 }
 
-func AppDestroy(ctx *cli.Context) {
+func AppDestroy(ctx context.Context) {
 	logger1.Info("---- appDestroy ----")
 	AppBaseDestory()
 }

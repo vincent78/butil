@@ -16,7 +16,6 @@ require (
 	github.com/muesli/cache2go v0.0.0-20221011235721-518229cd8021
 	github.com/shamsher31/goimgext v1.0.0
 	github.com/stretchr/testify v1.10.0
-	github.com/urfave/cli/v2 v2.27.6
 	go.uber.org/zap v1.27.0
 	golang.org/x/crypto v0.38.0
 	golang.org/x/net v0.40.0
@@ -43,12 +42,11 @@ require (
 )
 
 require (
+	github.com/BurntSushi/toml v1.4.0 // indirect
 	github.com/bytedance/sonic v1.13.2 // indirect
 	github.com/bytedance/sonic/loader v0.2.4 // indirect
 	github.com/cloudwego/base64x v0.1.5 // indirect
-	github.com/cpuguy83/go-md2man/v2 v2.0.6 // indirect
 	github.com/davecgh/go-spew v1.1.1 // indirect
-	github.com/fsnotify/fsnotify v1.9.0 // indirect
 	github.com/gabriel-vasile/mimetype v1.4.8 // indirect
 	github.com/gin-contrib/sse v1.1.0 // indirect
 	github.com/go-playground/locales v0.14.1 // indirect
@@ -64,7 +62,6 @@ require (
 	github.com/richardlehane/mscfb v1.0.4 // indirect
 	github.com/richardlehane/msoleps v1.0.4 // indirect
 	github.com/rivo/uniseg v0.4.7 // indirect
-	github.com/russross/blackfriday/v2 v2.1.0 // indirect
 	github.com/sagikazarmark/locafero v0.9.0 // indirect
 	github.com/sourcegraph/conc v0.3.0 // indirect
 	github.com/spf13/afero v1.14.0 // indirect
@@ -76,7 +73,6 @@ require (
 	github.com/tiendc/go-deepcopy v1.6.0 // indirect
 	github.com/twitchyliquid64/golang-asm v0.15.1 // indirect
 	github.com/ugorji/go/codec v1.2.12 // indirect
-	github.com/xrash/smetrics v0.0.0-20240521201337-686a1a2994c1 // indirect
 	github.com/xuri/efp v0.0.1 // indirect
 	github.com/xuri/nfp v0.0.1 // indirect
 	go.uber.org/multierr v1.11.0 // indirect
@@ -86,6 +82,7 @@ require (
 )
 
 require (
+	github.com/fsnotify/fsnotify v1.9.0
 	github.com/golang/protobuf v1.5.4
 	github.com/gorilla/websocket v1.5.3
 	github.com/mattn/go-colorable v0.1.14
