@@ -7,6 +7,7 @@ import (
 	"strconv"
 	"strings"
 
+	"github.com/mitchellh/mapstructure"
 	"github.com/vincent78/butil/utils/mapUtil"
 	"github.com/vincent78/butil/utils/strUtil"
 )
@@ -35,7 +36,14 @@ func ToInt(obj interface{}) (int, error) {
 	return strconv.Atoi(s)
 }
 
-func ObjToMap(obj interface{}) map[string]interface{} {
+// Note: obj must be the point
+func ObjToMap[T any](obj T) (map[string]interface{}, error) {
+	var r map[string]interface{}
+	err := mapstructure.Decode(obj, &r)
+	return r, err
+}
+
+func ObjToMap2(obj interface{}) map[string]interface{} {
 	var r = make(map[string]interface{})
 	switch obj.(type) {
 	case string:
@@ -78,7 +86,7 @@ func ObjToStrMap(obj interface{}) map[string]string {
 	if obj == nil {
 		return nil
 	}
-	m := ObjToMap(obj)
+	m := ObjToMap2(obj)
 	r := map[string]string{}
 	for key, val := range m {
 		r[key] = strUtil.ToJsonStr(val)
@@ -212,4 +220,9 @@ func IsNil(i interface{}) bool {
 		return vi.IsNil()
 	}
 	return false
+}
+
+func Map2Obj[T any](m map[string]interface{}, obj *T) (*T, error) {
+	err := mapstructure.Decode(m, obj)
+	return obj, err
 }
