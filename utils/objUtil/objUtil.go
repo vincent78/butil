@@ -222,7 +222,6 @@ func IsNil(i interface{}) bool {
 	return false
 }
 
-func Map2Obj[T any](m map[string]interface{}, obj *T) (*T, error) {
-	err := mapstructure.Decode(m, obj)
-	return obj, err
+func Map2Obj[T any](m map[string]interface{}, obj *T) error {
+	return mapstructure.WeakDecode(m, obj)
 }
