@@ -6,20 +6,20 @@ import (
 	"testing"
 
 	"github.com/vincent78/butil/global"
-	"github.com/vincent78/butil/logger/logger1"
+	logger "github.com/vincent78/butil/logger/logger1"
 )
 
 func initLogger() {
 	path := "/tmp/http"
-	conf := logger1.NewLogConfig()
+	conf := logger.NewLogConfig()
 	conf.Path = path
-	logger1.NewLogger(conf)
+	logger.NewLogger(conf)
 
-	conf = logger1.NewLogConfig()
+	conf = logger.NewLogConfig()
 	conf.Path = path
 	conf.Name = global.LogFileHttpName
 	conf.ToConsole = false
-	logger1.NewLogger(conf)
+	logger.NewLogger(conf)
 }
 
 func TestServer(t *testing.T) {
