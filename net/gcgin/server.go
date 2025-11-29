@@ -10,6 +10,7 @@ import (
 
 	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
+	"github.com/prometheus/client_golang/prometheus/promhttp"
 	"github.com/vincent78/butil/global"
 	"github.com/vincent78/butil/logger/logger1"
 	itcp "github.com/vincent78/butil/net/gcgin/intercepter"
@@ -54,7 +55,16 @@ func InitEngine(debug bool) *gin.Engine {
 	//	caller, file, line, ok := runtime.Caller(1)
 	//	logger.DebugByName(global.LogFileHttpName, "caller:%v, file:%v, line:%v, ok:%v", caller, file, line, ok)
 	//}
+
+	me := e.Group("/metrics")
+	me.GET("", wrapper(promhttp.Handler()))
 	return e
+}
+
+func wrapper(h http.Handler) gin.HandlerFunc {
+	return func(c *gin.Context) {
+		h.ServeHTTP(c.Writer, c.Request)
+	}
 }
 
 func SyncStartServer(addr string, g *gin.Engine) {
@@ -122,7 +132,7 @@ func recover500(c *gin.Context) {
 		if r := recover(); r != nil {
 			logger1.ErrorByName(global.LogFileHttpName, "panic: %v\n", r)
 			//debug.PrintStack()
-			c.JSON(200, gin.H{
+			c.JSON(http.StatusOK, gin.H{
 				"code":    500,
 				"message": "服务器内部错误",
 			})
