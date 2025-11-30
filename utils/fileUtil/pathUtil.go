@@ -3,7 +3,8 @@ package fileUtil
 import (
 	"os"
 	"path"
-	"path/filepath"
+
+	pathUtil "path/filepath"
 
 	log "github.com/vincent78/butil/logger/logger2/logger"
 	"github.com/vincent78/butil/utils/strUtil"
@@ -28,7 +29,7 @@ func GetCurrentAbPathByExecutable() string {
 	if err != nil {
 		log.Fatal(err)
 	}
-	res, _ := filepath.EvalSymlinks(filepath.Dir(exePath))
+	res, _ := pathUtil.EvalSymlinks(pathUtil.Dir(exePath))
 	return res
 }
 
@@ -48,7 +49,7 @@ func GetTmpDir() string {
 	if dir == "" {
 		dir = os.Getenv("TMP")
 	}
-	res, _ := filepath.EvalSymlinks(dir)
+	res, _ := pathUtil.EvalSymlinks(dir)
 	return res
 }
 
@@ -94,7 +95,7 @@ func IsNotExistMkDir(src string) error {
 
 // MkDir 新建文件夹
 func MkDir(src string) error {
-	err := os.MkdirAll(filepath.Dir(src), os.ModePerm)
+	err := os.MkdirAll(pathUtil.Dir(src), os.ModePerm)
 	//err := os.MkdirAll(src, 0777)
 	if err != nil {
 		return err
@@ -121,4 +122,61 @@ func GetPrePath(ps string) string {
 			return ps
 		}
 	}
+}
+
+func CreatePathWithDefaultMode(path string) string {
+	if !strings.HasPrefix(path, string(os.PathSeparator)) {
+		path = pathUtil.Join(CurrPath(), path)
+	}
+	var r = false
+	if r = Exist(path); !r {
+		r = CreatePath(path, GetFileMode(700))
+	}
+	if r {
+		return path
+	} else {
+		return ""
+	}
+}
+
+func CreatePath(path string, perm os.FileMode) bool {
+	exist := Exist(path)
+	if !exist {
+		if te := os.MkdirAll(pathUtil.Clean(path), perm); te != nil {
+			return false
+		} else {
+			return true
+		}
+	} else {
+		return exist
+	}
+}
+
+func CurrPath() string {
+	dir, err := pathUtil.Abs(pathUtil.Dir(os.Args[0]))
+	if err != nil {
+		log.Fatal(err)
+	}
+	return dir
+}
+
+func CurrPath2() string {
+	_, file, _, _ := runtime.Caller(1)
+	return path.Dir(file)
+}
+
+func GetAbs(path string) string {
+	var err error
+	if !pathUtil.IsAbs(path) {
+		path = Join(CurrPath(), path)
+		path, err = pathUtil.Abs(path)
+		if err != nil {
+			return ""
+		}
+	}
+	return path
+}
+
+func LastPathName(fp string) string {
+	return pathUtil.Base(fp)
 }

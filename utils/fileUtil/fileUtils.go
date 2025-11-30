@@ -15,7 +15,6 @@ import (
 	"os"
 	"path"
 	pathUtil "path/filepath"
-	"runtime"
 	"strconv"
 	"strings"
 
@@ -26,67 +25,10 @@ func Join(str ...string) string {
 	return pathUtil.Join(str...)
 }
 
-func GetAbs(path string) string {
-	var err error
-	if !pathUtil.IsAbs(path) {
-		path = Join(CurrPath(), path)
-		path, err = pathUtil.Abs(path)
-		if err != nil {
-			return ""
-		}
-	}
-	return path
-}
-
-func LastPathName(fp string) string {
-	return pathUtil.Base(fp)
-}
-
 // perm ：文件权限，一个八进制数。r（读）04，w（写）02，x（执行）01。
 func GetFileMode(num int) os.FileMode {
 	var um, _ = strconv.ParseInt(strconv.Itoa(num), 8, 0)
 	return os.FileMode(um)
-}
-
-func CreatePathWithDefaultMode(path string) string {
-	if !strings.HasPrefix(path, string(os.PathSeparator)) {
-		path = pathUtil.Join(CurrPath(), path)
-	}
-	var r = false
-	if r = Exist(path); !r {
-		r = CreatePath(path, GetFileMode(700))
-	}
-	if r {
-		return path
-	} else {
-		return ""
-	}
-}
-
-func CreatePath(path string, perm os.FileMode) bool {
-	exist := Exist(path)
-	if !exist {
-		if te := os.MkdirAll(pathUtil.Clean(path), perm); te != nil {
-			return false
-		} else {
-			return true
-		}
-	} else {
-		return exist
-	}
-}
-
-func CurrPath() string {
-	dir, err := pathUtil.Abs(pathUtil.Dir(os.Args[0]))
-	if err != nil {
-		log.Fatal(err)
-	}
-	return dir
-}
-
-func CurrPath2() string {
-	_, file, _, _ := runtime.Caller(1)
-	return path.Dir(file)
 }
 
 func Exist(path string) bool {
