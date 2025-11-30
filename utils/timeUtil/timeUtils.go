@@ -54,8 +54,18 @@ func TimeNano(t time.Time) int64 {
 func NowMillis() int64 {
 	return TimeMillis(time.Now())
 }
+func NowUtcMillis() int64 {
+	return UTCTimeMillis(time.Now().UTC())
+}
 func TimeMillis(t time.Time) int64 {
 	return t.UnixNano() / 1e6
+}
+func UTCTimeMillis(t time.Time) int64 {
+	// shanghai, _ := time.LoadLocation("Asia/Shanghai")
+	if t.Location() != time.UTC {
+		t.In(time.UTC)
+	}
+	return TimeMillis(t)
 }
 
 // NowSecond 得到当前时间戳 秒
@@ -64,6 +74,14 @@ func NowSecond() int64 {
 }
 func TimeSecond(t time.Time) int64 {
 	return t.Unix()
+}
+
+func UTCTimeSecond(t time.Time) int64 {
+	// shanghai, _ := time.LoadLocation("Asia/Shanghai")
+	if t.Location() != time.UTC {
+		t.In(time.UTC)
+	}
+	return TimeMillis(t)
 }
 
 // TimeFromStamp 时间戳 参数  s 为秒   ns 为纳秒
