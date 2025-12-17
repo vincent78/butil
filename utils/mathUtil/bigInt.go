@@ -37,6 +37,10 @@ func ConvertFloatToBigInt(amount float64, decimals int) *big.Int {
 }
 
 func ConvertStringToBigInt(amount string, decimals int) *big.Int {
+	if decimals == 0 {
+		r, _ := new(big.Int).SetString(amount, 10)
+		return r
+	}
 	multiplier := math.Pow10(decimals)
 	bf, _ := big.NewFloat(0).SetString(amount)
 	f := big.NewFloat(0).Mul(big.NewFloat(multiplier), bf)
@@ -167,4 +171,11 @@ func ConvertFloat2BigInt(num string, decimals int) *big.Int {
 	}
 	r, _ := new(big.Int).SetString(s, 10)
 	return r
+}
+
+func ConvertBigInt2Float64String(num *big.Int, decimals int) string {
+	multiplier := new(big.Float).SetFloat64(math.Pow10(decimals))
+	f := big.NewFloat(0).SetInt(num)
+	r := new(big.Float).Quo(f, multiplier)
+	return r.String()
 }

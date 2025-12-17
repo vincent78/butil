@@ -221,11 +221,71 @@ func TestConvertFloatToBigInt(t *testing.T) {
 			},
 			want: big.NewInt(123),
 		},
+		{
+			name: "test05",
+			args: args{
+				amount:   "1",
+				decimals: 0,
+			},
+			want: big.NewInt(1),
+		},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
 			if got := ConvertStringToBigInt(tt.args.amount, tt.args.decimals); !reflect.DeepEqual(got, tt.want) {
 				t.Errorf("ConvertFloatToBigInt() = %v, want %v", got, tt.want)
+			}
+		})
+	}
+}
+
+func TestConvertBigInt2Float64String(t *testing.T) {
+	type args struct {
+		num      *big.Int
+		decimals int
+	}
+	tests := []struct {
+		name string
+		args args
+		want string
+	}{
+		{
+			name: "test01",
+			args: args{
+				num:      big.NewInt(123456),
+				decimals: 1,
+			},
+			want: "12345.6",
+		},
+		{
+			name: "test02",
+			args: args{
+				num:      big.NewInt(123456),
+				decimals: 6,
+			},
+			want: "0.123456",
+		},
+		{
+			name: "test03",
+			args: args{
+				num:      big.NewInt(123456),
+				decimals: 7,
+			},
+			want: "0.0123456",
+		},
+		{
+			name: "test03",
+			args: args{
+				num:      big.NewInt(123456),
+				decimals: 0,
+			},
+			want: "123456",
+		},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			if got := ConvertBigInt2Float64String(tt.args.num, tt.args.decimals); got != tt.want {
+				t.Errorf("ConvertBigInt2Float64String() = %v, want %v", got, tt.want)
 			}
 		})
 	}
