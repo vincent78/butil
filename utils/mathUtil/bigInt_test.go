@@ -2,6 +2,8 @@ package mathUtil
 
 import (
 	"fmt"
+	"math/big"
+	"reflect"
 	"testing"
 )
 
@@ -107,4 +109,124 @@ func TestConvertFloat2BigInt(t *testing.T) {
 	s := "7357499.492611614930156458"
 	r := ConvertFloat2BigInt(s, 19)
 	t.Log(r)
+}
+
+func TestConvertFloat2BigInt1(t *testing.T) {
+	type args struct {
+		num      string
+		decimals int
+	}
+	tests := []struct {
+		name string
+		args args
+		want *big.Int
+	}{
+		{
+			name: "test01",
+			args: args{
+				num:      "123456",
+				decimals: 3,
+			},
+			want: big.NewInt(123456000),
+		},
+		{
+			name: "test02",
+			args: args{
+				num:      "12345.6",
+				decimals: 3,
+			},
+			want: big.NewInt(12345600),
+		},
+		{
+			name: "test03",
+			args: args{
+				num:      "0.1234",
+				decimals: 3,
+			},
+			want: big.NewInt(123),
+		},
+		{
+			name: "test04",
+			args: args{
+				num:      "0.1239",
+				decimals: 3,
+			},
+			want: big.NewInt(123),
+		},
+		{
+			name: "test05",
+			args: args{
+				num:      "0.12",
+				decimals: 3,
+			},
+			want: big.NewInt(120),
+		},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			if got := ConvertFloat2BigInt(tt.args.num, tt.args.decimals); !reflect.DeepEqual(got, tt.want) {
+				t.Errorf("ConvertFloat2BigInt() = %v, want %v", got, tt.want)
+			}
+		})
+	}
+}
+
+func TestConvertFloatToBigInt(t *testing.T) {
+	type args struct {
+		amount   string
+		decimals int
+	}
+	tests := []struct {
+		name string
+		args args
+		want *big.Int
+	}{
+		{
+			name: "test01",
+			args: args{
+				amount:   "123",
+				decimals: 3,
+			},
+			want: big.NewInt(123000),
+		},
+		{
+			name: "test02",
+			args: args{
+				amount:   "0.123",
+				decimals: 3,
+			},
+			want: big.NewInt(123),
+		},
+		{
+			name: "test03",
+			args: args{
+				amount:   "0.12",
+				decimals: 3,
+			},
+			want: big.NewInt(120),
+		},
+		{
+			name: "test04",
+			args: args{
+				amount:   "0.1234",
+				decimals: 3,
+			},
+			want: big.NewInt(123),
+		},
+		{
+			name: "test05",
+			args: args{
+				amount:   "0.1239",
+				decimals: 3,
+			},
+			want: big.NewInt(123),
+		},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			if got := ConvertStringToBigInt(tt.args.amount, tt.args.decimals); !reflect.DeepEqual(got, tt.want) {
+				t.Errorf("ConvertFloatToBigInt() = %v, want %v", got, tt.want)
+			}
+		})
+	}
 }

@@ -36,6 +36,15 @@ func ConvertFloatToBigInt(amount float64, decimals int) *big.Int {
 	return result
 }
 
+func ConvertStringToBigInt(amount string, decimals int) *big.Int {
+	multiplier := math.Pow10(decimals)
+	bf, _ := big.NewFloat(0).SetString(amount)
+	f := big.NewFloat(0).Mul(big.NewFloat(multiplier), bf)
+	i := new(big.Int)
+	f.Int(i)
+	return i
+}
+
 // SuoJinSuanFa 将整数转换为特定缩进格式的字符串（如 5000 → "0.05001"）
 func SuoJinSuanFa(numStr string) string {
 	//numStr := strconv.Itoa(num)
@@ -151,6 +160,10 @@ func ConvertFloat2BigInt(num string, decimals int) *big.Int {
 		} else {
 			s = s[:p] + s[p+1:p+2] + "." + s[p+2:]
 		}
+	}
+	dot := strings.Index(s, ".")
+	if dot >= 0 {
+		s = s[:dot]
 	}
 	r, _ := new(big.Int).SetString(s, 10)
 	return r
