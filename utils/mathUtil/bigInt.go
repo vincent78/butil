@@ -6,6 +6,8 @@ import (
 	"math/big"
 	"strconv"
 	"strings"
+
+	"github.com/shopspring/decimal"
 )
 
 func DivideWithPrecision(value *big.Int, precision int) string {
@@ -28,12 +30,8 @@ func ConvertBigIntToFloat(amount *big.Int, decimals int) float64 {
 	return result
 }
 
-func ConvertFloatToBigInt(amount float64, decimals int) *big.Int {
-	multiplier := math.Pow10(decimals)
-	bf := new(big.Float).SetFloat64(amount * multiplier)
-	result := new(big.Int)
-	bf.Int(result)
-	return result
+func ConvertFloatToBigInt(amount float64, decimals int32) *big.Int {
+	return decimal.NewFromFloatWithExponent(amount, decimals).BigInt()
 }
 
 func ConvertStringToBigInt(amount string, decimals int) *big.Int {
@@ -173,9 +171,52 @@ func ConvertFloat2BigInt(num string, decimals int) *big.Int {
 	return r
 }
 
-func ConvertBigInt2Float64String(num *big.Int, decimals int) string {
-	multiplier := new(big.Float).SetFloat64(math.Pow10(decimals))
-	f := big.NewFloat(0).SetInt(num)
-	r := new(big.Float).Quo(f, multiplier)
-	return r.String()
+/***********************************************************
+ *
+ * 高精度操作
+ *
+ ***********************************************************/
+
+func BigDiv(num1, num2 string) (string, error) {
+	var d1, d2 decimal.Decimal
+	var err error
+	if d1, err = decimal.NewFromString(num1); err != nil {
+		return "", err
+	}
+	if d2, err = decimal.NewFromString(num2); err != nil {
+		return "", err
+	}
+	return d1.Div(d2).String(), nil
+}
+
+func BigDivExp(num string, exp int32) (string, error) {
+	//d2 := big.NewInt(int64(math.Pow10(int(exp))))
+	d2 := decimal.New(1, exp)
+	return BigDiv(num, d2.String())
+}
+
+func BigMul(num1, num2 string) (string, error) {
+	var d1, d2 decimal.Decimal
+	var err error
+	if d1, err = decimal.NewFromString(num1); err != nil {
+		return "", err
+	}
+	if d2, err = decimal.NewFromString(num2); err != nil {
+		return "", err
+	}
+	return d1.Mul(d2).String(), nil
+}
+
+func BigMulExp(num string, exp int32) (string, error) {
+	d2 := decimal.New(1, exp)
+	return BigMul(num, d2.String())
+}
+
+func BigFormat(num string, n int32) (string, error) {
+	if d1, err := decimal.NewFromString(num); err != nil {
+		return "", err
+	} else {
+		rounded := d1.Round(n)
+		return rounded.String(), nil
+	}
 }

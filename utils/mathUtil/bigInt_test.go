@@ -106,12 +106,6 @@ func TestSuoJinSuanFa2Reverse(t *testing.T) {
 }
 
 func TestConvertFloat2BigInt(t *testing.T) {
-	s := "7357499.492611614930156458"
-	r := ConvertFloat2BigInt(s, 19)
-	t.Log(r)
-}
-
-func TestConvertFloat2BigInt1(t *testing.T) {
 	type args struct {
 		num      string
 		decimals int
@@ -171,78 +165,10 @@ func TestConvertFloat2BigInt1(t *testing.T) {
 	}
 }
 
-func TestConvertFloatToBigInt(t *testing.T) {
+func TestBigMulExp(t *testing.T) {
 	type args struct {
 		amount   string
-		decimals int
-	}
-	tests := []struct {
-		name string
-		args args
-		want *big.Int
-	}{
-		{
-			name: "test01",
-			args: args{
-				amount:   "123",
-				decimals: 3,
-			},
-			want: big.NewInt(123000),
-		},
-		{
-			name: "test02",
-			args: args{
-				amount:   "0.123",
-				decimals: 3,
-			},
-			want: big.NewInt(123),
-		},
-		{
-			name: "test03",
-			args: args{
-				amount:   "0.12",
-				decimals: 3,
-			},
-			want: big.NewInt(120),
-		},
-		{
-			name: "test04",
-			args: args{
-				amount:   "0.1234",
-				decimals: 3,
-			},
-			want: big.NewInt(123),
-		},
-		{
-			name: "test05",
-			args: args{
-				amount:   "0.1239",
-				decimals: 3,
-			},
-			want: big.NewInt(123),
-		},
-		{
-			name: "test05",
-			args: args{
-				amount:   "1",
-				decimals: 0,
-			},
-			want: big.NewInt(1),
-		},
-	}
-	for _, tt := range tests {
-		t.Run(tt.name, func(t *testing.T) {
-			if got := ConvertStringToBigInt(tt.args.amount, tt.args.decimals); !reflect.DeepEqual(got, tt.want) {
-				t.Errorf("ConvertFloatToBigInt() = %v, want %v", got, tt.want)
-			}
-		})
-	}
-}
-
-func TestConvertBigInt2Float64String(t *testing.T) {
-	type args struct {
-		num      *big.Int
-		decimals int
+		decimals int32
 	}
 	tests := []struct {
 		name string
@@ -252,7 +178,60 @@ func TestConvertBigInt2Float64String(t *testing.T) {
 		{
 			name: "test01",
 			args: args{
-				num:      big.NewInt(123456),
+				amount:   "123",
+				decimals: 3,
+			},
+			want: "123000",
+		},
+		{
+			name: "test02",
+			args: args{
+				amount:   "0.123",
+				decimals: 2,
+			},
+			want: "12.3",
+		},
+		{
+			name: "test03",
+			args: args{
+				amount:   "0.12",
+				decimals: 3,
+			},
+			want: "120",
+		},
+		{
+			name: "test04",
+			args: args{
+				amount:   "2",
+				decimals: 0,
+			},
+			want: "2",
+		},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			//num, _ := new(big.Int).SetString(tt.args.amount, 10)
+			if got, _ := BigMulExp(tt.args.amount, tt.args.decimals); !reflect.DeepEqual(got, tt.want) {
+				t.Errorf("ConvertFloatToBigInt() = %v, want %v", got, tt.want)
+			}
+		})
+	}
+}
+
+func TestBigDivExp(t *testing.T) {
+	type args struct {
+		num      string
+		decimals int32
+	}
+	tests := []struct {
+		name string
+		args args
+		want string
+	}{
+		{
+			name: "test01",
+			args: args{
+				num:      "123456",
 				decimals: 1,
 			},
 			want: "12345.6",
@@ -260,7 +239,7 @@ func TestConvertBigInt2Float64String(t *testing.T) {
 		{
 			name: "test02",
 			args: args{
-				num:      big.NewInt(123456),
+				num:      "123456",
 				decimals: 6,
 			},
 			want: "0.123456",
@@ -268,7 +247,7 @@ func TestConvertBigInt2Float64String(t *testing.T) {
 		{
 			name: "test03",
 			args: args{
-				num:      big.NewInt(123456),
+				num:      "123456",
 				decimals: 7,
 			},
 			want: "0.0123456",
@@ -276,16 +255,24 @@ func TestConvertBigInt2Float64String(t *testing.T) {
 		{
 			name: "test03",
 			args: args{
-				num:      big.NewInt(123456),
+				num:      "123456",
 				decimals: 0,
 			},
 			want: "123456",
 		},
+		{
+			name: "test04",
+			args: args{
+				num:      "521622999431879754",
+				decimals: 9,
+			},
+			want: "521622999.431879754",
+		},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			if got := ConvertBigInt2Float64String(tt.args.num, tt.args.decimals); got != tt.want {
-				t.Errorf("ConvertBigInt2Float64String() = %v, want %v", got, tt.want)
+			if got, err := BigDivExp(tt.args.num, tt.args.decimals); err != nil || got != tt.want {
+				t.Errorf("ConvertBigInt2Float64String() = %v, want %v  err: %v ", got, tt.want, err)
 			}
 		})
 	}

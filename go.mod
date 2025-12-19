@@ -95,6 +95,7 @@ require (
 	github.com/peterh/liner v1.2.2
 	github.com/prometheus/client_golang v1.23.2
 	github.com/segmentio/ksuid v1.0.4
+	github.com/shopspring/decimal v1.4.0
 	github.com/spf13/viper v1.20.1
 	github.com/tidwall/gjson v1.18.0
 	github.com/xuri/excelize/v2 v2.9.1
