@@ -51,7 +51,7 @@ func TestDoneInChannel(t *testing.T) {
 	t.Log(resp.Data)
 }
 
-func TestP2(t *testing.T) {
+func TestPostHttpForm(t *testing.T) {
 	urlApi := "http://localhost:8080/v1/discovery"
 	var contentType string = "application/x-www-form-urlencoded"
 
@@ -74,7 +74,7 @@ func TestP2(t *testing.T) {
 	t.Log(string(respBody))
 }
 
-func TestP3(t *testing.T) {
+func TestPostHttpJson(t *testing.T) {
 	urlApi := "http://localhost:8080/v1/discovery"
 	var contentType string = "application/json"
 
