@@ -6,6 +6,7 @@ import (
 	"reflect"
 	"strconv"
 	"strings"
+	"unsafe"
 
 	"github.com/mitchellh/mapstructure"
 	"github.com/vincent78/butil/utils/mapUtil"
@@ -220,6 +221,25 @@ func IsNil(i any) bool {
 		return vi.IsNil()
 	}
 	return false
+}
+
+type eface struct {
+	typ unsafe.Pointer
+	ptr unsafe.Pointer
+}
+
+// IsNil 值判空
+func IsNil2(v any) bool {
+	if v == nil {
+		return true
+	}
+
+	ep := (*eface)(unsafe.Pointer(&v))
+	if ep == nil {
+		return true
+	}
+
+	return ep.typ == nil || uintptr(ep.ptr) == 0x0
 }
 
 func Map2Obj[T any](m map[string]any, obj *T) error {
