@@ -105,7 +105,7 @@ func (c *Console) doHandler(apiName string, args ...string) model.RespModel {
 	return c.client.DoHandler(apiName, args...)
 }
 
-func (c *Console) Print(msg string, opt ...interface{}) {
+func (c *Console) Print(msg string, opt ...any) {
 	s := fmt.Sprintf("%v%v%v", string(Newline), msg, string(Newline))
 	fmt.Fprintf(c.client.printer, s, opt...)
 	fmt.Fprintf(c.client.printer, "%v%v", string(Newline), c.prompt)

@@ -6,84 +6,84 @@ import (
 
 type Helper struct {
 	Logger
-	fields map[string]interface{}
+	fields map[string]any
 }
 
 func NewHelper(log Logger) *Helper {
 	return &Helper{Logger: log}
 }
 
-func (h *Helper) Info(args ...interface{}) {
+func (h *Helper) Info(args ...any) {
 	if !h.Logger.Options().Level.Enabled(InfoLevel) {
 		return
 	}
 	h.Logger.Fields(h.fields).Log(InfoLevel, args...)
 }
 
-func (h *Helper) Infof(template string, args ...interface{}) {
+func (h *Helper) Infof(template string, args ...any) {
 	if !h.Logger.Options().Level.Enabled(InfoLevel) {
 		return
 	}
 	h.Logger.Fields(h.fields).Logf(InfoLevel, template, args...)
 }
 
-func (h *Helper) Trace(args ...interface{}) {
+func (h *Helper) Trace(args ...any) {
 	if !h.Logger.Options().Level.Enabled(TraceLevel) {
 		return
 	}
 	h.Logger.Fields(h.fields).Log(TraceLevel, args...)
 }
 
-func (h *Helper) Tracef(template string, args ...interface{}) {
+func (h *Helper) Tracef(template string, args ...any) {
 	if !h.Logger.Options().Level.Enabled(TraceLevel) {
 		return
 	}
 	h.Logger.Fields(h.fields).Logf(TraceLevel, template, args...)
 }
 
-func (h *Helper) Debug(args ...interface{}) {
+func (h *Helper) Debug(args ...any) {
 	if !h.Logger.Options().Level.Enabled(DebugLevel) {
 		return
 	}
 	h.Logger.Fields(h.fields).Log(DebugLevel, args...)
 }
 
-func (h *Helper) Debugf(template string, args ...interface{}) {
+func (h *Helper) Debugf(template string, args ...any) {
 	if !h.Logger.Options().Level.Enabled(DebugLevel) {
 		return
 	}
 	h.Logger.Fields(h.fields).Logf(DebugLevel, template, args...)
 }
 
-func (h *Helper) Warn(args ...interface{}) {
+func (h *Helper) Warn(args ...any) {
 	if !h.Logger.Options().Level.Enabled(WarnLevel) {
 		return
 	}
 	h.Logger.Fields(h.fields).Log(WarnLevel, args...)
 }
 
-func (h *Helper) Warnf(template string, args ...interface{}) {
+func (h *Helper) Warnf(template string, args ...any) {
 	if !h.Logger.Options().Level.Enabled(WarnLevel) {
 		return
 	}
 	h.Logger.Fields(h.fields).Logf(WarnLevel, template, args...)
 }
 
-func (h *Helper) Error(args ...interface{}) {
+func (h *Helper) Error(args ...any) {
 	if !h.Logger.Options().Level.Enabled(ErrorLevel) {
 		return
 	}
 	h.Logger.Fields(h.fields).Log(ErrorLevel, args...)
 }
 
-func (h *Helper) Errorf(template string, args ...interface{}) {
+func (h *Helper) Errorf(template string, args ...any) {
 	if !h.Logger.Options().Level.Enabled(ErrorLevel) {
 		return
 	}
 	h.Logger.Fields(h.fields).Logf(ErrorLevel, template, args...)
 }
 
-func (h *Helper) Fatal(args ...interface{}) {
+func (h *Helper) Fatal(args ...any) {
 	if !h.Logger.Options().Level.Enabled(FatalLevel) {
 		return
 	}
@@ -91,7 +91,7 @@ func (h *Helper) Fatal(args ...interface{}) {
 	os.Exit(1)
 }
 
-func (h *Helper) Fatalf(template string, args ...interface{}) {
+func (h *Helper) Fatalf(template string, args ...any) {
 	if !h.Logger.Options().Level.Enabled(FatalLevel) {
 		return
 	}
@@ -105,7 +105,7 @@ func (h *Helper) WithError(err error) *Helper {
 	return &Helper{Logger: h.Logger, fields: fields}
 }
 
-func (h *Helper) WithFields(fields map[string]interface{}) *Helper {
+func (h *Helper) WithFields(fields map[string]any) *Helper {
 	nfields := copyFields(fields)
 	for k, v := range h.fields {
 		nfields[k] = v

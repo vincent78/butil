@@ -14,7 +14,7 @@ func TestPool(t *testing.T) {
 		logger1.Error("the Pool create error : %v", err.Error())
 		return
 	}
-	var testFunc = func(arg interface{}) error {
+	var testFunc = func(arg any) error {
 		println("the test func: " + arg.(string))
 		time.Sleep(time.Second * 3)
 		return nil

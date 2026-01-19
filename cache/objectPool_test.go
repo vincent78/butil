@@ -6,7 +6,7 @@ import (
 )
 
 func TestObjPool(t *testing.T) {
-	num := func() interface{} {
+	num := func() any {
 		return 10.0
 	}
 

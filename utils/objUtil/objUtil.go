@@ -12,7 +12,7 @@ import (
 	"github.com/vincent78/butil/utils/strUtil"
 )
 
-func ToString(obj interface{}) string {
+func ToString(obj any) string {
 	if obj == nil {
 		return ""
 	}
@@ -31,38 +31,38 @@ func ToString(obj interface{}) string {
 	return str
 }
 
-func ToInt(obj interface{}) (int, error) {
+func ToInt(obj any) (int, error) {
 	s := ToString(obj)
 	return strconv.Atoi(s)
 }
 
 // Note: obj must be the point
-func ObjToMap[T any](obj T) (map[string]interface{}, error) {
-	var r map[string]interface{}
+func ObjToMap[T any](obj T) (map[string]any, error) {
+	var r map[string]any
 	err := mapstructure.Decode(obj, &r)
 	return r, err
 }
 
-func ObjToMap2(obj interface{}) map[string]interface{} {
-	var r = make(map[string]interface{})
+func ObjToMap2(obj any) map[string]any {
+	var r = make(map[string]any)
 	switch obj.(type) {
 	case string:
 		err := strUtil.Parse(obj.(string), &r)
 		if err != nil {
 			return nil
 		}
-	case []interface{}:
-		t := obj.([]interface{})
+	case []any:
+		t := obj.([]any)
 		for i := 0; i < len(t); i++ {
 			r[fmt.Sprintf("key%+v", i)] = t[i]
 		}
-	case map[interface{}]interface{}:
-		t := obj.(map[interface{}]interface{})
+	case map[any]any:
+		t := obj.(map[any]any)
 		for key, value := range t {
 			r[ToString(key)] = value
 		}
-	case map[string]interface{}:
-		r = obj.(map[string]interface{})
+	case map[string]any:
+		r = obj.(map[string]any)
 	default:
 		r["context"] = obj
 		break
@@ -70,9 +70,9 @@ func ObjToMap2(obj interface{}) map[string]interface{} {
 	return r
 }
 
-func ObjsToInterface[T any](objs []T) []interface{} {
+func ObjsToInterface[T any](objs []T) []any {
 	if objs != nil {
-		rt := make([]interface{}, 0, len(objs))
+		rt := make([]any, 0, len(objs))
 		for _, o := range objs {
 			rt = append(rt, o)
 		}
@@ -82,7 +82,7 @@ func ObjsToInterface[T any](objs []T) []interface{} {
 	}
 }
 
-func ObjToStrMap(obj interface{}) map[string]string {
+func ObjToStrMap(obj any) map[string]string {
 	if obj == nil {
 		return nil
 	}
@@ -94,12 +94,12 @@ func ObjToStrMap(obj interface{}) map[string]string {
 	return r
 }
 
-func ObjToStrSlice(obj interface{}) []string {
+func ObjToStrSlice(obj any) []string {
 	var r []string
 	//fmt.Printf("obj type:%v",reflect.TypeOf(obj))
 	switch obj.(type) {
-	case []interface{}:
-		r = ArrayToStrSlice(obj.([]interface{}))
+	case []any:
+		r = ArrayToStrSlice(obj.([]any))
 	default:
 		r = append(r, fmt.Sprintf("%v", obj))
 		break
@@ -107,7 +107,7 @@ func ObjToStrSlice(obj interface{}) []string {
 	return r
 }
 
-func ArrayToStrSlice(obj []interface{}) []string {
+func ArrayToStrSlice(obj []any) []string {
 	var r []string
 	if obj == nil {
 		return r
@@ -118,7 +118,7 @@ func ArrayToStrSlice(obj []interface{}) []string {
 	return r
 }
 
-func ObjByAnchor(obj interface{}, anchor string) interface{} {
+func ObjByAnchor(obj any, anchor string) any {
 	if obj == nil {
 		return nil
 	}
@@ -127,7 +127,7 @@ func ObjByAnchor(obj interface{}, anchor string) interface{} {
 
 // HasObj 判断 target 中是否包含 obj
 // !objUtil.HasObj(ext[1], [...]string{"jpg", "png"})
-func HasObj(obj interface{}, target interface{}) bool {
+func HasObj(obj any, target any) bool {
 	targetValue := reflect.ValueOf(target)
 	switch reflect.TypeOf(target).Kind() {
 	case reflect.Array, reflect.Slice:
@@ -147,7 +147,7 @@ func HasObj(obj interface{}, target interface{}) bool {
 // SimpleCopyProperties 对象copy
 // target 目标对象指针
 // src 源对象(或源对象指针)
-func SimpleCopyProperties(target, src interface{}) (err error) {
+func SimpleCopyProperties(target, src any) (err error) {
 	// 防止意外panic
 	defer func() {
 		if e := recover(); e != nil {
@@ -196,7 +196,7 @@ func SimpleCopyProperties(target, src interface{}) (err error) {
 }
 
 // 此时 T 不能为指针
-func ParseList[T any](list []interface{}) ([]T, error) {
+func ParseList[T any](list []any) ([]T, error) {
 	r := make([]T, 0, len(list))
 	for _, o := range list {
 		s := strUtil.ToJsonStr(o)
@@ -211,7 +211,7 @@ func ParseList[T any](list []interface{}) ([]T, error) {
 
 // 判断 interface{} 是否为空
 // 输入必须是 chan, func, interface, map, pointer, or slice
-func IsNil(i interface{}) bool {
+func IsNil(i any) bool {
 	defer func() {
 		recover()
 	}()
@@ -222,6 +222,6 @@ func IsNil(i interface{}) bool {
 	return false
 }
 
-func Map2Obj[T any](m map[string]interface{}, obj *T) error {
+func Map2Obj[T any](m map[string]any, obj *T) error {
 	return mapstructure.WeakDecode(m, obj)
 }

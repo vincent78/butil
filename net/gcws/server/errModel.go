@@ -12,15 +12,15 @@ const (
 	ErrorNoCmdHanderCode
 )
 
-var ErrorParseCmd = func(msg string, args ...interface{}) *model.ErrorModel {
+var ErrorParseCmd = func(msg string, args ...any) *model.ErrorModel {
 	return model.NewErrModelByStr(ErrorParseCmdCode, msg, args...)
 }
 
-var ErrorCmdInputType = func(input interface{}) *model.ErrorModel {
+var ErrorCmdInputType = func(input any) *model.ErrorModel {
 	return model.NewErrModelByStr(ErrorCmdInputTypeCode, "Cmd Input[%v] error", input)
 }
 
-var ErrorParseCmdInput = func(input interface{}, err error) *model.ErrorModel {
+var ErrorParseCmdInput = func(input any, err error) *model.ErrorModel {
 	return model.NewErrModelByStr(ErrorParseCmdInputCode, "parse Cmd Input[%v] error:%v ", input, err)
 }
 

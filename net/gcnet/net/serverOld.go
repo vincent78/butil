@@ -11,7 +11,7 @@ import (
 	gcnet "github.com/vincent78/butil/net/gcnet/proto.pb"
 )
 
-type NetHandler func(data interface{}, conn net.Conn)
+type NetHandler func(data any, conn net.Conn)
 
 var NetHandlerMap = make(map[string]NetHandler)
 
@@ -22,10 +22,10 @@ func RegistNetHandler(cmd string, f NetHandler) {
 }
 
 func init() {
-	RegistNetHandler("unknown", func(data interface{}, conn net.Conn) {
+	RegistNetHandler("unknown", func(data any, conn net.Conn) {
 		logger1.Error("net[%v] receive unknown command. data: %v", conn.RemoteAddr(), data)
 	})
-	RegistNetHandler("stop", func(data interface{}, conn net.Conn) {
+	RegistNetHandler("stop", func(data any, conn net.Conn) {
 		logger1.Error("net[%v] receive unknown command. data: %v", conn.RemoteAddr(), data)
 	})
 }

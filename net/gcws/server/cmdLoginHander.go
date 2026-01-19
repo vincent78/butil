@@ -7,9 +7,9 @@ import (
 )
 
 type LoginCmdInput struct {
-	Name   string      `json:"name"`
-	Passwd string      `json:"passwd"`
-	Data   interface{} `json:"data,omitempty"`
+	Name   string `json:"name"`
+	Passwd string `json:"passwd"`
+	Data   any    `json:"data,omitempty"`
 }
 
 type LoginCmdHandler struct {

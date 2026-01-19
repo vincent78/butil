@@ -35,7 +35,7 @@ var upgrader = websocket.Upgrader{
 	},
 }
 
-var ignoreCmdMap = map[string]interface{}{
+var ignoreCmdMap = map[string]any{
 	fmt.Sprintf("%v:%v", common.CmdCategorySys, common.CmdNamePing): struct{}{},
 	fmt.Sprintf("%v:%v", common.CmdCategorySys, common.CmdNamePong): struct{}{},
 }

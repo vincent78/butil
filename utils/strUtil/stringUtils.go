@@ -159,7 +159,7 @@ func RandomString(l int) string {
  *
  *****************************************/
 
-func ParseFromYaml(str string, v interface{}) error {
+func ParseFromYaml(str string, v any) error {
 	if bs, err := yaml.YAMLToJSON(String2Bytes(str)); err == nil {
 		Parse(Bytes2String(bs), &v)
 		return nil
@@ -171,7 +171,7 @@ func ParseFromYaml(str string, v interface{}) error {
 // ToStr 获取变量的字符串值
 // 浮点型 3.0将会转换成字符串3, "3"
 // 非数值或字符类型的变量将会被转换成JSON格式字符串
-func ToStr(value interface{}) string {
+func ToStr(value any) string {
 	var key string
 	if value == nil {
 		return key

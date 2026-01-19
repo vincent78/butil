@@ -37,27 +37,27 @@ func Fatal(msg string, fields ...Field) {
 }
 
 // Debugf format level information
-func Debugf(format string, a ...interface{}) {
+func Debugf(format string, a ...any) {
 	getSugaredLogger().Debugf(format, a...)
 }
 
 // Infof format level information
-func Infof(format string, a ...interface{}) {
+func Infof(format string, a ...any) {
 	getSugaredLogger().Infof(format, a...)
 }
 
 // Warnf format level information
-func Warnf(format string, a ...interface{}) {
+func Warnf(format string, a ...any) {
 	getSugaredLogger().Warnf(format, a...)
 }
 
 // Errorf format level information
-func Errorf(format string, a ...interface{}) {
+func Errorf(format string, a ...any) {
 	getSugaredLogger().Errorf(format, a...)
 }
 
 // Fatalf format level information
-func Fatalf(format string, a ...interface{}) {
+func Fatalf(format string, a ...any) {
 	getSugaredLogger().Fatalf(format, a...)
 }
 

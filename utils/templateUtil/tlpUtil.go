@@ -8,7 +8,7 @@ import (
 	"github.com/vincent78/butil/utils/fileUtil"
 )
 
-func GenFile(tf, target string, d interface{}) error {
+func GenFile(tf, target string, d any) error {
 	if exist := fileUtil.Exist(tf); !exist {
 		return fmt.Errorf("can't find template file [%v] ", tf)
 	}

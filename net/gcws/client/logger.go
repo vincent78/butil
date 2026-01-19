@@ -2,7 +2,7 @@ package client
 
 import "fmt"
 
-func (c *WSClient) NormalLogger(msg string, args ...interface{}) string {
+func (c *WSClient) NormalLogger(msg string, args ...any) string {
 	str := fmt.Sprintf(msg, args...)
 	return fmt.Sprintf("%v: %v ", c.LogPrefix(), str)
 }

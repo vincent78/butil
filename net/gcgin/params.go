@@ -13,7 +13,7 @@ import (
 )
 
 // ParseJSON 解析请求JSON
-func ParseJSON(c *gin.Context, obj interface{}) error {
+func ParseJSON(c *gin.Context, obj any) error {
 	if err := c.ShouldBindJSON(obj); err != nil {
 		return errors.New(fmt.Sprintf("解析请求参数发生错误 - %s", err.Error()))
 	}
@@ -21,7 +21,7 @@ func ParseJSON(c *gin.Context, obj interface{}) error {
 }
 
 // ParseQuery 解析Query参数
-func ParseQuery(c *gin.Context, obj interface{}) error {
+func ParseQuery(c *gin.Context, obj any) error {
 	if err := c.ShouldBindQuery(obj); err != nil {
 		return errors.New(fmt.Sprintf("解析请求参数发生错误 - %s", err.Error()))
 	}
@@ -29,7 +29,7 @@ func ParseQuery(c *gin.Context, obj interface{}) error {
 }
 
 // ParseForm 解析Form请求
-func ParseForm(c *gin.Context, obj interface{}) error {
+func ParseForm(c *gin.Context, obj any) error {
 	if err := c.ShouldBindWith(obj, binding.Form); err != nil {
 		return errors.New(fmt.Sprintf("解析请求参数发生错误 - %s", err.Error()))
 	}
@@ -76,21 +76,21 @@ func ParseParamInt(c *gin.Context, param string) int {
 	return int(vID)
 }
 
-func GetRawDataToMapUseNumber(c *gin.Context) (map[string]interface{}, error) {
+func GetRawDataToMapUseNumber(c *gin.Context) (map[string]any, error) {
 	req := c.Request
 	d := json.NewDecoder(req.Body)
 	d.UseNumber()
-	var x interface{}
+	var x any
 	if err := d.Decode(&x); err != nil {
 		// log.Errorf(err, "decode json error: %s", err.Error())
 	}
-	maps := x.(map[string]interface{})
+	maps := x.(map[string]any)
 	removeTraceCond(maps)
 	return maps, nil
 }
 
-func GetRawDataToMap(c *gin.Context) (map[string]interface{}, error) {
-	var condition = make(map[string]interface{})
+func GetRawDataToMap(c *gin.Context) (map[string]any, error) {
+	var condition = make(map[string]any)
 
 	b, err := c.GetRawData()
 	if err != nil {
@@ -112,7 +112,7 @@ func GetRawDataToMap(c *gin.Context) (map[string]interface{}, error) {
 
 // removeTraceCond 移除客户端的跟踪条件
 // TODO: 需重构在拦截器处理跟踪条件(appBuild, deviceName等)
-func removeTraceCond(cond map[string]interface{}) {
+func removeTraceCond(cond map[string]any) {
 	keys := []string{"appBuild", "deviceName"}
 
 	for _, key := range keys {

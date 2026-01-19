@@ -10,7 +10,7 @@ const (
 	ErrorWSMNoCmdName
 )
 
-var ErrorWSMParseCmd = func(msg string, args ...interface{}) *model.ErrorModel {
+var ErrorWSMParseCmd = func(msg string, args ...any) *model.ErrorModel {
 	return model.NewErrModelByStr(ErrorWSMParseCmdCode, msg, args...)
 }
 

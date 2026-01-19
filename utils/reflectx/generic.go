@@ -24,7 +24,7 @@ func SafeValue[T any](v T) T {
 // 必须传入指针
 // 它会将空指针的字段设置为该类型的零值的指针
 // 传入空指针会返回一个所有字段都为零值的结构体
-func SafeStruct(v interface{}) interface{} {
+func SafeStruct(v any) any {
 	vt := reflect.TypeOf(v)
 	vv := reflect.ValueOf(v)
 	if vv.IsNil() {

@@ -23,7 +23,7 @@ type TCPServer struct {
 	Addr                   *net.TCPAddr             // ip:port
 	InitHandler            func(*TCPTransfer) error // 第一次收到客户端信息后，执行的回执函数
 	Handler                func(*TCPTransfer)       // 每次收到客户端信息后，执行的处理信息函数
-	PanicHandler           func(interface{})        // 接收客户端请求 传输处理数据过程中遇到panic时的处理函数
+	PanicHandler           func(any)                // 接收客户端请求 传输处理数据过程中遇到panic时的处理函数
 	ClientConMap           sync.Map                 // 客户端传输对象: key 为客户端addr, value 为 *TCPTransfer
 	ClientMaxNum           int                      // 允许连接的最大客户端数
 	ServerState            bool                     // 服务状态： true ： 服务存活 ， false : 服务关闭
@@ -41,7 +41,7 @@ const Con_Time_Out int64 = 30000
 // param: handler  客户端逻辑处理函数
 // param: panicHandler  panic时处理函数，传空则使用默认panic 处理函数
 // return t tcpServer 对象
-func NewTCPServer(addr string, clientMaxNum int, clientConnTimeOut int64, initHandler func(transfer *TCPTransfer) error, handler func(transfer *TCPTransfer), panicHandler func(interface{})) (t *TCPServer, err error) {
+func NewTCPServer(addr string, clientMaxNum int, clientConnTimeOut int64, initHandler func(transfer *TCPTransfer) error, handler func(transfer *TCPTransfer), panicHandler func(any)) (t *TCPServer, err error) {
 	logger1.Info("New TCPServer addr:%v", addr)
 	// 校验地址格式是否正确
 	var tcpAddr *net.TCPAddr
@@ -214,7 +214,7 @@ func (t *TCPServer) acceptAndHandle() (err error) {
 }
 
 // 默认是捕获panic但不会因为有panic而退出更上层的for循环
-func defaultPanicHandler(ifPanic interface{}) {
+func defaultPanicHandler(ifPanic any) {
 	if ifPanic != nil {
 		logger1.Error("================ TCP PANIC, errMsg: `%v` ================", ifPanic)
 	}
@@ -260,7 +260,7 @@ func (t *TCPServer) closeConnTimeOut() {
 
 // 遍历syncMap并转化为切片类型的 *TCPTransfer
 func syncMapSwapSlice(m sync.Map) (transfers []*TCPTransfer) {
-	m.Range(func(key, value interface{}) bool {
+	m.Range(func(key, value any) bool {
 		v := value.(*TCPTransfer)
 		transfers = append(transfers, v)
 		return true

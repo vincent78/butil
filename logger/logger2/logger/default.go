@@ -40,15 +40,15 @@ func (l *defaultLogger) String() string {
 	return "default"
 }
 
-func (l *defaultLogger) Fields(fields map[string]interface{}) Logger {
+func (l *defaultLogger) Fields(fields map[string]any) Logger {
 	l.Lock()
 	l.opts.Fields = copyFields(fields)
 	l.Unlock()
 	return l
 }
 
-func copyFields(src map[string]interface{}) map[string]interface{} {
-	dst := make(map[string]interface{}, len(src))
+func copyFields(src map[string]any) map[string]any {
+	dst := make(map[string]any, len(src))
 	for k, v := range src {
 		dst[k] = v
 	}
@@ -79,15 +79,15 @@ func logCallerfilePath(loggingFilePath string) string {
 	return loggingFilePath[idx+1:]
 }
 
-func (l *defaultLogger) Log(level Level, v ...interface{}) {
+func (l *defaultLogger) Log(level Level, v ...any) {
 	l.logf(level, "", v...)
 }
 
-func (l *defaultLogger) Logf(level Level, format string, v ...interface{}) {
+func (l *defaultLogger) Logf(level Level, format string, v ...any) {
 	l.logf(level, format, v...)
 }
 
-func (l *defaultLogger) logf(level Level, format string, v ...interface{}) {
+func (l *defaultLogger) logf(level Level, format string, v ...any) {
 	// TODO decide does we need to write message if log level not used?
 	if !l.opts.Level.Enabled(level) {
 		return
@@ -166,7 +166,7 @@ func NewLogger(opts ...Option) Logger {
 	// Default options
 	options := Options{
 		Level:           InfoLevel,
-		Fields:          make(map[string]interface{}),
+		Fields:          make(map[string]any),
 		Out:             os.Stderr,
 		CallerSkipCount: 3,
 		Context:         context.Background(),

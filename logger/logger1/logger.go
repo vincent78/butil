@@ -103,18 +103,18 @@ func NewLogger(conf *LogConfig) *Logger {
 	return obj
 }
 
-func (obj *Logger) Debug(msg string, args ...interface{}) {
+func (obj *Logger) Debug(msg string, args ...any) {
 	writeByLevel(obj.Conf.Name, LevelDebug, msg, args...)
 }
 
-func (obj *Logger) Info(msg string, args ...interface{}) {
+func (obj *Logger) Info(msg string, args ...any) {
 	writeByLevel(obj.Conf.Name, LevelInfo, msg, args...)
 }
 
-func (obj *Logger) Warn(msg string, args ...interface{}) {
+func (obj *Logger) Warn(msg string, args ...any) {
 	writeByLevel(obj.Conf.Name, LevelWarn, msg, args...)
 }
 
-func (obj *Logger) Error(msg string, args ...interface{}) {
+func (obj *Logger) Error(msg string, args ...any) {
 	writeByLevel(obj.Conf.Name, LevelError, msg, args...)
 }

@@ -35,7 +35,7 @@ func NowUtcStr() string {
 	return TimeStr(time.Now().UTC())
 }
 func NowUtcStr2() string {
-	return TimeFmtStr(time.Now().UTC(),CompactFormat)
+	return TimeFmtStr(time.Now().UTC(), CompactFormat)
 }
 
 func NowFmtStr(fmtStr string) string {

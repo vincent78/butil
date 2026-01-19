@@ -254,7 +254,7 @@ func Done(task *Task, client *HttpClient) model.RespModel {
  *
  **************************************************************************/
 
-func PostFormData(urlStr string, header map[string]string, body map[string]interface{}) model.RespModel {
+func PostFormData(urlStr string, header map[string]string, body map[string]any) model.RespModel {
 	if header == nil {
 		header = make(map[string]string)
 	}

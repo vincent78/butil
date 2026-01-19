@@ -29,19 +29,19 @@ import (
 //
 // src 中 empty, dst中的ptr会赋值为empty. str="" -> *str="" (如果需要nil不能使用这个方法)
 // FIXME : 不能解决 empty -> ptr 复制后 ptr为empty, copier新版本v0.1.0 使用 option 解决
-func Copy(src, dst interface{}) {
+func Copy(src, dst any) {
 	err := CopyIgnoreEmpty(src, dst)
 	_ = err
 	return
 }
 
-func CopyWithOption(src, dst interface{}, opt copier.Option) error {
+func CopyWithOption(src, dst any, opt copier.Option) error {
 
 	return copier.CopyWithOption(dst, src, opt)
 }
 
 // CopyWithFieldStr 拷贝指定的属性
-func CopyWithFieldStr(src, dst interface{}, fs ...string) error {
+func CopyWithFieldStr(src, dst any, fs ...string) error {
 	if src == nil {
 		return fmt.Errorf("src is nil")
 	}
@@ -85,22 +85,22 @@ func CopyWithFieldStr(src, dst interface{}, fs ...string) error {
 	return nil
 }
 
-func CopyIgnoreEmpty(src, dst interface{}) error {
+func CopyIgnoreEmpty(src, dst any) error {
 
 	return CopyWithOption(src, dst, copier.Option{IgnoreEmpty: true})
 }
 
-func CopyMap(src, dst interface{}) {
+func CopyMap(src, dst any) {
 	err := copier.Copy(dst, src)
 	_ = err
 	return
 }
 
-func Decode(src interface{}, dst interface{}) error {
+func Decode(src any, dst any) error {
 	return mapstructure.Decode(src, dst)
 }
 
-func DecodeSpec(data interface{}, out interface{}) error {
+func DecodeSpec(data any, out any) error {
 	decoder, err := mapstructure.NewDecoder(&mapstructure.DecoderConfig{
 		Metadata: nil,
 		//DecodeHook: ToTimeHookFunc(),
@@ -115,7 +115,7 @@ func DecodeSpec(data interface{}, out interface{}) error {
 	return nil
 }
 
-func DecodeMap(data map[string]interface{}, out interface{}) error {
+func DecodeMap(data map[string]any, out any) error {
 	config := &mapstructure.DecoderConfig{
 		//DecodeHook:       mapstructure.StringToTimeHookFunc(timex.LayoutLong),
 		//DecodeHook:       ToTimeHookFunc(),

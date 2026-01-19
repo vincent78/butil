@@ -8,13 +8,13 @@ import (
 )
 
 func wsInfo(c *gin.Context) {
-	info := map[string]interface{}{}
+	info := map[string]any{}
 
 	list1 := make([]string, len(HubManager.loginServers))
 	for _, server := range HubManager.loginServers {
 		list1 = append(list1, fmt.Sprintf("%v - %v", server.RemoteIP, server.ID))
 	}
-	info["loginServers"] = map[string]interface{}{
+	info["loginServers"] = map[string]any{
 		"count":  len(HubManager.loginServers),
 		"detail": list1,
 	}
@@ -24,7 +24,7 @@ func wsInfo(c *gin.Context) {
 		list2 = append(list2, server.RemoteIP)
 	}
 
-	info["anonymity"] = map[string]interface{}{
+	info["anonymity"] = map[string]any{
 		"count":  len(HubManager.servers),
 		"detail": list2,
 	}

@@ -150,7 +150,7 @@ func file_gcrpc_proto_helloworld_proto_rawDescGZIP() []byte {
 }
 
 var file_gcrpc_proto_helloworld_proto_msgTypes = make([]protoimpl.MessageInfo, 2)
-var file_gcrpc_proto_helloworld_proto_goTypes = []interface{}{
+var file_gcrpc_proto_helloworld_proto_goTypes = []any{
 	(*HelloRequest)(nil), // 0: HelloRequest
 	(*HelloReply)(nil),   // 1: HelloReply
 }
@@ -170,7 +170,7 @@ func file_gcrpc_proto_helloworld_proto_init() {
 		return
 	}
 	if !protoimpl.UnsafeEnabled {
-		file_gcrpc_proto_helloworld_proto_msgTypes[0].Exporter = func(v interface{}, i int) interface{} {
+		file_gcrpc_proto_helloworld_proto_msgTypes[0].Exporter = func(v any, i int) any {
 			switch v := v.(*HelloRequest); i {
 			case 0:
 				return &v.state
@@ -182,7 +182,7 @@ func file_gcrpc_proto_helloworld_proto_init() {
 				return nil
 			}
 		}
-		file_gcrpc_proto_helloworld_proto_msgTypes[1].Exporter = func(v interface{}, i int) interface{} {
+		file_gcrpc_proto_helloworld_proto_msgTypes[1].Exporter = func(v any, i int) any {
 			switch v := v.(*HelloReply); i {
 			case 0:
 				return &v.state
@@ -266,7 +266,7 @@ func RegisterHelloWorldServer(s *grpc.Server, srv HelloWorldServer) {
 	s.RegisterService(&_HelloWorld_serviceDesc, srv)
 }
 
-func _HelloWorld_SayHello_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+func _HelloWorld_SayHello_Handler(srv any, ctx context.Context, dec func(any) error, interceptor grpc.UnaryServerInterceptor) (any, error) {
 	in := new(HelloRequest)
 	if err := dec(in); err != nil {
 		return nil, err
@@ -278,7 +278,7 @@ func _HelloWorld_SayHello_Handler(srv interface{}, ctx context.Context, dec func
 		Server:     srv,
 		FullMethod: "/HelloWorld/SayHello",
 	}
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+	handler := func(ctx context.Context, req any) (any, error) {
 		return srv.(HelloWorldServer).SayHello(ctx, req.(*HelloRequest))
 	}
 	return interceptor(ctx, in, info, handler)

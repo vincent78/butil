@@ -101,7 +101,7 @@ func FailureResp(w http.ResponseWriter, code int, msg string) {
 	io.WriteString(w, msg)
 }
 
-func SuccessRespJson(w http.ResponseWriter, r interface{}) {
+func SuccessRespJson(w http.ResponseWriter, r any) {
 	SetJsonRep(w)
 	result := model.SuccessResp(r)
 	io.WriteString(w, result.String())

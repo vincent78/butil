@@ -15,7 +15,7 @@ func logic1() {
 	basePath := fileUtil.GetCurrentProjectPath()
 	tf := fileUtil.Join(basePath, "template", "example/simple/hello.go.template")
 	tg := fileUtil.Join("/tmp", "hello.go")
-	data := map[string]interface{}{"msg": "\"hello world\""}
+	data := map[string]any{"msg": "\"hello world\""}
 	if err := templateUtil.GenFile(tf, tg, data); err != nil {
 		fmt.Printf("\n--- error: %v", err)
 	} else {

@@ -16,18 +16,18 @@ const (
 )
 
 type MsgModel struct {
-	Now     string                 `json:"ts"`
-	Level   LoggerLeverl           `json:"level"`
-	Format  MessageFormat          `json:"-"`
-	Message string                 `json:"msg"`
-	Fields  map[string]interface{} `json:"field,omitempty"`
+	Now     string         `json:"ts"`
+	Level   LoggerLeverl   `json:"level"`
+	Format  MessageFormat  `json:"-"`
+	Message string         `json:"msg"`
+	Fields  map[string]any `json:"field,omitempty"`
 }
 
 var msgObjPool = &sync.Pool{New: func() any {
 	return MsgModel{}
 }}
 
-func NewMsgModel(l LoggerLeverl, msg string, field map[string]interface{}) *MsgModel {
+func NewMsgModel(l LoggerLeverl, msg string, field map[string]any) *MsgModel {
 	obj := msgObjPool.Get().(MsgModel)
 	obj.Now = timeUtil.NowFmtStr(timeUtil.LongFormat)
 	obj.Level = l

@@ -171,7 +171,7 @@ func file_gcnet_proto_command_proto_rawDescGZIP() []byte {
 }
 
 var file_gcnet_proto_command_proto_msgTypes = make([]protoimpl.MessageInfo, 2)
-var file_gcnet_proto_command_proto_goTypes = []interface{}{
+var file_gcnet_proto_command_proto_goTypes = []any{
 	(*CmdRequest)(nil),  // 0: CmdRequest
 	(*CmdResponse)(nil), // 1: CmdResponse
 }
@@ -189,7 +189,7 @@ func file_gcnet_proto_command_proto_init() {
 		return
 	}
 	if !protoimpl.UnsafeEnabled {
-		file_gcnet_proto_command_proto_msgTypes[0].Exporter = func(v interface{}, i int) interface{} {
+		file_gcnet_proto_command_proto_msgTypes[0].Exporter = func(v any, i int) any {
 			switch v := v.(*CmdRequest); i {
 			case 0:
 				return &v.state
@@ -201,7 +201,7 @@ func file_gcnet_proto_command_proto_init() {
 				return nil
 			}
 		}
-		file_gcnet_proto_command_proto_msgTypes[1].Exporter = func(v interface{}, i int) interface{} {
+		file_gcnet_proto_command_proto_msgTypes[1].Exporter = func(v any, i int) any {
 			switch v := v.(*CmdResponse); i {
 			case 0:
 				return &v.state

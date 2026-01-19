@@ -18,7 +18,7 @@ type zaplog struct {
 	zap  *zap.Logger
 	opts logger2.Options
 	sync.RWMutex
-	fields map[string]interface{}
+	fields map[string]any
 }
 
 func (l *zaplog) Init(opts ...logger2.Option) error {
@@ -83,14 +83,14 @@ func (l *zaplog) Init(opts ...logger2.Option) error {
 
 	l.cfg = zapConfig
 	l.zap = log
-	l.fields = make(map[string]interface{})
+	l.fields = make(map[string]any)
 
 	return nil
 }
 
-func (l *zaplog) Fields(fields map[string]interface{}) logger2.Logger {
+func (l *zaplog) Fields(fields map[string]any) logger2.Logger {
 	l.Lock()
-	nfields := make(map[string]interface{}, len(l.fields))
+	nfields := make(map[string]any, len(l.fields))
 	for k, v := range l.fields {
 		nfields[k] = v
 	}
@@ -115,10 +115,10 @@ func (l *zaplog) Fields(fields map[string]interface{}) logger2.Logger {
 }
 
 func (l *zaplog) Error(err error) logger2.Logger {
-	return l.Fields(map[string]interface{}{"error": err})
+	return l.Fields(map[string]any{"error": err})
 }
 
-func (l *zaplog) Log(level logger2.Level, args ...interface{}) {
+func (l *zaplog) Log(level logger2.Level, args ...any) {
 	l.RLock()
 	data := make([]zap.Field, 0, len(l.fields))
 	for k, v := range l.fields {
@@ -142,7 +142,7 @@ func (l *zaplog) Log(level logger2.Level, args ...interface{}) {
 	}
 }
 
-func (l *zaplog) Logf(level logger2.Level, format string, args ...interface{}) {
+func (l *zaplog) Logf(level logger2.Level, format string, args ...any) {
 	l.RLock()
 	data := make([]zap.Field, 0, len(l.fields))
 	for k, v := range l.fields {
@@ -179,7 +179,7 @@ func NewLogger(opts ...logger2.Option) (logger2.Logger, error) {
 	// Default options
 	options := logger2.Options{
 		Level:   logger2.InfoLevel,
-		Fields:  make(map[string]interface{}),
+		Fields:  make(map[string]any),
 		Out:     os.Stderr,
 		Context: context.Background(),
 	}

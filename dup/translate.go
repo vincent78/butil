@@ -6,7 +6,7 @@ import (
 	"reflect"
 )
 
-func Translate(form, to interface{}) {
+func Translate(form, to any) {
 	fType := reflect.TypeOf(form)
 	fValue := reflect.ValueOf(form)
 	if fType.Kind() == reflect.Ptr {
@@ -30,7 +30,7 @@ func Translate(form, to interface{}) {
 }
 
 // SimpleCopyProperties 拷贝属性
-func SimpleCopyProperties(dst, src interface{}) (err error) {
+func SimpleCopyProperties(dst, src any) (err error) {
 	// 防止意外panic
 	defer func() {
 		if e := recover(); e != nil {

@@ -238,12 +238,12 @@ func printCounter() {
 
 type logger struct{}
 
-func (l *logger) info(format string, args ...interface{}) {
+func (l *logger) info(format string, args ...any) {
 	v := fmt.Sprintf(format, args...)
 	fmt.Println(v)
 }
 
-func (l *logger) error(format string, args ...interface{}) {
+func (l *logger) error(format string, args ...any) {
 	v := fmt.Sprintf(format, args...)
 	color := fmt.Sprintf("%c[%d;%d;%dm %s %c[0m", 0x1B, 5, 40, 31, v, 0x1B)
 	fmt.Println(color)

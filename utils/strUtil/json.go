@@ -12,7 +12,7 @@ import (
 )
 
 // ToJsonStr 将对象转为json字符串
-func ToJsonStr(obj interface{}) string {
+func ToJsonStr(obj any) string {
 
 	if str, ok := obj.(string); ok {
 		return str
@@ -29,7 +29,7 @@ func ToJsonStr(obj interface{}) string {
 	return r
 }
 
-func ToBytes(obj interface{}) []byte {
+func ToBytes(obj any) []byte {
 	if str, ok := obj.(string); ok {
 		return []byte(str)
 	}
@@ -43,15 +43,15 @@ func ToBytes(obj interface{}) []byte {
 	}
 }
 
-func Parse(str string, v interface{}) error {
+func Parse(str string, v any) error {
 	return json.Unmarshal([]byte(str), &v)
 }
 
-func ParseByBytes(bytes []byte, v interface{}) error {
+func ParseByBytes(bytes []byte, v any) error {
 	return json.Unmarshal(bytes, &v)
 }
 
-func ObjByAnchor(str, anchor string) interface{} {
+func ObjByAnchor(str, anchor string) any {
 	if str == "" {
 		return str
 	}
@@ -72,7 +72,7 @@ func IsArray(data []byte) (bool, error) {
 }
 
 // 长字符串通过decode的方法进行解析(包括数组）
-func Decoder2Json(str string, v interface{}) error {
+func Decoder2Json(str string, v any) error {
 	if !reflectx.IsPoint(v) {
 		return errors.New("v must be point")
 	}

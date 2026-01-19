@@ -7,13 +7,13 @@ import (
 )
 
 type ErrorModel struct {
-	Code    int         `json:"code"`
-	Message string      `json:"message"`
-	Suggest interface{} `json:"suggest,omitempty"`
-	Params  interface{} `json:"params,omitempty"`
+	Code    int    `json:"code"`
+	Message string `json:"message"`
+	Suggest any    `json:"suggest,omitempty"`
+	Params  any    `json:"params,omitempty"`
 }
 
-func NewErrModelByStr(code int, msg string, args ...interface{}) *ErrorModel {
+func NewErrModelByStr(code int, msg string, args ...any) *ErrorModel {
 	obj := &ErrorModel{}
 	obj.Code = code
 	obj.Message = fmt.Sprintf(msg, args...)
@@ -25,7 +25,7 @@ func NewErrModel(code int, err error) *ErrorModel {
 	return NewErrModelByStr(code, str)
 }
 
-func (eo *ErrorModel) ToString(args ...interface{}) string {
+func (eo *ErrorModel) ToString(args ...any) string {
 	return fmt.Sprintf(eo.Message, args...)
 }
 

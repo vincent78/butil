@@ -15,7 +15,7 @@ import (
 )
 
 // Parse configuration files to struct, including yaml, toml, json, etc., and turn on listening for configuration file changes if fs is not empty
-func Parse(configFile string, obj interface{}, reloads ...func()) error {
+func Parse(configFile string, obj any, reloads ...func()) error {
 	confFileAbs, err := filepath.Abs(configFile)
 	if err != nil {
 		return err
@@ -48,7 +48,7 @@ func Parse(configFile string, obj interface{}, reloads ...func()) error {
 }
 
 // ParseConfigData parse data to struct
-func ParseConfigData(data []byte, format string, obj interface{}) error {
+func ParseConfigData(data []byte, format string, obj any) error {
 	viper.SetConfigType(format)
 	err := viper.ReadConfig(bytes.NewBuffer(data))
 	if err != nil {
@@ -59,7 +59,7 @@ func ParseConfigData(data []byte, format string, obj interface{}) error {
 }
 
 // listening for profile updates
-func watchConfig(obj interface{}, reloads ...func()) {
+func watchConfig(obj any, reloads ...func()) {
 	viper.WatchConfig()
 
 	// Note: OnConfigChange is called twice on Windows
@@ -76,7 +76,7 @@ func watchConfig(obj interface{}, reloads ...func()) {
 }
 
 // Show print configuration information (hide sensitive fields)
-func Show(obj interface{}, fields ...string) string {
+func Show(obj any, fields ...string) string {
 	var out string
 
 	data, err := json.MarshalIndent(obj, "", "    ")

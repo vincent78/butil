@@ -2,23 +2,23 @@ package manager
 
 type Queue struct {
 	PoolSize int
-	PoolChan chan interface{}
+	PoolChan chan any
 }
 
 func NewQueue(size int) *Queue {
 	return &Queue{
 		PoolSize: size,
-		PoolChan: make(chan interface{}, size),
+		PoolChan: make(chan any, size),
 	}
 }
 
 func (tq *Queue) Init(size int) *Queue {
 	tq.PoolSize = size
-	tq.PoolChan = make(chan interface{}, size)
+	tq.PoolChan = make(chan any, size)
 	return tq
 }
 
-func (tq *Queue) Push(i interface{}) bool {
+func (tq *Queue) Push(i any) bool {
 	if len(tq.PoolChan) == tq.PoolSize {
 		return false
 	}
@@ -26,13 +26,13 @@ func (tq *Queue) Push(i interface{}) bool {
 	return true
 }
 
-func (tq *Queue) PushSlice(s []interface{}) {
+func (tq *Queue) PushSlice(s []any) {
 	for _, i := range s {
 		tq.Push(i)
 	}
 }
 
-func (tq *Queue) Pull() interface{} {
+func (tq *Queue) Pull() any {
 	return <-tq.PoolChan
 }
 
@@ -46,7 +46,7 @@ func (tq *Queue) Exchange(num int) (add int) {
 	}
 
 	if tq.PoolSize < num {
-		var pool []interface{}
+		var pool []any
 		for i := 0; i < last; i++ {
 			pool = append(pool, <-tq.PoolChan)
 		}

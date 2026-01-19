@@ -56,7 +56,7 @@ func GinLogger() gin.HandlerFunc {
 
 		data := GenerateRequestBody(c)
 
-		obj := make(map[string]interface{})
+		obj := make(map[string]any)
 		obj["method"] = c.Request.Method
 		obj["path"] = path
 		if len(query) > 0 {
@@ -80,7 +80,7 @@ func GinLogger() gin.HandlerFunc {
 		c.Next()
 		cost := time.Since(start)
 
-		respLogMap := make(map[string]interface{})
+		respLogMap := make(map[string]any)
 		respLogMap["cost"] = cost
 		if c.Errors != nil {
 			respLogMap["errors"] = c.Errors.ByType(gin.ErrorTypePrivate).String()

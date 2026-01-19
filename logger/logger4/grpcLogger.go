@@ -22,51 +22,51 @@ func ReplaceGRPCLoggerV2(l *zap.Logger) {
 	grpclog.SetLoggerV2(zzl)
 }
 
-func (l *grpcLogger) Info(args ...interface{}) {
+func (l *grpcLogger) Info(args ...any) {
 	l.zLog.Info(fmt.Sprint(args...))
 }
 
-func (l *grpcLogger) Infoln(args ...interface{}) {
+func (l *grpcLogger) Infoln(args ...any) {
 	l.zLog.Info(fmt.Sprint(args...))
 }
 
-func (l *grpcLogger) Infof(format string, args ...interface{}) {
+func (l *grpcLogger) Infof(format string, args ...any) {
 	l.zLog.Info(fmt.Sprintf(format, args...))
 }
 
-func (l *grpcLogger) Warning(args ...interface{}) {
+func (l *grpcLogger) Warning(args ...any) {
 	l.zLog.Warn(fmt.Sprint(args...))
 }
 
-func (l *grpcLogger) Warningln(args ...interface{}) {
+func (l *grpcLogger) Warningln(args ...any) {
 	l.zLog.Warn(fmt.Sprint(args...))
 }
 
-func (l *grpcLogger) Warningf(format string, args ...interface{}) {
+func (l *grpcLogger) Warningf(format string, args ...any) {
 	l.zLog.Warn(fmt.Sprintf(format, args...))
 }
 
-func (l *grpcLogger) Error(args ...interface{}) {
+func (l *grpcLogger) Error(args ...any) {
 	l.zLog.Error(fmt.Sprint(args...))
 }
 
-func (l *grpcLogger) Errorln(args ...interface{}) {
+func (l *grpcLogger) Errorln(args ...any) {
 	l.zLog.Error(fmt.Sprint(args...))
 }
 
-func (l *grpcLogger) Errorf(format string, args ...interface{}) {
+func (l *grpcLogger) Errorf(format string, args ...any) {
 	l.zLog.Error(fmt.Sprintf(format, args...))
 }
 
-func (l *grpcLogger) Fatal(args ...interface{}) {
+func (l *grpcLogger) Fatal(args ...any) {
 	l.zLog.Fatal(fmt.Sprint(args...))
 }
 
-func (l *grpcLogger) Fatalln(args ...interface{}) {
+func (l *grpcLogger) Fatalln(args ...any) {
 	l.zLog.Fatal(fmt.Sprint(args...))
 }
 
-func (l *grpcLogger) Fatalf(format string, args ...interface{}) {
+func (l *grpcLogger) Fatalf(format string, args ...any) {
 	l.zLog.Fatal(fmt.Sprintf(format, args...))
 }
 

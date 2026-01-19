@@ -18,7 +18,7 @@ type MemoryCache struct {
 }
 
 type MemeryCacheValue struct {
-	Value     interface{}
+	Value     any
 	Timestamp int64
 }
 
@@ -48,7 +48,7 @@ func GetLocalMemoryCache() *MemoryCache {
 	return localMemoryCache
 }
 
-func (cache *MemoryCache) Get(key string) (interface{}, bool) {
+func (cache *MemoryCache) Get(key string) (any, bool) {
 	cache.extendLock.RLock()
 	defer cache.extendLock.RUnlock()
 	if cache.extend != nil {
@@ -68,14 +68,14 @@ func getNowMillSecond() int64 {
 	return time.Now().UnixNano() / 1e6
 }
 
-func (cache *MemoryCache) Put(key string, val interface{}) error {
+func (cache *MemoryCache) Put(key string, val any) error {
 	// 默认30分钟后失效
 	return cache.PutWithTimeout(key, val, 30*60*1000*getNowMillSecond())
 }
 
 // PutWithTimeout
 // 参数  out: 毫秒数
-func (cache *MemoryCache) PutWithTimeout(key string, val interface{}, out int64) error {
+func (cache *MemoryCache) PutWithTimeout(key string, val any, out int64) error {
 	cache.extend[key] = MemeryCacheValue{
 		Value:     val,
 		Timestamp: out + getNowMillSecond(),

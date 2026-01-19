@@ -26,24 +26,24 @@ func genNameByLevel(conf *LogConfig, level int) string {
 	}
 }
 
-func Debug(msg string, args ...interface{}) {
+func Debug(msg string, args ...any) {
 	writeByLevel(DefaultMapKey, LevelDebug, msg, args...)
 }
 
-func Info(msg string, args ...interface{}) {
+func Info(msg string, args ...any) {
 	writeByLevel(DefaultMapKey, LevelInfo, msg, args...)
 }
 
-func Warn(msg string, args ...interface{}) {
+func Warn(msg string, args ...any) {
 	writeByLevel(DefaultMapKey, LevelWarn, msg, args...)
 }
 
-func Error(msg string, args ...interface{}) {
+func Error(msg string, args ...any) {
 	writeByLevel(DefaultMapKey, LevelError, msg, args...)
 	//writeByLevel(DefaultMapKey, LevelError, "%v", strUtil.Bytes2String(debug.Stack()))
 }
 
-func DebugByName(name, msg string, args ...interface{}) {
+func DebugByName(name, msg string, args ...any) {
 	if name != "" {
 		writeByLevel(name, LevelDebug, msg, args...)
 	} else {
@@ -51,7 +51,7 @@ func DebugByName(name, msg string, args ...interface{}) {
 	}
 }
 
-func InfoByName(name, msg string, args ...interface{}) {
+func InfoByName(name, msg string, args ...any) {
 	if name != "" {
 		writeByLevel(name, LevelInfo, msg, args...)
 	} else {
@@ -59,7 +59,7 @@ func InfoByName(name, msg string, args ...interface{}) {
 	}
 }
 
-func WarnByName(name, msg string, args ...interface{}) {
+func WarnByName(name, msg string, args ...any) {
 
 	if name != "" {
 		writeByLevel(name, LevelWarn, msg, args...)
@@ -68,7 +68,7 @@ func WarnByName(name, msg string, args ...interface{}) {
 	}
 }
 
-func ErrorByName(name, msg string, args ...interface{}) {
+func ErrorByName(name, msg string, args ...any) {
 
 	if name != "" {
 		writeByLevel(name, LevelError, msg, args...)
@@ -78,7 +78,7 @@ func ErrorByName(name, msg string, args ...interface{}) {
 	}
 }
 
-func writeByLevel(name string, level int, msg string, args ...interface{}) {
+func writeByLevel(name string, level int, msg string, args ...any) {
 	if name == "" {
 		name = DefaultMapKey
 	}

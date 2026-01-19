@@ -10,10 +10,10 @@ import (
 const Success = 0
 
 type RespModel struct {
-	Code    int                    `json:"code" example:"0"`
-	Message string                 `json:"message,omitempty" example:""`
-	Header  map[string]interface{} `json:"header,omitempty" example:""`
-	Data    interface{}            `json:"data,omitempty" example:""`
+	Code    int            `json:"code" example:"0"`
+	Message string         `json:"message,omitempty" example:""`
+	Header  map[string]any `json:"header,omitempty" example:""`
+	Data    any            `json:"data,omitempty" example:""`
 }
 
 func NewRespModel(bytes []byte) RespModel {
@@ -25,7 +25,7 @@ func NewRespModel(bytes []byte) RespModel {
 	return obj
 }
 
-func SuccessResp(data interface{}) RespModel {
+func SuccessResp(data any) RespModel {
 	if data == nil {
 		return RespModel{
 			Code: Success,
@@ -49,7 +49,7 @@ func SuccessResp(data interface{}) RespModel {
 	//}
 }
 
-func FailureRespWithStr(code int, msg string, v ...interface{}) RespModel {
+func FailureRespWithStr(code int, msg string, v ...any) RespModel {
 	s := msg
 	if v != nil {
 		s = fmt.Sprintf(msg, v)
@@ -61,14 +61,14 @@ func FailureRespWithStr(code int, msg string, v ...interface{}) RespModel {
 	}
 }
 
-func FailureRespWithErrModel(obj *ErrorModel, args ...interface{}) RespModel {
+func FailureRespWithErrModel(obj *ErrorModel, args ...any) RespModel {
 	return RespModel{
 		Code:    obj.Code,
 		Message: obj.ToString(args...),
 	}
 }
 
-func FailureRespWithErrModelObj(data interface{}, obj *ErrorModel) RespModel {
+func FailureRespWithErrModelObj(data any, obj *ErrorModel) RespModel {
 	if obj == nil {
 		return RespModel{Code: Success, Data: data}
 	}

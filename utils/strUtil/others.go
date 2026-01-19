@@ -5,7 +5,7 @@ import (
 	"strings"
 )
 
-func FmtSlice(f, space string, args ...interface{}) string {
+func FmtSlice(f, space string, args ...any) string {
 	if len(args) > 0 {
 		sb := strings.Builder{}
 		for _, v := range args {
@@ -20,7 +20,7 @@ func FmtSlice(f, space string, args ...interface{}) string {
 	}
 }
 
-func FmtSliceByDefault(args ...interface{}) string {
+func FmtSliceByDefault(args ...any) string {
 	f := "%v"
 	space := " "
 	if len(args) > 0 {

@@ -12,11 +12,11 @@ type Logger interface {
 	// Options The Logger options
 	Options() Options
 	// Fields set fields to always be logged
-	Fields(fields map[string]interface{}) Logger
+	Fields(fields map[string]any) Logger
 	// Log writes a log entry
-	Log(level Level, v ...interface{})
+	Log(level Level, v ...any)
 	// Logf writes a formatted log entry
-	Logf(level Level, format string, v ...interface{})
+	Logf(level Level, format string, v ...any)
 	// String returns the name of logger
 	String() string
 }
@@ -25,15 +25,15 @@ func Init(opts ...Option) error {
 	return DefaultLogger.Init(opts...)
 }
 
-func Fields(fields map[string]interface{}) Logger {
+func Fields(fields map[string]any) Logger {
 	return DefaultLogger.Fields(fields)
 }
 
-func Log(level Level, v ...interface{}) {
+func Log(level Level, v ...any) {
 	DefaultLogger.Log(level, v...)
 }
 
-func Logf(level Level, format string, v ...interface{}) {
+func Logf(level Level, format string, v ...any) {
 	DefaultLogger.Logf(level, format, v...)
 }
 

@@ -31,7 +31,7 @@ type Record struct {
 	// Metadata to enrich log record
 	Metadata map[string]string `json:"metadata"`
 	// Value contains log entry
-	Message interface{} `json:"message"`
+	Message any `json:"message"`
 }
 
 // Stream returns a log stream

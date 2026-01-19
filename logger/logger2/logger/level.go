@@ -80,52 +80,52 @@ func GetLevel(levelStr string) (Level, error) {
 	return InfoLevel, fmt.Errorf("Unknown Level String: '%s', defaulting to InfoLevel", levelStr)
 }
 
-func Info(args ...interface{}) {
+func Info(args ...any) {
 	DefaultLogger.Log(InfoLevel, args...)
 }
 
-func Infof(template string, args ...interface{}) {
+func Infof(template string, args ...any) {
 	DefaultLogger.Logf(InfoLevel, template, args...)
 }
 
-func Trace(args ...interface{}) {
+func Trace(args ...any) {
 	DefaultLogger.Log(TraceLevel, args...)
 }
 
-func Tracef(template string, args ...interface{}) {
+func Tracef(template string, args ...any) {
 	DefaultLogger.Logf(TraceLevel, template, args...)
 }
 
-func Debug(args ...interface{}) {
+func Debug(args ...any) {
 	DefaultLogger.Log(DebugLevel, args...)
 }
 
-func Debugf(template string, args ...interface{}) {
+func Debugf(template string, args ...any) {
 	DefaultLogger.Logf(DebugLevel, template, args...)
 }
 
-func Warn(args ...interface{}) {
+func Warn(args ...any) {
 	DefaultLogger.Log(WarnLevel, args...)
 }
 
-func Warnf(template string, args ...interface{}) {
+func Warnf(template string, args ...any) {
 	DefaultLogger.Logf(WarnLevel, template, args...)
 }
 
-func Error(args ...interface{}) {
+func Error(args ...any) {
 	DefaultLogger.Log(ErrorLevel, args...)
 }
 
-func Errorf(template string, args ...interface{}) {
+func Errorf(template string, args ...any) {
 	DefaultLogger.Logf(ErrorLevel, template, args...)
 }
 
-func Fatal(args ...interface{}) {
+func Fatal(args ...any) {
 	DefaultLogger.Log(FatalLevel, args...)
 	os.Exit(1)
 }
 
-func Fatalf(template string, args ...interface{}) {
+func Fatalf(template string, args ...any) {
 	DefaultLogger.Logf(FatalLevel, template, args...)
 	os.Exit(1)
 }

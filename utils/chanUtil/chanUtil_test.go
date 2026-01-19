@@ -15,9 +15,9 @@ func TestDefaultChan1Sender1Receiver(t *testing.T) {
 	ch.Send("def main():\n\tif __name__=='__main__':\n\t\tprint('这边不是python啊!')")
 
 	// 通过闭包可以在执行循环的时候利用到额外的变量
-	ch.Range(func() func(interface{}) bool {
+	ch.Range(func() func(any) bool {
 		var count int
-		return func(val interface{}) bool {
+		return func(val any) bool {
 			count++
 			data := val.(string)
 			if data == "tadakuso×osukadat√" {
@@ -40,11 +40,11 @@ func TestDefaultChan1Sender1Receiver(t *testing.T) {
 	ch.Send("titotihiro no kamigakusi")
 
 	// 阻塞操作作用于select块
-	done := func() <-chan interface{} {
-		done := make(chan interface{})
+	done := func() <-chan any {
+		done := make(chan any)
 		go func() {
 			v, ok := ch.ReceiveWithBoolean()
-			done <- [2]interface{}{v, ok}
+			done <- [2]any{v, ok}
 		}()
 		return done
 	}()
@@ -52,7 +52,7 @@ func TestDefaultChan1Sender1Receiver(t *testing.T) {
 	time.Sleep(time.Nanosecond * 10)
 	select {
 	case res := <-done:
-		fmt.Println(res.([2]interface{}))
+		fmt.Println(res.([2]any))
 	default:
 		fmt.Println("取不到")
 	}

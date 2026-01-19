@@ -18,10 +18,10 @@ import (
 4、默认值（默认的配置文件或原始值)
 */
 
-type ChangedHandler func(key string, value interface{})
+type ChangedHandler func(key string, value any)
 
 var (
-	globalConfig interface{}
+	globalConfig any
 )
 
 // ParseConfig conf 必须传入指针类型

@@ -32,7 +32,7 @@ import (
 
 const JwtPayloadKey = "JWT_PAYLOAD"
 
-type MapClaims map[string]interface{}
+type MapClaims map[string]any
 
 // GinJWTMiddleware provides a Json-Web-Token authentication implementation. On failure, a 401 HTTP response
 // is returned. On success, the wrapped middleware is called, and the userID is made available as
@@ -62,12 +62,12 @@ type GinJWTMiddleware struct {
 	// Callback function that should perform the authentication of the user based on login info.
 	// Must return user data as user identifier, it will be stored in Claim Array. Required.
 	// Check error (e) to determine the appropriate error message.
-	Authenticator func(c *gin.Context) (interface{}, error)
+	Authenticator func(c *gin.Context) (any, error)
 
 	// Callback function that should perform the authorization of the authenticated user. Called
 	// only after an authentication success. Must return true on success, false on failure.
 	// Optional, default to success.
-	Authorizator func(data interface{}, c *gin.Context) bool
+	Authorizator func(data any, c *gin.Context) bool
 
 	// Callback function that will be called during login.
 	// Using this function it is possible to add additional payload data to the webtoken.
@@ -75,7 +75,7 @@ type GinJWTMiddleware struct {
 	// Note that the payload is not encrypted.
 	// The attributes mentioned on jwt.io can't be used as keys for the map.
 	// Optional, by default no additional data will be set.
-	PayloadFunc func(data interface{}) MapClaims
+	PayloadFunc func(data any) MapClaims
 
 	// User can define own Unauthorized func.
 	Unauthorized func(*gin.Context, int, string)
@@ -90,7 +90,7 @@ type GinJWTMiddleware struct {
 	RefreshResponse func(*gin.Context, int, string, time.Time)
 
 	// Set the identity handler function
-	IdentityHandler func(*gin.Context) interface{}
+	IdentityHandler func(*gin.Context) any
 
 	// Set the identity key
 	IdentityKey string
@@ -325,7 +325,7 @@ func (mw *GinJWTMiddleware) MiddlewareInit() error {
 	}
 
 	if mw.Authorizator == nil {
-		mw.Authorizator = func(data interface{}, c *gin.Context) bool {
+		mw.Authorizator = func(data any, c *gin.Context) bool {
 			return true
 		}
 	}
@@ -376,7 +376,7 @@ func (mw *GinJWTMiddleware) MiddlewareInit() error {
 	}
 
 	if mw.IdentityHandler == nil {
-		mw.IdentityHandler = func(c *gin.Context) interface{} {
+		mw.IdentityHandler = func(c *gin.Context) any {
 			claims := ExtractClaims(c)
 			return claims
 		}
@@ -612,7 +612,7 @@ func (mw *GinJWTMiddleware) CheckIfTokenExpire(c *gin.Context) (jwt.MapClaims, e
 }
 
 // TokenGenerator method that clients can use to get a jwt token.
-func (mw *GinJWTMiddleware) TokenGenerator(data interface{}) (string, time.Time, error) {
+func (mw *GinJWTMiddleware) TokenGenerator(data any) (string, time.Time, error) {
 	token := jwt.New(jwt.GetSigningMethod(mw.SigningAlgorithm))
 	claims := token.Claims.(jwt.MapClaims)
 
@@ -707,7 +707,7 @@ func (mw *GinJWTMiddleware) ParseToken(c *gin.Context) (*jwt.Token, error) {
 		return nil, err
 	}
 
-	return jwt.Parse(token, func(t *jwt.Token) (interface{}, error) {
+	return jwt.Parse(token, func(t *jwt.Token) (any, error) {
 		if jwt.GetSigningMethod(mw.SigningAlgorithm) != t.Method {
 			return nil, ErrInvalidSigningAlgorithm
 		}
@@ -722,7 +722,7 @@ func (mw *GinJWTMiddleware) ParseToken(c *gin.Context) (*jwt.Token, error) {
 
 // ParseTokenString parse jwt token string
 func (mw *GinJWTMiddleware) ParseTokenString(token string) (*jwt.Token, error) {
-	return jwt.Parse(token, func(t *jwt.Token) (interface{}, error) {
+	return jwt.Parse(token, func(t *jwt.Token) (any, error) {
 		if jwt.GetSigningMethod(mw.SigningAlgorithm) != t.Method {
 			return nil, ErrInvalidSigningAlgorithm
 		}

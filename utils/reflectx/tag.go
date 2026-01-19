@@ -5,7 +5,7 @@ import (
 	"reflect"
 )
 
-func ToPointer(w interface{}) interface{} {
+func ToPointer(w any) any {
 	typeOf := reflect.TypeOf(w)
 	if typeOf.Kind() == reflect.Ptr {
 		return w
@@ -17,7 +17,7 @@ func ToPointer(w interface{}) interface{} {
 	return pv.Interface()
 }
 
-func DelPointer(w interface{}) interface{} {
+func DelPointer(w any) any {
 	typeOf := reflect.TypeOf(w)
 	if typeOf.Kind() != reflect.Ptr {
 		return w
@@ -26,7 +26,7 @@ func DelPointer(w interface{}) interface{} {
 	return valueOf.Elem().Interface()
 }
 
-func GetFieldName(structName interface{}) []string {
+func GetFieldName(structName any) []string {
 	t := reflect.TypeOf(structName)
 	if t.Kind() == reflect.Ptr {
 		t = t.Elem()
@@ -43,7 +43,7 @@ func GetFieldName(structName interface{}) []string {
 	return result
 }
 
-func GetValueByFieldName(structName interface{}, fieldName string) interface{} {
+func GetValueByFieldName(structName any, fieldName string) any {
 	t := reflect.ValueOf(structName)
 	if t.Kind() == reflect.Ptr {
 		t = t.Elem()
@@ -56,7 +56,7 @@ func GetValueByFieldName(structName interface{}, fieldName string) interface{} {
 	return fieldByName.Interface()
 }
 
-func GetTagName(structName interface{}, tagKey string) []FieldInfo {
+func GetTagName(structName any, tagKey string) []FieldInfo {
 	t := reflect.TypeOf(structName)
 	if t.Kind() == reflect.Ptr {
 		t = t.Elem()

@@ -8,25 +8,25 @@ import (
 
 type ObjPool struct {
 	sync.Mutex
-	Inuse     []interface{}
-	Available []interface{}
-	new       func() interface{}
-	Reset     func(obj interface{})
+	Inuse     []any
+	Available []any
+	new       func() any
+	Reset     func(obj any)
 	Capacity  int
 }
 
-func NewObjPool(new func() interface{}) *ObjPool {
+func NewObjPool(new func() any) *ObjPool {
 	op := &ObjPool{new: new}
 	op.Capacity = 100
-	op.Inuse = make([]interface{}, 0)
-	op.Available = make([]interface{}, 0)
+	op.Inuse = make([]any, 0)
+	op.Available = make([]any, 0)
 	return op
 }
 
-func (p *ObjPool) Acquire() interface{} {
+func (p *ObjPool) Acquire() any {
 	p.Lock()
 	defer p.Unlock()
-	var obj interface{}
+	var obj any
 
 	if len(p.Inuse) != 0 && len(p.Available) > 0 {
 		obj = p.Available[0]
@@ -39,7 +39,7 @@ func (p *ObjPool) Acquire() interface{} {
 	return obj
 }
 
-func (p *ObjPool) Release(object interface{}) {
+func (p *ObjPool) Release(object any) {
 	p.Lock()
 	defer p.Unlock()
 	if (len(p.Inuse) + len(p.Available)) <= p.Capacity {

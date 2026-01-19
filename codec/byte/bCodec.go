@@ -16,7 +16,7 @@ import (
  *
  ************************************************************************/
 
-func Int2BytesFunc(v interface{}, config ByteCodecItemConfig) ([]byte, error) {
+func Int2BytesFunc(v any, config ByteCodecItemConfig) ([]byte, error) {
 	if t, ok := v.(int64); ok {
 		return byteUtil.Int2BytesBigEndian(t, byte(config.Size))
 	} else if t, ok := v.(uint64); ok {
@@ -50,7 +50,7 @@ func Int2BytesFunc(v interface{}, config ByteCodecItemConfig) ([]byte, error) {
 	}
 }
 
-func GetEncodeFunc(str string) func(v interface{}, config ByteCodecItemConfig) ([]byte, error) {
+func GetEncodeFunc(str string) func(v any, config ByteCodecItemConfig) ([]byte, error) {
 	switch str {
 	case "Int2BytesFunc":
 		{
@@ -61,7 +61,7 @@ func GetEncodeFunc(str string) func(v interface{}, config ByteCodecItemConfig) (
 	}
 }
 
-func ByteEncode(m interface{}, config ByteCodecConfig) ([]byte, error) {
+func ByteEncode(m any, config ByteCodecConfig) ([]byte, error) {
 	result := make([]byte, config.Total)
 	for _, ic := range config.Items {
 		v := reflectx.GetValueByName(m, ic.Name)
@@ -112,7 +112,7 @@ func GetDecodeFunc(str string) func(bs []byte, config ByteCodecItemConfig) (int6
 	}
 }
 
-func ByteDecode(bs []byte, obj interface{}, config ByteCodecConfig) error {
+func ByteDecode(bs []byte, obj any, config ByteCodecConfig) error {
 	if int(config.Total) != len(bs) {
 		return fmt.Errorf("the bytes length[%v] is not equal config size[%v]", len(bs), config.Total)
 	}

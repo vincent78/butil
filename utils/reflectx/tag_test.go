@@ -53,7 +53,7 @@ func TestTag(t *testing.T) {
 	v.Call([]reflect.Value{})
 }
 
-func TagStruct(a interface{}) {
+func TagStruct(a any) {
 	typ := reflect.TypeOf(a)
 
 	tag := typ.Elem().Field(0).Tag.Get("sync_eth")

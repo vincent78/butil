@@ -68,7 +68,7 @@ func generate(claimsType string, payload *Payload, expiresTime time.Duration) (s
 func VerifyToken(token string, claimsType string) (*CustomClaims, error) {
 	claims := &CustomClaims{}
 
-	t, err := jwt.ParseWithClaims(token, claims, func(token *jwt.Token) (interface{}, error) {
+	t, err := jwt.ParseWithClaims(token, claims, func(token *jwt.Token) (any, error) {
 		return []byte(Secret), nil
 	}, jwt.WithJSONNumber())
 	if err != nil {

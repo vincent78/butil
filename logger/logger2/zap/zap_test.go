@@ -60,7 +60,7 @@ func TestFields(t *testing.T) {
 	if err != nil {
 		t.Fatal(err)
 	}
-	logger2.DefaultLogger = l.Fields(map[string]interface{}{
+	logger2.DefaultLogger = l.Fields(map[string]any{
 		"x-request-id": "123456abc",
 	})
 	logger2.DefaultLogger.Log(logger2.InfoLevel, "hello")
@@ -77,7 +77,7 @@ func TestFile(t *testing.T) {
 	if err != nil {
 		t.Errorf("logger setup error: %s", err.Error())
 	}
-	logger2.DefaultLogger = logger2.DefaultLogger.Fields(map[string]interface{}{
+	logger2.DefaultLogger = logger2.DefaultLogger.Fields(map[string]any{
 		"x-request-id": "123456abc",
 	})
 	fmt.Println(logger2.DefaultLogger)

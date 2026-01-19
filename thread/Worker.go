@@ -5,7 +5,7 @@ import (
 	"time"
 )
 
-type functinType func(interface{}) error
+type functinType func(any) error
 
 // Worker is the actual executor who runs the tasks,
 // it starts a goroutine that accepts tasks and
@@ -18,7 +18,7 @@ type Worker struct {
 	// recycleTime will be update when putting a routine back into queue.
 	recycleTime time.Time
 
-	input chan interface{}
+	input chan any
 }
 
 // run starts a goroutine to repeat the process
@@ -28,7 +28,7 @@ func (w *Worker) run() {
 	go func() {
 		//监听任务列表，一旦有任务立马取出运行
 		count := 1
-		var input interface{}
+		var input any
 		var f functinType
 		for count <= 2 {
 			select {
@@ -70,6 +70,6 @@ func (w *Worker) sendTask(task functinType) {
 	w.task <- task
 }
 
-func (w *Worker) sendarg(input interface{}) {
+func (w *Worker) sendarg(input any) {
 	w.input <- input
 }

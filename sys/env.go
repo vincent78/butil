@@ -8,7 +8,7 @@ import (
 )
 
 // FindPrefixedEnvVars finds prefixed environment variables.
-func FindPrefixedEnvVars(environ []string, prefix string, element interface{}) []string {
+func FindPrefixedEnvVars(environ []string, prefix string, element any) []string {
 	prefixes := getRootPrefixes(element, prefix)
 
 	var values []string
@@ -23,7 +23,7 @@ func FindPrefixedEnvVars(environ []string, prefix string, element interface{}) [
 	return values
 }
 
-func getRootPrefixes(element interface{}, prefix string) []string {
+func getRootPrefixes(element any, prefix string) []string {
 	if element == nil {
 		return nil
 	}

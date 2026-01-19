@@ -18,7 +18,7 @@ func Int64ToInt(n1 int64) int {
 	}
 }
 
-func ToInt(v interface{}) int {
+func ToInt(v any) int {
 	switch v.(type) {
 	case sj.Number:
 		u, err := v.(sj.Number).Int64()
@@ -44,7 +44,7 @@ func ToInt(v interface{}) int {
 	return 0
 }
 
-func ToUInt(v interface{}) uint {
+func ToUInt(v any) uint {
 	switch v.(type) {
 	case sj.Number:
 		u, err := v.(sj.Number).Int64()
@@ -74,7 +74,7 @@ func ToUInt(v interface{}) uint {
 	return 0
 }
 
-func ToInt64(v interface{}) int64 {
+func ToInt64(v any) int64 {
 	switch v.(type) {
 	case sj.Number:
 		u, err := v.(sj.Number).Int64()
@@ -100,7 +100,7 @@ func ToInt64(v interface{}) int64 {
 	return 0
 }
 
-func ToUInt64(v interface{}) uint64 {
+func ToUInt64(v any) uint64 {
 	switch v.(type) {
 	case sj.Number:
 		u, err := v.(sj.Number).Int64()
@@ -126,7 +126,7 @@ func ToUInt64(v interface{}) uint64 {
 	return 0
 }
 
-func ToString(v interface{}) string {
+func ToString(v any) string {
 	switch v.(type) {
 	case sj.Number:
 		return v.(sj.Number).String()

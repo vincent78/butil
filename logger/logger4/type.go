@@ -87,6 +87,6 @@ func Err(err error) Field {
 }
 
 // Any type, if it is a composite type such as object, slice, map, etc., use Any
-func Any(key string, val interface{}) Field {
+func Any(key string, val any) Field {
 	return zap.Any(key, val)
 }

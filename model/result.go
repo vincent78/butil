@@ -8,10 +8,10 @@ import (
 )
 
 type ResultModel[T any] struct {
-	Code    int                    `json:"code" example:"0"`
-	Message string                 `json:"message,omitempty" example:""`
-	Header  map[string]interface{} `json:"header,omitempty" example:""`
-	Data    T                      `json:"data,omitempty" example:""`
+	Code    int            `json:"code" example:"0"`
+	Message string         `json:"message,omitempty" example:""`
+	Header  map[string]any `json:"header,omitempty" example:""`
+	Data    T              `json:"data,omitempty" example:""`
 }
 
 func NewResultModel[T any](bytes []byte) ResultModel[T] {
@@ -30,7 +30,7 @@ func SuccessResult[T any](data T) ResultModel[T] {
 	}
 }
 
-func FailureResultWithStr[T any](code int, msg string, v ...interface{}) ResultModel[T] {
+func FailureResultWithStr[T any](code int, msg string, v ...any) ResultModel[T] {
 	s := msg
 	if v != nil {
 		s = fmt.Sprintf(msg, v)
@@ -42,7 +42,7 @@ func FailureResultWithStr[T any](code int, msg string, v ...interface{}) ResultM
 	}
 }
 
-func FailureResultWithErrModel[T any](obj *ErrorModel, args ...interface{}) ResultModel[T] {
+func FailureResultWithErrModel[T any](obj *ErrorModel, args ...any) ResultModel[T] {
 	return ResultModel[T]{
 		Code:    obj.Code,
 		Message: obj.ToString(args...),

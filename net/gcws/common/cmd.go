@@ -10,19 +10,19 @@ import (
 )
 
 type WSCmd struct {
-	ID        string                 `json:"id"`                  // 唯一标识
-	Category  string                 `json:"category,omitempty"`  // 类型
-	Cmd       string                 `json:"cmd"`                 // 命令
-	Data      interface{}            `json:"data,omitempty"`      // 命令的内容
-	Trans     map[string]interface{} `json:"trans,omitempty"`     // 透传内容
-	PID       string                 `json:"pid"`                 // 非空时，大部分为回复(resp)
-	Header    map[string]string      `json:"header,omitempty"`    // 命令的头信息
-	Timestamp int64                  `json:"timestamp,omitempty"` // 时间戳 （单位：毫秒）
+	ID        string            `json:"id"`                  // 唯一标识
+	Category  string            `json:"category,omitempty"`  // 类型
+	Cmd       string            `json:"cmd"`                 // 命令
+	Data      any               `json:"data,omitempty"`      // 命令的内容
+	Trans     map[string]any    `json:"trans,omitempty"`     // 透传内容
+	PID       string            `json:"pid"`                 // 非空时，大部分为回复(resp)
+	Header    map[string]string `json:"header,omitempty"`    // 命令的头信息
+	Timestamp int64             `json:"timestamp,omitempty"` // 时间戳 （单位：毫秒）
 }
 
 type WSCmdOption struct {
 	Key   string
-	Value interface{}
+	Value any
 }
 
 func NewWSCmdOptionMustResp() WSCmdOption {
@@ -32,7 +32,7 @@ func NewWSCmdOptionMustResp() WSCmdOption {
 	}
 }
 
-func ParseCmdInput[T any](source interface{}, obj T) *model.ErrorModel {
+func ParseCmdInput[T any](source any, obj T) *model.ErrorModel {
 	if source == nil {
 		return nil
 	}
@@ -61,7 +61,7 @@ func NewWSCmd(cmd string, ops ...WSCmdOption) *WSCmd {
 		for i := 0; i < len(ops); i++ {
 			op := ops[i]
 			if op.Key == CmdHeaderKeyMustResp {
-				ws.Trans = map[string]interface{}{CmdHeaderKeyMustResp: op.Value}
+				ws.Trans = map[string]any{CmdHeaderKeyMustResp: op.Value}
 			}
 		}
 	}
@@ -99,13 +99,13 @@ func (cmd *WSCmd) String() string {
 	return strUtil.ToStr(cmd)
 }
 
-func (cmd *WSCmd) SuccessWithName(name string, data interface{}) *WSCmd {
+func (cmd *WSCmd) SuccessWithName(name string, data any) *WSCmd {
 	obj := cmd.Success(data)
 	obj.Cmd = name
 	return obj
 }
 
-func (cmd *WSCmd) Success(data interface{}) *WSCmd {
+func (cmd *WSCmd) Success(data any) *WSCmd {
 	return &WSCmd{
 		ID:  token.NewShort(),
 		Cmd: "",

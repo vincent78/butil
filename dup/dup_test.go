@@ -29,11 +29,11 @@ func genUsers() []*User {
 	return users
 }
 
-func copyUserToReport(src interface{}, dest interface{}) {
+func copyUserToReport(src any, dest any) {
 	// Copy(src, dest)
 }
 
-func copyUsersToReport(src []*User) interface{} {
+func copyUsersToReport(src []*User) any {
 	var users = make([]*ReportUser, len(src))
 	for i := 0; i < len(src); i++ {
 		var rUser ReportUser
@@ -76,7 +76,7 @@ type MenuDst struct {
 	Age  *uint64
 }
 
-func copyD(src, dst interface{}) error {
+func copyD(src, dst any) error {
 	return nil
 }
 

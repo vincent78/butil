@@ -13,7 +13,7 @@ func Go(goroutine func()) {
 }
 
 // GoWithRecover starts a recoverable goroutine using given customRecover() function.
-func GoWithRecover(goroutine func(), customRecover func(err interface{})) {
+func GoWithRecover(goroutine func(), customRecover func(err any)) {
 	go func() {
 		defer func() {
 			if err := recover(); err != nil {
@@ -24,7 +24,7 @@ func GoWithRecover(goroutine func(), customRecover func(err interface{})) {
 	}()
 }
 
-func defaultRecoverGoroutine(err interface{}) {
+func defaultRecoverGoroutine(err any) {
 	logger1.Error("Error in Go routine: %v", err)
 	logger1.Error("Stack: %s", sys.Stack())
 }

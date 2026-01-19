@@ -22,61 +22,61 @@ type LogModel struct {
 type LogOperation interface {
 	InitWithConfig(config config.LoggerConfig) error
 
-	Debug(msg string, args ...interface{})
-	Info(msg string, args ...interface{})
-	Warn(msg string, args ...interface{})
-	Error(msg string, args ...interface{})
+	Debug(msg string, args ...any)
+	Info(msg string, args ...any)
+	Warn(msg string, args ...any)
+	Error(msg string, args ...any)
 
-	DebugWithField(msg string, field map[string]interface{})
-	InfoWithField(msg string, field map[string]interface{})
-	WarnWithField(msg string, field map[string]interface{})
-	ErrorWithField(msg string, field map[string]interface{})
+	DebugWithField(msg string, field map[string]any)
+	InfoWithField(msg string, field map[string]any)
+	WarnWithField(msg string, field map[string]any)
+	ErrorWithField(msg string, field map[string]any)
 }
 
-func (log *LogModel) Debug(msg string, args ...interface{}) {
+func (log *LogModel) Debug(msg string, args ...any) {
 	if log.Level <= LevelDebug {
 		m := NewMsgModel(LevelDebug, fmt.Sprintf(msg, args...), nil)
 		log.Queue <- m
 	}
 }
-func (log *LogModel) Info(msg string, args ...interface{}) {
+func (log *LogModel) Info(msg string, args ...any) {
 	if log.Level <= LevelInfo {
 		m := NewMsgModel(LevelInfo, fmt.Sprintf(msg, args...), nil)
 		log.Queue <- m
 	}
 }
-func (log *LogModel) Warn(msg string, args ...interface{}) {
+func (log *LogModel) Warn(msg string, args ...any) {
 	if log.Level <= LevelWarn {
 		m := NewMsgModel(LevelWarn, fmt.Sprintf(msg, args...), nil)
 		log.Queue <- m
 	}
 }
-func (log *LogModel) Error(msg string, args ...interface{}) {
+func (log *LogModel) Error(msg string, args ...any) {
 	if log.Level <= LevelError {
 		m := NewMsgModel(LevelError, fmt.Sprintf(msg, args...), nil)
 		log.Queue <- m
 	}
 }
 
-func (log *LogModel) DebugWithField(msg string, field map[string]interface{}) {
+func (log *LogModel) DebugWithField(msg string, field map[string]any) {
 	if log.Level <= LevelDebug {
 		m := NewMsgModel(LevelDebug, msg, field)
 		log.Queue <- m
 	}
 }
-func (log *LogModel) InfoWithField(msg string, field map[string]interface{}) {
+func (log *LogModel) InfoWithField(msg string, field map[string]any) {
 	if log.Level <= LevelInfo {
 		m := NewMsgModel(LevelInfo, msg, field)
 		log.Queue <- m
 	}
 }
-func (log *LogModel) WarnWithField(msg string, field map[string]interface{}) {
+func (log *LogModel) WarnWithField(msg string, field map[string]any) {
 	if log.Level <= LevelWarn {
 		m := NewMsgModel(LevelWarn, msg, field)
 		log.Queue <- m
 	}
 }
-func (log *LogModel) ErrorWithField(msg string, field map[string]interface{}) {
+func (log *LogModel) ErrorWithField(msg string, field map[string]any) {
 	if log.Level <= LevelError {
 		m := NewMsgModel(LevelError, msg, field)
 		log.Queue <- m

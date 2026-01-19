@@ -8,7 +8,7 @@ import (
 )
 
 func TestNetServer(t *testing.T) {
-	RegistNetHandler("echo", func(data interface{}, conn net.Conn) {
+	RegistNetHandler("echo", func(data any, conn net.Conn) {
 		logger1.Debug("echo the data:%v", data)
 	})
 

@@ -9,6 +9,6 @@ const (
 	ErrorWSCCmdInputTypeCode int = iota + global.ErrorCodeWSClientBase + 100
 )
 
-var ErrorWSCCmdInputType = func(input interface{}) *model.ErrorModel {
+var ErrorWSCCmdInputType = func(input any) *model.ErrorModel {
 	return model.NewErrModelByStr(ErrorWSCCmdInputTypeCode, "Cmd Input[%v] error", input)
 }

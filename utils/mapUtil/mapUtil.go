@@ -25,25 +25,25 @@ go get github.com/goinggo/mapstructure
 	        fmt.Println(people)
 	}
 */
-func MapToStruct(m map[string]interface{}, t interface{}) {
+func MapToStruct(m map[string]any, t any) {
 	err := mapstructure.Decode(m, t)
 	if err != nil {
 		panic(err)
 	}
 }
 
-func StructToMap(obj interface{}) map[string]interface{} {
+func StructToMap(obj any) map[string]any {
 	obj1 := reflect.TypeOf(obj)
 	obj2 := reflect.ValueOf(obj)
 
-	var data = make(map[string]interface{})
+	var data = make(map[string]any)
 	for i := 0; i < obj1.NumField(); i++ {
 		data[obj1.Field(i).Name] = obj2.Field(i).Interface()
 	}
 	return data
 }
 
-func ToJsonStr(obj interface{}) string {
+func ToJsonStr(obj any) string {
 	if obj == nil {
 		return ""
 	}
@@ -55,8 +55,8 @@ func ToJsonStr(obj interface{}) string {
 	return string(bytes)
 }
 
-func FromJsonStr(str string) interface{} {
-	var r interface{}
+func FromJsonStr(str string) any {
+	var r any
 	e := json.Unmarshal([]byte(str), &r)
 	if e != nil {
 		println(fmt.Sprintf("FromJsonStr error: %v", e.Error()))
@@ -65,14 +65,14 @@ func FromJsonStr(str string) interface{} {
 	return r
 }
 
-func ObjByAnchorFromMap(obj interface{}, anchor []string) interface{} {
+func ObjByAnchorFromMap(obj any, anchor []string) any {
 	if obj == nil {
 		return nil
 	}
 	if reflect.TypeOf(obj).Name() == "string" {
 		obj = FromJsonStr(obj.(string))
 	}
-	mapObj, err := obj.(map[string]interface{})
+	mapObj, err := obj.(map[string]any)
 	if !err {
 		return nil
 	}
@@ -92,7 +92,7 @@ func ObjByAnchorFromMap(obj interface{}, anchor []string) interface{} {
 	}
 }
 
-func Add(source, target map[string]interface{}) map[string]interface{} {
+func Add(source, target map[string]any) map[string]any {
 	if target == nil || len(target) == 0 {
 		return source
 	}
@@ -107,8 +107,8 @@ func Add(source, target map[string]interface{}) map[string]interface{} {
 	return target
 }
 
-func mergeMaps(maps ...map[string]interface{}) map[string]interface{} {
-	result := make(map[string]interface{})
+func mergeMaps(maps ...map[string]any) map[string]any {
+	result := make(map[string]any)
 	for _, m := range maps {
 		for k, v := range m {
 			result[k] = v

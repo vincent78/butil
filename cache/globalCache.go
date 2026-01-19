@@ -31,12 +31,12 @@ func init() {
 }
 
 // 保存数据，永远不过期
-func Save(key string, value interface{}) {
+func Save(key string, value any) {
 	SaveWithLifeSpan(key, value, 0)
 }
 
 // 保存数据，指定时间后过期
-func SaveWithLifeSpan(key string, value interface{}, lifeDuration time.Duration) {
+func SaveWithLifeSpan(key string, value any, lifeDuration time.Duration) {
 	defaultCachePool.Add(key, lifeDuration, value)
 	defaultCachePool.Flush()
 }
@@ -49,7 +49,7 @@ func Delete(key string) error {
 	return err
 }
 
-func Get(key string) interface{} {
+func Get(key string) any {
 	val, err := defaultCachePool.Value(key)
 	if err == nil {
 		return val

@@ -10,7 +10,7 @@ import (
 	model2 "github.com/vincent78/butil/net/gcgin/model"
 )
 
-func DoBusAction[T any](g *gin.Context, req T, action func(ctx context.Context, req T) (interface{}, *model.ErrorModel)) {
+func DoBusAction[T any](g *gin.Context, req T, action func(ctx context.Context, req T) (any, *model.ErrorModel)) {
 	err := g.ShouldBindJSON(req)
 	if err != nil {
 		// 获取validator.ValidationErrors类型的errors

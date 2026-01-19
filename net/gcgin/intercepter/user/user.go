@@ -18,7 +18,7 @@ func ExtractClaims(c *gin.Context) intercepter.MapClaims {
 	return claims.(intercepter.MapClaims)
 }
 
-func Get(c *gin.Context, key string) interface{} {
+func Get(c *gin.Context, key string) any {
 	data := ExtractClaims(c)
 	if data[key] != nil {
 		return data[key]

@@ -7,11 +7,11 @@ import (
 )
 
 // IsPoint 判断是否为指针
-func IsPoint(m interface{}) bool {
+func IsPoint(m any) bool {
 	return reflect.TypeOf(m).Kind() == reflect.Ptr
 }
 
-func NilOrZero(m interface{}, fs string) bool {
+func NilOrZero(m any, fs string) bool {
 	if m == nil {
 		return true
 	}
@@ -20,7 +20,7 @@ func NilOrZero(m interface{}, fs string) bool {
 	return false
 }
 
-func GetType(m interface{}) reflect.Type {
+func GetType(m any) reflect.Type {
 	tp := reflect.TypeOf(m)
 	if tp.Kind() != reflect.Ptr {
 		return tp
@@ -29,7 +29,7 @@ func GetType(m interface{}) reflect.Type {
 	}
 }
 
-func GetFieldByName(m interface{}, n string) (reflect.StructField, error) {
+func GetFieldByName(m any, n string) (reflect.StructField, error) {
 	t := GetType(m)
 	if t.Kind() != reflect.Struct {
 		return reflect.StructField{}, errors.New("input object is not struct")
@@ -41,7 +41,7 @@ func GetFieldByName(m interface{}, n string) (reflect.StructField, error) {
 	}
 }
 
-func GetAllFieldName(m interface{}) ([]string, error) {
+func GetAllFieldName(m any) ([]string, error) {
 	t := GetType(m)
 	if t.Kind() != reflect.Struct {
 		return []string{}, errors.New("input object is not struct")
@@ -54,7 +54,7 @@ func GetAllFieldName(m interface{}) ([]string, error) {
 	return r, nil
 }
 
-func GetFieldValueByName(m interface{}, n string) reflect.Value {
+func GetFieldValueByName(m any, n string) reflect.Value {
 	tv := reflect.ValueOf(m)
 	if IsPoint(m) {
 		tv = tv.Elem()
@@ -62,7 +62,7 @@ func GetFieldValueByName(m interface{}, n string) reflect.Value {
 	return tv.FieldByName(n)
 }
 
-func GetValueByName(m interface{}, n string) interface{} {
+func GetValueByName(m any, n string) any {
 	tv := reflect.ValueOf(m)
 	if IsPoint(m) {
 		tv = tv.Elem()
@@ -70,7 +70,7 @@ func GetValueByName(m interface{}, n string) interface{} {
 	return tv.FieldByName(n).Interface()
 }
 
-func SetFieldValue(m interface{}, n string, v reflect.Value) error {
+func SetFieldValue(m any, n string, v reflect.Value) error {
 	tv := reflect.ValueOf(m)
 	if IsPoint(m) {
 		tv = tv.Elem()
@@ -86,8 +86,8 @@ func SetFieldValue(m interface{}, n string, v reflect.Value) error {
 }
 
 // 将切片转成 []interface{}
-func ToInterfaceSlice(src interface{}) []interface{} {
-	var ret []interface{}
+func ToInterfaceSlice(src any) []any {
+	var ret []any
 	if reflect.TypeOf(src).Kind() == reflect.Slice {
 		s := reflect.ValueOf(src)
 		for i := 0; i < s.Len(); i++ {
@@ -99,7 +99,7 @@ func ToInterfaceSlice(src interface{}) []interface{} {
 }
 
 // PrintInterface print the interface by level
-func PrintInterface(v interface{}) {
+func PrintInterface(v any) {
 	val := reflect.ValueOf(v).Elem()
 	typ := reflect.TypeOf(v)
 	//log.Printf("%+v\n", v)

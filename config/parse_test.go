@@ -7,7 +7,7 @@ import (
 	"time"
 )
 
-var c = make(map[string]interface{})
+var c = make(map[string]any)
 
 func TestShow(t *testing.T) {
 	t.Log(Show(c))
@@ -35,7 +35,7 @@ func Test_hideSensitiveFields(t *testing.T) {
 
 // test listening for configuration file updates
 func TestParse(t *testing.T) {
-	conf := make(map[string]interface{})
+	conf := make(map[string]any)
 
 	reloads := []func(){
 		func() {
@@ -71,7 +71,7 @@ func TestParseErr(t *testing.T) {
 }
 
 func TestParseConfigData(t *testing.T) {
-	conf := make(map[string]interface{})
+	conf := make(map[string]any)
 
 	data, err := os.ReadFile("test.yml")
 	if err != nil {
