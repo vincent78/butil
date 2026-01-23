@@ -9,6 +9,8 @@ package logger4
 import (
 	"encoding/json"
 	"fmt"
+	"os"
+	"runtime"
 	"strings"
 	"time"
 
@@ -236,4 +238,54 @@ func InitByConf(cfg config.LoggerConfig) (*Logger, error) {
 			WithFileIsCompression(cfg.LogFileConfig.IsCompression),
 		),
 	)
+}
+
+// getCallerInfo 获取调用者的文件路径和行号（去掉根目录前缀）
+func getCallerInfo() string {
+	// 从调用栈中查找第一个非logger包的调用者
+	for i := 1; i <= 10; i++ {
+		pc, file, line, ok := runtime.Caller(i)
+		if !ok {
+			break
+		}
+
+		fn := runtime.FuncForPC(pc)
+		if fn == nil {
+			continue
+		}
+
+		funcName := fn.Name()
+
+		// 跳过logger包内部的函数
+		if !strings.Contains(funcName, "core/logger") {
+			// 动态获取项目根目录，去掉根目录前缀
+			relativeFile := trimProjectRoot(file)
+			// 合并文件路径和行号
+			location := fmt.Sprintf("%s:%d", relativeFile, line)
+			return location
+		}
+	}
+
+	return "unknown:0"
+}
+
+func trimProjectRoot(filePath string) string {
+	projectRoot := getProjectRoot()
+	if projectRoot == "" {
+		return filePath
+	}
+	if strings.HasPrefix(filePath, projectRoot) {
+		relativePath := strings.TrimPrefix(filePath, projectRoot)
+		return strings.TrimPrefix(relativePath, "/")
+	}
+
+	return filePath
+}
+
+// getProjectRoot 获取项目根目录
+func getProjectRoot() string {
+	if wd, err := os.Getwd(); err == nil {
+		return wd
+	}
+	return ""
 }

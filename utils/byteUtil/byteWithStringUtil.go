@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"strconv"
 	"strings"
+	"unsafe"
 
 	"golang.org/x/text/encoding/simplifiedchinese"
 )
@@ -109,6 +110,10 @@ func TrimRightZeroes(s []byte) []byte {
 	return s[:idx]
 }
 
+func BytesToString(b []byte) string {
+	return *(*string)(unsafe.Pointer(&b))
+}
+
 /********************************************************
 
 	string => byte[]
@@ -131,6 +136,15 @@ func FromHex(s string) []byte {
 func Hex2Bytes(str string) []byte {
 	h, _ := hex.DecodeString(str)
 	return h
+}
+
+func StringToBytes(s string) []byte {
+	return *(*[]byte)(unsafe.Pointer(
+		&struct {
+			string
+			Cap int
+		}{s, len(s)},
+	))
 }
 
 /********************************************************
