@@ -78,3 +78,18 @@ func Decoder2Json(str string, v any) error {
 	}
 	return json.NewDecoder(strings.NewReader(str)).Decode(v)
 }
+
+func IsEmptyJSON(data string) bool {
+	// nil 或空
+	if len(data) == 0 {
+		return true
+	}
+
+	s := strings.TrimSpace(data)
+	switch s {
+	case "", "{}", "[]", "null":
+		return true
+	}
+
+	return false
+}

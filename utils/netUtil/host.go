@@ -1,5 +1,5 @@
 // Package utils is a library of commonly used utility functions.
-package utils
+package netUtil
 
 import (
 	"fmt"
