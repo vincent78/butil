@@ -29,6 +29,7 @@ const (
 	levelInfo  = "INFO"
 	levelWarn  = "WARN"
 	levelError = "ERROR"
+	levelPanic = "PANIC"
 )
 
 type Logger = zap.Logger
@@ -73,18 +74,21 @@ func Init(opts ...Option) (*Logger, error) {
 	levelName := o.level
 	encoding := o.encoding
 	disableCaller := o.disableCaller
+	stacktraceLevel := getLevelSize(o.stacktrace)
 
 	var err error
 	var zapLog *Logger
 	var str string
 	if !isSave {
-		zapLog, err = log2Terminal(levelName, encoding, disableCaller)
+		zapLog, err = log2Terminal(levelName, encoding, disableCaller, stacktraceLevel, o.callerSkip)
+
 		if err != nil {
 			panic(err)
 		}
 		str = fmt.Sprintf("initialize logger finish, config is output to 'terminal', format=%s, level=%s", encoding, levelName)
 	} else {
-		zapLog = log2File(encoding, levelName, o.fileConfig)
+
+		zapLog = log2File(encoding, levelName, stacktraceLevel, o.callerSkip, o.fileConfig)
 		str = fmt.Sprintf("initialize logger finish, config is output to 'file', format=%s, level=%s, file=%s", encoding, levelName, o.fileConfig.filename)
 	}
 
@@ -99,13 +103,13 @@ func Init(opts ...Option) (*Logger, error) {
 	return zapLog, err
 }
 
-func log2Terminal(levelName string, encoding string, disableCaller bool) (*Logger, error) {
+func log2Terminal(levelName string, encoding string, disableCaller bool, stackTraceLevel zapcore.LevelEnabler, skip int) (*Logger, error) {
 	js := fmt.Sprintf(`{
       		"level": "%s",
             "encoding": "%s",
       		"outputPaths": ["stdout"],
             "errorOutputPaths": ["stdout"],
-			"disableCaller": %v
+			"x": %v
 		}`, levelName, encoding, disableCaller)
 
 	var config zap.Config
@@ -121,10 +125,10 @@ func log2Terminal(levelName string, encoding string, disableCaller bool) (*Logge
 		config.EncoderConfig.EncodeLevel = zapcore.CapitalLevelEncoder // logging levels in the log file using upper case letters
 	}
 	config.EncoderConfig.EncodeTime = timeFormatter // default time format
-	return config.Build()
+	return config.Build(zap.AddStacktrace(stackTraceLevel), zap.AddCallerSkip(skip))
 }
 
-func log2File(encoding string, levelName string, fo *fileOptions) *Logger {
+func log2File(encoding string, levelName string, stackTraceLevel zapcore.LevelEnabler, skip int, fo *fileOptions) *Logger {
 	encoderConfig := zap.NewProductionEncoderConfig()
 	encoderConfig.EncodeTime = zapcore.ISO8601TimeEncoder   // modify Time Encoder
 	encoderConfig.EncodeLevel = zapcore.CapitalLevelEncoder // logging levels in the log file using upper case letters
@@ -145,7 +149,7 @@ func log2File(encoding string, levelName string, fo *fileOptions) *Logger {
 	core := zapcore.NewCore(encoder, ws, getLevelSize(levelName))
 
 	// add the function call information log to the log.
-	return zap.New(core, zap.AddCaller())
+	return zap.New(core, zap.AddCaller(), zap.AddStacktrace(stackTraceLevel), zap.AddCallerSkip(skip))
 }
 
 // DEBUG(default), INFO, WARN, ERROR
@@ -160,6 +164,8 @@ func getLevelSize(levelName string) zapcore.Level {
 		return zapcore.WarnLevel
 	case levelError:
 		return zapcore.ErrorLevel
+	case levelPanic:
+		return zapcore.PanicLevel
 	}
 	return zapcore.DebugLevel
 }
@@ -237,6 +243,7 @@ func InitByConf(cfg config.LoggerConfig) (*Logger, error) {
 			WithFileMaxAge(cfg.LogFileConfig.MaxAge),
 			WithFileIsCompression(cfg.LogFileConfig.IsCompression),
 		),
+		WithStacktraceLevel(cfg.StacktraceLevel),
 	)
 }
 

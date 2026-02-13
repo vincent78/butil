@@ -1,19 +1,21 @@
 package config
 
 type LoggerConfig struct {
-	Format        string        `yaml:"format" json:"format"`
-	IsSave        bool          `yaml:"isSave" json:"isSave"`
-	Level         string        `yaml:"level" json:"level"`
-	DisableCaller bool          `yaml:"disableCaller" json:"disableCaller"`
-	LogFileConfig LogFileConfig `yaml:"logFileConfig" json:"logFileConfig"`
+	Format          string        `yaml:"format" json:"format"`
+	IsSave          bool          `yaml:"isSave" json:"isSave"`
+	Level           string        `yaml:"level" json:"level"`
+	DisableCaller   bool          `yaml:"disableCaller" json:"disableCaller"`
+	StacktraceLevel string        `yaml:"stacktraceLevel" json:"stacktraceLevel"`
+	LogFileConfig   LogFileConfig `yaml:"logFileConfig" json:"logFileConfig"`
 }
 
 func NewLoggerConfig() LoggerConfig {
 	return LoggerConfig{
-		Format:        "console",
-		Level:         "debug",
-		IsSave:        false,
-		DisableCaller: true,
+		Format:          "console",
+		Level:           "debug",
+		IsSave:          false,
+		DisableCaller:   true,
+		StacktraceLevel: "error",
 		LogFileConfig: LogFileConfig{
 			Filename:      "out.log",
 			MaxSize:       20,

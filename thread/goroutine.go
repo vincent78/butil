@@ -19,6 +19,11 @@ func GetGID() uint64 {
 	return n
 }
 
+// 获取当前系统的协程数量
+func GetGoroutineNum() int {
+	return runtime.NumGoroutine()
+}
+
 // 并发协程数量
 var goChanNumberTotal = make(chan struct{}, 10000)
 

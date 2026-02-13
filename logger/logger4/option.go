@@ -7,17 +7,19 @@ import (
 )
 
 var (
-	defaultLevel    = "debug" // output log levels debug, info, warn, error, default is debug
-	defaultEncoding = formatConsole
-	defaultIsSave   = false // false:output to terminal, true:output to file, default is false
-	defaultCaller   = false
+	defaultLevel      = "debug" // output log levels debug, info, warn, error, default is debug
+	defaultEncoding   = formatConsole
+	defaultIsSave     = false // false:output to terminal, true:output to file, default is false
+	defaultCaller     = false
+	defaultCallerSkip = 2
 
-	defaultFilename      = "out.log" // file name
-	defaultMaxSize       = 10        // maximum file size (MB)
-	defaultMaxBackups    = 100       // maximum number of old files
-	defaultMaxAge        = 30        // maximum number of days for old documents
-	defaultIsCompression = false     // whether to compress and archive old files
-	defaultIsLocalTime   = true      // whether to use local time
+	defaultFilename        = "out.log" // file name
+	defaultMaxSize         = 10        // maximum file size (MB)
+	defaultMaxBackups      = 100       // maximum number of old files
+	defaultMaxAge          = 30        // maximum number of days for old documents
+	defaultIsCompression   = false     // whether to compress and archive old files
+	defaultIsLocalTime     = true      // whether to use local time
+	defaultStacktraceLevel = levelError
 )
 
 type options struct {
@@ -25,6 +27,8 @@ type options struct {
 	encoding      string
 	isSave        bool
 	disableCaller bool
+	stacktrace    string
+	callerSkip    int
 
 	fileConfig *fileOptions
 
@@ -37,6 +41,8 @@ func defaultOptions() *options {
 		encoding:      defaultEncoding,
 		disableCaller: defaultCaller,
 		isSave:        defaultIsSave,
+		stacktrace:    defaultStacktraceLevel,
+		callerSkip:    defaultCallerSkip,
 	}
 }
 
@@ -54,10 +60,37 @@ func WithLevel(levelName string) Option {
 	return func(o *options) {
 		levelName = strings.ToUpper(levelName)
 		switch levelName {
-		case levelDebug, levelInfo, levelWarn, levelError:
+		case levelDebug, levelInfo, levelWarn, levelError, levelPanic:
 			o.level = levelName
 		default:
 			o.level = levelDebug
+		}
+	}
+}
+
+// WithCaller setting the log caller
+func WithCaller(caller bool) Option {
+	return func(o *options) {
+		o.disableCaller = caller
+	}
+}
+
+// WithCallerSkip setting the log caller
+func WithCallerSkip(skip int) Option {
+	return func(o *options) {
+		o.callerSkip = skip
+	}
+}
+
+// WithStacktraceLevel setting the log stacktraceLevel
+func WithStacktraceLevel(levelName string) Option {
+	return func(o *options) {
+		levelName = strings.ToUpper(levelName)
+		switch levelName {
+		case levelDebug, levelInfo, levelWarn, levelError, levelPanic:
+			o.stacktrace = levelName
+		default:
+			o.stacktrace = levelError
 		}
 	}
 }
