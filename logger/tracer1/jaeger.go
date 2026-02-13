@@ -1,7 +1,11 @@
 package tracer1
 
 import (
-	"go.opentelemetry.io/otel/exporters/jaeger" //nolint
+	"context"
+	"encoding/base64"
+	"fmt"
+
+	"go.opentelemetry.io/otel/exporters/otlp/otlptrace/otlptracegrpc"
 	sdkTrace "go.opentelemetry.io/otel/sdk/trace"
 )
 
@@ -39,31 +43,35 @@ func WithPassword(password string) JaegerOption {
 }
 
 // NewJaegerExporter use jaeger collector as exporter, e.g. default url=http://localhost:14268/api/traces
-func NewJaegerExporter(url string, opts ...JaegerOption) (sdkTrace.SpanExporter, error) {
-	ceps := []jaeger.CollectorEndpointOption{
-		jaeger.WithEndpoint(url),
+func NewJaegerExporter(ctx context.Context, url string, opts ...JaegerOption) (sdkTrace.SpanExporter, error) {
+	ceps := []otlptracegrpc.Option{
+		otlptracegrpc.WithEndpoint(url),
 	}
 
 	o := defaultJaegerOptions()
 	o.apply(opts...)
-	if o.username != "" {
-		ceps = append(ceps, jaeger.WithUsername(o.username))
-	}
-	if o.password != "" {
-		ceps = append(ceps, jaeger.WithPassword(o.password))
+
+	if o.username != "" && o.password != "" {
+		// 计算 Basic Auth 字符串
+		auth := base64.StdEncoding.EncodeToString([]byte("username:password"))
+		ceps = append(ceps, otlptracegrpc.WithHeaders(map[string]string{
+			"Authorization": "Basic " + auth,
+		}))
 	}
 
-	endpointOption := jaeger.WithCollectorEndpoint(ceps...)
-
-	return jaeger.New(endpointOption)
+	exporter, err := otlptracegrpc.New(ctx,
+		otlptracegrpc.WithInsecure(), // 如果没配 TLS
+		otlptracegrpc.WithEndpoint(url),
+	)
+	return exporter, err
 }
 
 // NewJaegerAgentExporter use jaeger agent as exporter, e.g. host=localhost port=6831
-func NewJaegerAgentExporter(host string, port string) (sdkTrace.SpanExporter, error) {
-	return jaeger.New(
-		jaeger.WithAgentEndpoint(
-			jaeger.WithAgentHost(host),
-			jaeger.WithAgentPort(port),
-		),
+func NewJaegerAgentExporter(ctx context.Context, host string, port string) (sdkTrace.SpanExporter, error) {
+	// 默认连接到 localhost:4317 (Jaeger 的 OTLP 默认端口)
+	exporter, err := otlptracegrpc.New(ctx,
+		otlptracegrpc.WithInsecure(), // 如果没配 TLS
+		otlptracegrpc.WithEndpoint(fmt.Sprintf("%s:%s", host, port)),
 	)
+	return exporter, err
 }

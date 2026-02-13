@@ -10,7 +10,11 @@ import (
 )
 
 func TestStartSpanWithCustomTraceID(t *testing.T) {
-	InitJaeger()
+	cp, err := InitJaeger()
+	if err != nil {
+		t.Fatal(err)
+	}
+	defer cp()
 
 	//trace id
 	traceId := uuid.New().String()

@@ -9,7 +9,7 @@ import (
 
 	"go.opentelemetry.io/otel"
 	"go.opentelemetry.io/otel/attribute"
-	"go.opentelemetry.io/otel/exporters/jaeger"
+	"go.opentelemetry.io/otel/exporters/otlp/otlptrace/otlptracegrpc"
 	"go.opentelemetry.io/otel/propagation"
 	"go.opentelemetry.io/otel/sdk/resource"
 	tracesdk "go.opentelemetry.io/otel/sdk/trace"
@@ -18,11 +18,12 @@ import (
 )
 
 var Tracer trace.Tracer
-var JaegerServername = "xpbet-service"
+var JaegerServername = "test-service"
 
 var DateTimeMilli = "2006-01-02 15:04:05.000000"
 
-var JaegerHost = "http://jaeger-collector.common:14268/api/traces"
+// var JaegerHost = "http://jaeger-collector.common:14268/api/traces"
+var JaegerHost = "127.0.0.1:4317"
 
 var ServerRunEnv *string // 运行环境: local、dev、test、prod
 
@@ -37,7 +38,13 @@ func InitJaeger() (func(), error) {
 	jaegerEndpoint := JaegerHost
 
 	// 创建 Jaeger 导出器
-	exp, err := jaeger.New(jaeger.WithCollectorEndpoint(jaeger.WithEndpoint(jaegerEndpoint)))
+
+	// 默认连接到 localhost:4317 (Jaeger 的 OTLP 默认端口)
+	exp, err := otlptracegrpc.New(context.Background(),
+		otlptracegrpc.WithInsecure(), // 如果没配 TLS
+		otlptracegrpc.WithEndpoint(jaegerEndpoint),
+	)
+	//exp, err := jaeger.New(jaeger.WithCollectorEndpoint(jaeger.WithEndpoint(jaegerEndpoint)))
 	if err != nil {
 		return nil, fmt.Errorf("failed to create jaeger exporter: %w", err)
 	}

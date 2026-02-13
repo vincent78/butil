@@ -54,7 +54,7 @@ func InitWithConfig(appName string, appEnv string, appVersion string,
 	)
 
 	// initializing tracing
-	exporter, err := NewJaegerAgentExporter(jaegerAgentHost, jaegerAgentPort)
+	exporter, err := NewJaegerAgentExporter(context.Background(), jaegerAgentHost, jaegerAgentPort)
 	if err != nil {
 		panic("init trace error:" + err.Error())
 	}

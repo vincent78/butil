@@ -1,19 +1,20 @@
 package tracer1
 
 import (
+	"context"
 	"testing"
 
 	"github.com/stretchr/testify/assert"
 )
 
 func TestNewJaegerAgentExporter(t *testing.T) {
-	exporter, err := NewJaegerAgentExporter("localhost", "2379")
+	exporter, err := NewJaegerAgentExporter(context.Background(), "localhost", "4317")
 	assert.NoError(t, err)
 	assert.NotNil(t, exporter)
 }
 
 func TestNewJaegerExporter(t *testing.T) {
-	exporter, err := NewJaegerExporter("http://localhost:14268/api/traces",
+	exporter, err := NewJaegerExporter(context.Background(), "http://localhost:14268/api/traces",
 		WithUsername("foo"),
 		WithPassword("bar"),
 	)
