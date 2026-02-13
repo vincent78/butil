@@ -69,44 +69,36 @@ func Bytes2IntByOrder(b []byte, order binary.ByteOrder) int {
 func Int2BytesBigEndian(n int64, bytesLength byte) ([]byte, error) {
 	switch bytesLength {
 	case 1:
-		tmp := int8(n)
 		bytesBuffer := bytes.NewBuffer([]byte{})
-		binary.Write(bytesBuffer, binary.BigEndian, &tmp)
+		binary.Write(bytesBuffer, binary.BigEndian, new(int8(n)))
 		return bytesBuffer.Bytes(), nil
 	case 2:
-		tmp := int16(n)
 		bytesBuffer := bytes.NewBuffer([]byte{})
-		binary.Write(bytesBuffer, binary.BigEndian, &tmp)
+		binary.Write(bytesBuffer, binary.BigEndian, new(int16(n)))
 		return bytesBuffer.Bytes(), nil
 	case 3:
-		tmp := int32(n)
 		bytesBuffer := bytes.NewBuffer([]byte{})
-		binary.Write(bytesBuffer, binary.BigEndian, &tmp)
+		binary.Write(bytesBuffer, binary.BigEndian, new(int32(n)))
 		return bytesBuffer.Bytes()[1:], nil
 	case 4:
-		tmp := int32(n)
 		bytesBuffer := bytes.NewBuffer([]byte{})
-		binary.Write(bytesBuffer, binary.BigEndian, &tmp)
+		binary.Write(bytesBuffer, binary.BigEndian, new(int32(n)))
 		return bytesBuffer.Bytes(), nil
 	case 5:
-		tmp := n
 		bytesBuffer := bytes.NewBuffer([]byte{})
-		binary.Write(bytesBuffer, binary.BigEndian, &tmp)
+		binary.Write(bytesBuffer, binary.BigEndian, new(n))
 		return bytesBuffer.Bytes()[3:], nil
 	case 6:
-		tmp := n
 		bytesBuffer := bytes.NewBuffer([]byte{})
-		binary.Write(bytesBuffer, binary.BigEndian, &tmp)
+		binary.Write(bytesBuffer, binary.BigEndian, new(n))
 		return bytesBuffer.Bytes()[2:], nil
 	case 7:
-		tmp := n
 		bytesBuffer := bytes.NewBuffer([]byte{})
-		binary.Write(bytesBuffer, binary.BigEndian, &tmp)
+		binary.Write(bytesBuffer, binary.BigEndian, new(n))
 		return bytesBuffer.Bytes()[1:], nil
 	case 8:
-		tmp := n
 		bytesBuffer := bytes.NewBuffer([]byte{})
-		binary.Write(bytesBuffer, binary.BigEndian, &tmp)
+		binary.Write(bytesBuffer, binary.BigEndian, new(n))
 		return bytesBuffer.Bytes(), nil
 	}
 	return nil, fmt.Errorf("Int2BytesBigEndian b param is invaild")
@@ -116,44 +108,36 @@ func Int2BytesBigEndian(n int64, bytesLength byte) ([]byte, error) {
 func Int2BytesLittleEndian(n int64, bytesLength byte) ([]byte, error) {
 	switch bytesLength {
 	case 1:
-		tmp := int8(n)
 		bytesBuffer := bytes.NewBuffer([]byte{})
-		binary.Write(bytesBuffer, binary.LittleEndian, &tmp)
+		binary.Write(bytesBuffer, binary.LittleEndian, new(int8(n)))
 		return bytesBuffer.Bytes(), nil
 	case 2:
-		tmp := int16(n)
 		bytesBuffer := bytes.NewBuffer([]byte{})
-		binary.Write(bytesBuffer, binary.LittleEndian, &tmp)
+		binary.Write(bytesBuffer, binary.LittleEndian, new(int16(n)))
 		return bytesBuffer.Bytes(), nil
 	case 3:
-		tmp := int32(n)
 		bytesBuffer := bytes.NewBuffer([]byte{})
-		binary.Write(bytesBuffer, binary.LittleEndian, &tmp)
+		binary.Write(bytesBuffer, binary.LittleEndian, new(int32(n)))
 		return bytesBuffer.Bytes()[0:3], nil
 	case 4:
-		tmp := int32(n)
 		bytesBuffer := bytes.NewBuffer([]byte{})
-		binary.Write(bytesBuffer, binary.LittleEndian, &tmp)
+		binary.Write(bytesBuffer, binary.LittleEndian, new(int32(n)))
 		return bytesBuffer.Bytes(), nil
 	case 5:
-		tmp := n
 		bytesBuffer := bytes.NewBuffer([]byte{})
-		binary.Write(bytesBuffer, binary.LittleEndian, &tmp)
+		binary.Write(bytesBuffer, binary.LittleEndian, new(n))
 		return bytesBuffer.Bytes()[0:5], nil
 	case 6:
-		tmp := n
 		bytesBuffer := bytes.NewBuffer([]byte{})
-		binary.Write(bytesBuffer, binary.LittleEndian, &tmp)
+		binary.Write(bytesBuffer, binary.LittleEndian, new(n))
 		return bytesBuffer.Bytes()[0:6], nil
 	case 7:
-		tmp := n
 		bytesBuffer := bytes.NewBuffer([]byte{})
-		binary.Write(bytesBuffer, binary.LittleEndian, &tmp)
+		binary.Write(bytesBuffer, binary.LittleEndian, new(n))
 		return bytesBuffer.Bytes()[0:7], nil
 	case 8:
-		tmp := n
 		bytesBuffer := bytes.NewBuffer([]byte{})
-		binary.Write(bytesBuffer, binary.LittleEndian, &tmp)
+		binary.Write(bytesBuffer, binary.LittleEndian, new(n))
 		return bytesBuffer.Bytes(), nil
 	}
 	return nil, fmt.Errorf("Int2BytesLittleEndian b param is invaild")

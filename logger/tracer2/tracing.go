@@ -28,8 +28,7 @@ var JaegerHost = "127.0.0.1:4317"
 var ServerRunEnv *string // 运行环境: local、dev、test、prod
 
 func init() {
-	runEnv := "dev"
-	ServerRunEnv = &runEnv
+	ServerRunEnv = new("dev")
 }
 
 // InitJaeger 初始化 Jaeger 追踪

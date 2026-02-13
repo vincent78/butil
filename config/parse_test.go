@@ -35,8 +35,6 @@ func Test_hideSensitiveFields(t *testing.T) {
 
 // test listening for configuration file updates
 func TestParse(t *testing.T) {
-	conf := make(map[string]any)
-
 	reloads := []func(){
 		func() {
 			fmt.Println("close and reconnect mysql")
@@ -44,7 +42,7 @@ func TestParse(t *testing.T) {
 		},
 	}
 
-	err := Parse("test.yml", &conf, reloads...)
+	err := Parse("test.yml", new(make(map[string]any)), reloads...)
 	if err != nil {
 		t.Error(err)
 		return

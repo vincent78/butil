@@ -68,8 +68,7 @@ func TestRsaSign(t *testing.T) {
 	fmt.Println("Message: ", string(message))
 	fmt.Println("Signature: ", base64.StdEncoding.EncodeToString(signature))
 
-	pubKey := privKey.PublicKey
-	err = rsa.VerifyPKCS1v15(&pubKey, crypto.SHA256, hash[:], signature)
+	err = rsa.VerifyPKCS1v15(new(privKey.PublicKey), crypto.SHA256, hash[:], signature)
 	if err != nil {
 		t.Error(err)
 	}

@@ -148,9 +148,8 @@ func GetClient(baseUrl string, opt ...ClientOption) *HttpClient {
  **************************************************************************/
 func DoneInChannel(task *Task, client *HttpClient) {
 	go func() {
-		resp := Done(task, client)
 		if task.RespChan != nil {
-			task.RespChan <- &resp
+			task.RespChan <- new(Done(task, client))
 		} else {
 			panic("the task resp channel is nil")
 		}

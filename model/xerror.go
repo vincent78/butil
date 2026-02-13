@@ -84,8 +84,7 @@ func Wrap(err error, msg string, code ...int) *XError {
 	}
 
 	//err not XError
-	var xe *XError
-	if !errors.As(err, &xe) {
+	if _, ok := errors.AsType[*XError](err); !ok {
 		err = &XError{
 			Cause: err,
 			File:  filepath.Base(file),
@@ -134,8 +133,7 @@ func FormatStack(err error) string {
 
 // FirstXError 获取最外层错误
 func FirstXError(err error) *XError {
-	var xe *XError
-	if errors.As(err, &xe) {
+	if xe, ok := errors.AsType[*XError](err); ok {
 		return xe
 	}
 	return nil
