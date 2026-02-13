@@ -1,8 +1,9 @@
-package token
+package randUtil
 
 import (
+	"crypto/rand"
 	"encoding/hex"
-	"math/rand"
+	mr "math/rand/v2"
 
 	"golang.org/x/crypto/scrypt"
 )
@@ -64,4 +65,12 @@ func SetPassword(password string, salt string) (verify string, err error) {
 	}
 	verify = hex.EncodeToString(rb)
 	return
+}
+
+func GetRandomNumber() int {
+	return mr.IntN(10)
+}
+
+func GetRandomNumber100() int {
+	return mr.IntN(100)
 }

@@ -24,7 +24,7 @@ var goChanNumberTotal = make(chan struct{}, 10000)
 
 // GO goroutine
 func GO(handler func()) error {
-	ctx, cancel := context.WithTimeout(context.Background(), 50*time.Millisecond)
+	ctx, cancel := context.WithTimeout(context.Background(), 1*time.Second)
 	defer cancel()
 
 	select {

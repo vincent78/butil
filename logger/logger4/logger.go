@@ -257,7 +257,7 @@ func getCallerInfo() string {
 		funcName := fn.Name()
 
 		// 跳过logger包内部的函数
-		if !strings.Contains(funcName, "core/logger") {
+		if !strings.Contains(funcName, "logger/logger4") {
 			// 动态获取项目根目录，去掉根目录前缀
 			relativeFile := trimProjectRoot(file)
 			// 合并文件路径和行号
