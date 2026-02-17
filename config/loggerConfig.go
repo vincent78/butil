@@ -5,6 +5,7 @@ type LoggerConfig struct {
 	IsSave          bool          `yaml:"isSave" json:"isSave"`
 	Level           string        `yaml:"level" json:"level"`
 	DisableCaller   bool          `yaml:"disableCaller" json:"disableCaller"`
+	CallerSkip      int           `yaml:"callerSkip" json:"callerSkip"`
 	StacktraceLevel string        `yaml:"stacktraceLevel" json:"stacktraceLevel"`
 	LogFileConfig   LogFileConfig `yaml:"logFileConfig" json:"logFileConfig"`
 }

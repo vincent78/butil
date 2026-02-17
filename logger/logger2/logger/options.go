@@ -3,9 +3,16 @@ package logger
 import (
 	"context"
 	"io"
+
+	"go.uber.org/zap"
 )
 
 type Option func(*Options)
+
+func (o Option) apply(logger *zap.Logger) {
+	//TODO implement me
+	panic("implement me")
+}
 
 type Options struct {
 	// The logging level the logger should log at. default is `InfoLevel`

@@ -9,16 +9,12 @@ import (
 var (
 	defaultLevel      = "debug" // output log levels debug, info, warn, error, default is debug
 	defaultEncoding   = formatConsole
-	defaultIsSave     = false // false:output to terminal, true:output to file, default is false
-	defaultCaller     = false
-	defaultCallerSkip = 2
+	defaultCallerSkip = 0
 
 	defaultFilename        = "out.log" // file name
 	defaultMaxSize         = 10        // maximum file size (MB)
 	defaultMaxBackups      = 100       // maximum number of old files
 	defaultMaxAge          = 30        // maximum number of days for old documents
-	defaultIsCompression   = false     // whether to compress and archive old files
-	defaultIsLocalTime     = true      // whether to use local time
 	defaultStacktraceLevel = levelError
 )
 
@@ -37,12 +33,10 @@ type options struct {
 
 func defaultOptions() *options {
 	return &options{
-		level:         defaultLevel,
-		encoding:      defaultEncoding,
-		disableCaller: defaultCaller,
-		isSave:        defaultIsSave,
-		stacktrace:    defaultStacktraceLevel,
-		callerSkip:    defaultCallerSkip,
+		level:      defaultLevel,
+		encoding:   defaultEncoding,
+		stacktrace: defaultStacktraceLevel,
+		callerSkip: defaultCallerSkip,
 	}
 }
 
@@ -68,8 +62,8 @@ func WithLevel(levelName string) Option {
 	}
 }
 
-// WithCaller setting the log caller
-func WithCaller(caller bool) Option {
+// WithDisableCaller setting the log caller
+func WithDisableCaller(caller bool) Option {
 	return func(o *options) {
 		o.disableCaller = caller
 	}
@@ -101,13 +95,6 @@ func WithFormat(format string) Option {
 		if strings.ToLower(format) == formatJSON {
 			o.encoding = formatJSON
 		}
-	}
-}
-
-// WithFormat set the output log format, console or json
-func WithDisableCaller(disalbeCaller bool) Option {
-	return func(o *options) {
-		o.disableCaller = disalbeCaller
 	}
 }
 
@@ -143,12 +130,11 @@ type fileOptions struct {
 
 func defaultFileOptions() *fileOptions {
 	return &fileOptions{
-		filename:      defaultFilename,
-		maxSize:       defaultMaxSize,
-		maxBackups:    defaultMaxBackups,
-		maxAge:        defaultMaxAge,
-		isCompression: defaultIsCompression,
-		isLocalTime:   defaultIsLocalTime,
+		filename:    defaultFilename,
+		maxSize:     defaultMaxSize,
+		maxBackups:  defaultMaxBackups,
+		maxAge:      defaultMaxAge,
+		isLocalTime: true,
 	}
 }
 

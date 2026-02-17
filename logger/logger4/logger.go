@@ -195,27 +195,32 @@ func checkNil() {
 	}
 }
 
-func InitLoggerByConfig(cfgs map[string]config.LoggerConfig) {
+func InitLoggerByConfs(cfgs map[string]config.LoggerConfig) {
 	for name, cfg := range cfgs {
-
-		log, err := Init(
-			WithLevel(cfg.Level),
-			WithFormat(cfg.Format),
-			WithSave(
-				cfg.IsSave,
-				WithFileName(cfg.LogFileConfig.Filename),
-				WithFileMaxSize(cfg.LogFileConfig.MaxSize),
-				WithFileMaxBackups(cfg.LogFileConfig.MaxBackups),
-				WithFileMaxAge(cfg.LogFileConfig.MaxAge),
-				WithFileIsCompression(cfg.LogFileConfig.IsCompression),
-			),
-		)
+		log, err := InitLoggerByConf(cfg)
 		if err != nil {
 			panic("init logger error:" + err.Error())
 		}
-
 		loggerMap[name] = log
 	}
+}
+
+func InitLoggerByConf(cfg config.LoggerConfig) (*Logger, error) {
+	return Init(
+		WithLevel(cfg.Level),
+		WithFormat(cfg.Format),
+		WithDisableCaller(cfg.DisableCaller),
+		WithCallerSkip(cfg.CallerSkip),
+		WithStacktraceLevel(cfg.StacktraceLevel),
+		WithSave(
+			cfg.IsSave,
+			WithFileName(cfg.LogFileConfig.Filename),
+			WithFileMaxSize(cfg.LogFileConfig.MaxSize),
+			WithFileMaxBackups(cfg.LogFileConfig.MaxBackups),
+			WithFileMaxAge(cfg.LogFileConfig.MaxAge),
+			WithFileIsCompression(cfg.LogFileConfig.IsCompression),
+		),
+	)
 }
 
 func GetLogger(name string) *Logger {
@@ -235,6 +240,9 @@ func InitByConf(cfg config.LoggerConfig) (*Logger, error) {
 	return Init(
 		WithLevel(cfg.Level),
 		WithFormat(cfg.Format),
+		WithDisableCaller(cfg.DisableCaller),
+		WithCallerSkip(cfg.CallerSkip),
+		WithStacktraceLevel(cfg.StacktraceLevel),
 		WithSave(
 			cfg.IsSave,
 			WithFileName(cfg.LogFileConfig.Filename),
@@ -243,7 +251,6 @@ func InitByConf(cfg config.LoggerConfig) (*Logger, error) {
 			WithFileMaxAge(cfg.LogFileConfig.MaxAge),
 			WithFileIsCompression(cfg.LogFileConfig.IsCompression),
 		),
-		WithStacktraceLevel(cfg.StacktraceLevel),
 	)
 }
 

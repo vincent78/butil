@@ -17,25 +17,8 @@ logger:
     level: "debug"
     format: "console"
     isSave: false
-    disableCaller: true
     logFileConfig:
       filename: "./out.log"
-      maxSize: 20
-      maxBackups: 50
-      maxAge: 15
-      isCompression: true
-  mysql:
-    level: "debug"
-    format: "json"
-    isSave: false
-    disableCaller: true
-    logFileConfig:
-      filename: "mysql.log"
-      maxSize: 20
-      maxBackups: 50
-      maxAge: 15
-      isCompression: true
-
 
 redis:
   dsn: "vincent:qt%402023@127.0.0.1:6379/0"
