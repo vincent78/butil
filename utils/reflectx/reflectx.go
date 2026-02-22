@@ -112,3 +112,19 @@ func PrintInterface(v any) {
 	}
 	fmt.Println("")
 }
+
+func InvokeMethodWithoutParams(obj any, methodStr string, params ...any) any {
+	// 1. 根据名称获取方法对象
+	v := reflect.ValueOf(obj)
+	method := v.MethodByName(methodStr)
+	if !method.IsValid() {
+		return nil
+	}
+	args := make([]reflect.Value, 0)
+	for _, param := range params {
+		args = append(args, reflect.ValueOf(param))
+	}
+
+	results := method.Call(args)
+	return results
+}

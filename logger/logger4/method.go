@@ -1,10 +1,24 @@
 package logger4
 
 import (
+	"context"
 	"strings"
 
 	"go.uber.org/zap"
 )
+
+type LoggerMethod interface {
+	Debug(msg string, fields ...Field)
+	Info(msg string, fields ...Field)
+	Warn(msg string, fields ...Field)
+	Error(msg string, fields ...Field)
+	DPanic(msg string, fields ...Field)
+	Panic(msg string, fields ...Field)
+	Fatal(msg string, fields ...Field)
+	WithMetaCtx(ctx context.Context, keys ...string)
+	WithFields(fields ...Field)
+	WithMap(map[string]any)
+}
 
 // Debug level information
 func Debug(msg string, fields ...Field) {
@@ -73,5 +87,6 @@ func Sync() error {
 
 // WithFields carrying field information
 func WithFields(fields ...Field) *zap.Logger {
-	return GetWithSkip(0).With(fields...)
+	//return GetWithSkip(0).With(fields...)
+	return Get().With(fields...)
 }

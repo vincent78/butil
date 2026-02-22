@@ -138,19 +138,6 @@ func BenchmarkAny(b *testing.B) {
 	}
 }
 
-func Test_getLevelSize(t *testing.T) {
-	_ = getLevelSize(levelDebug)
-	_ = getLevelSize(levelInfo)
-	_ = getLevelSize(levelWarn)
-	_ = getLevelSize(levelWarn)
-	_ = getLevelSize(levelError)
-	_ = getLevelSize("unknown")
-
-	defaultLogger = nil
-	_ = GetWithSkip(5)
-	_ = Get()
-}
-
 func Test_InitTestConfigByFile(t *testing.T) {
 	path := fileUtil.GetCurrentProjectPath()
 	file := fileUtil.Join(path, "config", "test.yaml")

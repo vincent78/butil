@@ -14,39 +14,49 @@ import (
 	"strings"
 	"time"
 
-	"github.com/vincent78/butil/config"
-
 	"github.com/natefinch/lumberjack"
+	"github.com/vincent78/butil/config"
 	"go.uber.org/zap"
 	"go.uber.org/zap/zapcore"
 )
 
-const (
-	formatConsole = "console"
-	formatJSON    = "json"
-
-	levelDebug = "DEBUG"
-	levelInfo  = "INFO"
-	levelWarn  = "WARN"
-	levelError = "ERROR"
-	levelPanic = "PANIC"
-)
-
-type Logger = zap.Logger
+type SimpleLogger = zap.Logger
 type SugaredLogger = zap.SugaredLogger
 
-var defaultLogger *Logger
+var defaultLogger *SimpleLogger
 var defaultSugaredLogger *SugaredLogger
-var loggerMap = make(map[string]*Logger)
+var loggerMap = make(map[string]*SimpleLogger)
 
-func getLogger() *Logger {
+var configs map[string]config.LoggerConfig
+
+func getLogger() *SimpleLogger {
 	checkNil()
-	return defaultLogger.WithOptions(zap.AddCallerSkip(1))
+	//return defaultLogger.WithOptions(zap.AddCallerSkip(1))
+	return defaultLogger
+}
+
+func getLoggerWithOptions(opts ...Option) *SimpleLogger {
+	checkNil()
+	l, err := Init(opts...)
+	if err != nil {
+		panic(err)
+	}
+	return l
 }
 
 func getSugaredLogger() *SugaredLogger {
 	checkNil()
-	return defaultSugaredLogger.WithOptions(zap.AddCallerSkip(1))
+	//return defaultSugaredLogger.WithOptions(zap.AddCallerSkip(1))
+	return defaultSugaredLogger
+}
+
+func getSugaredLoggerWithOptions(opts ...Option) *SugaredLogger {
+	checkNil()
+	l, err := Init(opts...)
+	if err != nil {
+		panic(err)
+	}
+	return l.Sugar()
 }
 
 // Init initial log settings
@@ -67,29 +77,22 @@ func getSugaredLogger() *SugaredLogger {
 //			WithFileMaxAge(10),
 //			WithFileIsCompression(true),
 //		))
-func Init(opts ...Option) (*Logger, error) {
+func Init(opts ...Option) (*SimpleLogger, error) {
 	o := defaultOptions()
 	o.apply(opts...)
-	isSave := o.isSave
-	levelName := o.level
-	encoding := o.encoding
-	disableCaller := o.disableCaller
-	stacktraceLevel := getLevelSize(o.stacktrace)
 
 	var err error
-	var zapLog *Logger
+	var zapLog *SimpleLogger
 	var str string
-	if !isSave {
-		zapLog, err = log2Terminal(levelName, encoding, disableCaller, stacktraceLevel, o.callerSkip)
-
+	if !o.isSave {
+		zapLog, err = log2Terminal(o)
 		if err != nil {
 			panic(err)
 		}
-		str = fmt.Sprintf("initialize logger finish, config is output to 'terminal', format=%s, level=%s", encoding, levelName)
+		str = fmt.Sprintf("initialize logger finish, config is output to 'terminal', format=%s, level=%s", o.encoding, LevelString(o.level))
 	} else {
-
-		zapLog = log2File(encoding, levelName, stacktraceLevel, o.callerSkip, o.fileConfig)
-		str = fmt.Sprintf("initialize logger finish, config is output to 'file', format=%s, level=%s, file=%s", encoding, levelName, o.fileConfig.filename)
+		zapLog = log2File(o)
+		str = fmt.Sprintf("initialize logger finish, config is output to 'file', format=%s, level=%s, file=%s", o.encoding, LevelString(o.level), o.fileConfig.filename)
 	}
 
 	if len(o.hooks) > 0 {
@@ -103,14 +106,14 @@ func Init(opts ...Option) (*Logger, error) {
 	return zapLog, err
 }
 
-func log2Terminal(levelName string, encoding string, disableCaller bool, stackTraceLevel zapcore.LevelEnabler, skip int) (*Logger, error) {
+func log2Terminal(o *options) (*SimpleLogger, error) {
 	js := fmt.Sprintf(`{
       		"level": "%s",
             "encoding": "%s",
       		"outputPaths": ["stdout"],
             "errorOutputPaths": ["stdout"],
 			"x": %v
-		}`, levelName, encoding, disableCaller)
+		}`, LevelString(o.level), o.encoding, o.disableCaller)
 
 	var config zap.Config
 	err := json.Unmarshal([]byte(js), &config)
@@ -119,55 +122,57 @@ func log2Terminal(levelName string, encoding string, disableCaller bool, stackTr
 	}
 
 	config.EncoderConfig = zap.NewProductionEncoderConfig()
-	if encoding == formatConsole {
+	if o.encoding == formatConsole {
 		config.EncoderConfig.EncodeLevel = zapcore.CapitalColorLevelEncoder // logging color
 	} else {
 		config.EncoderConfig.EncodeLevel = zapcore.CapitalLevelEncoder // logging levels in the log file using upper case letters
 	}
 	config.EncoderConfig.EncodeTime = timeFormatter // default time format
-	return config.Build(zap.AddStacktrace(stackTraceLevel), zap.AddCallerSkip(skip))
+	return config.Build(zap.AddStacktrace(zapcore.Level(o.stacktrace)),
+		zap.AddCallerSkip(o.callerSkip),
+	)
 }
 
-func log2File(encoding string, levelName string, stackTraceLevel zapcore.LevelEnabler, skip int, fo *fileOptions) *Logger {
+func log2File(o *options) *SimpleLogger {
 	encoderConfig := zap.NewProductionEncoderConfig()
 	encoderConfig.EncodeTime = zapcore.ISO8601TimeEncoder   // modify Time Encoder
 	encoderConfig.EncodeLevel = zapcore.CapitalLevelEncoder // logging levels in the log file using upper case letters
 	var encoder zapcore.Encoder
-	if encoding == formatConsole { // console format
+	if o.encoding == formatConsole { // console format
 		encoder = zapcore.NewConsoleEncoder(encoderConfig)
 	} else { // json format
 		encoder = zapcore.NewJSONEncoder(encoderConfig)
 	}
 
 	ws := zapcore.AddSync(&lumberjack.Logger{
-		Filename:   fo.filename,      // file name
-		MaxSize:    fo.maxSize,       // maximum file size (MB)
-		MaxBackups: fo.maxBackups,    // maximum number of old files
-		MaxAge:     fo.maxAge,        // maximum number of days for old documents
-		Compress:   fo.isCompression, // whether to compress and archive old files
+		Filename:   o.fileConfig.filename,      // file name
+		MaxSize:    o.fileConfig.maxSize,       // maximum file size (MB)
+		MaxBackups: o.fileConfig.maxBackups,    // maximum number of old files
+		MaxAge:     o.fileConfig.maxAge,        // maximum number of days for old documents
+		Compress:   o.fileConfig.isCompression, // whether to compress and archive old files
 	})
-	core := zapcore.NewCore(encoder, ws, getLevelSize(levelName))
+	core := zapcore.NewCore(encoder, ws, zapcore.Level(o.level))
 
 	// add the function call information log to the log.
-	return zap.New(core, zap.AddCaller(), zap.AddStacktrace(stackTraceLevel), zap.AddCallerSkip(skip))
+	return zap.New(core,
+		zap.AddCaller(),
+		zap.AddStacktrace(zapcore.Level(o.stacktrace)),
+		zap.AddCallerSkip(o.callerSkip),
+	)
 }
 
 // DEBUG(default), INFO, WARN, ERROR
-func getLevelSize(levelName string) zapcore.Level {
-	levelName = strings.ToUpper(levelName)
-	switch levelName {
-	case levelDebug:
-		return zapcore.DebugLevel
-	case levelInfo:
-		return zapcore.InfoLevel
-	case levelWarn:
-		return zapcore.WarnLevel
-	case levelError:
-		return zapcore.ErrorLevel
-	case levelPanic:
-		return zapcore.PanicLevel
+func getLevel(name string) zapcore.Level {
+	level, err := zapcore.ParseLevel(strings.ToLower(name))
+	if err != nil {
+		panic(err)
 	}
-	return zapcore.DebugLevel
+	return level
+}
+
+func LevelString(level Level) string {
+	l := zapcore.Level(level)
+	return l.String()
 }
 
 func timeFormatter(t time.Time, enc zapcore.PrimitiveArrayEncoder) {
@@ -175,15 +180,9 @@ func timeFormatter(t time.Time, enc zapcore.PrimitiveArrayEncoder) {
 }
 
 // GetWithSkip get defaultLogger, set the skipped caller value, customize the number of lines of code displayed
-func GetWithSkip(skip int) *Logger {
+func GetWithSkip(skip int) *SimpleLogger {
 	checkNil()
 	return defaultLogger.WithOptions(zap.AddCallerSkip(skip))
-}
-
-// Get logger
-func Get() *Logger {
-	checkNil()
-	return defaultLogger
 }
 
 func checkNil() {
@@ -197,6 +196,7 @@ func checkNil() {
 
 func InitLoggerByConfs(cfgs map[string]config.LoggerConfig) {
 	for name, cfg := range cfgs {
+		configs[name] = cfg
 		log, err := InitLoggerByConf(cfg)
 		if err != nil {
 			panic("init logger error:" + err.Error())
@@ -205,12 +205,11 @@ func InitLoggerByConfs(cfgs map[string]config.LoggerConfig) {
 	}
 }
 
-func InitLoggerByConf(cfg config.LoggerConfig) (*Logger, error) {
+func InitLoggerByConf(cfg config.LoggerConfig) (*SimpleLogger, error) {
 	return Init(
 		WithLevel(cfg.Level),
 		WithFormat(cfg.Format),
-		WithDisableCaller(cfg.DisableCaller),
-		WithCallerSkip(cfg.CallerSkip),
+		WithCaller(cfg.DisableCaller, cfg.CallerSkip),
 		WithStacktraceLevel(cfg.StacktraceLevel),
 		WithSave(
 			cfg.IsSave,
@@ -223,7 +222,13 @@ func InitLoggerByConf(cfg config.LoggerConfig) (*Logger, error) {
 	)
 }
 
-func GetLogger(name string) *Logger {
+// Get logger
+func Get() *SimpleLogger {
+	checkNil()
+	return defaultLogger
+}
+
+func GetLogger(name string) *SimpleLogger {
 	if logger, ok := loggerMap[name]; ok {
 		return logger
 	} else {
@@ -233,25 +238,6 @@ func GetLogger(name string) *Logger {
 
 func SetDefaultLogger(name string) {
 	defaultLogger = GetLogger(name)
-}
-
-func InitByConf(cfg config.LoggerConfig) (*Logger, error) {
-	// initializing log
-	return Init(
-		WithLevel(cfg.Level),
-		WithFormat(cfg.Format),
-		WithDisableCaller(cfg.DisableCaller),
-		WithCallerSkip(cfg.CallerSkip),
-		WithStacktraceLevel(cfg.StacktraceLevel),
-		WithSave(
-			cfg.IsSave,
-			WithFileName(cfg.LogFileConfig.Filename),
-			WithFileMaxSize(cfg.LogFileConfig.MaxSize),
-			WithFileMaxBackups(cfg.LogFileConfig.MaxBackups),
-			WithFileMaxAge(cfg.LogFileConfig.MaxAge),
-			WithFileIsCompression(cfg.LogFileConfig.IsCompression),
-		),
-	)
 }
 
 // getCallerInfo 获取调用者的文件路径和行号（去掉根目录前缀）

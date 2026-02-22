@@ -22,3 +22,7 @@ func (l LoggerLeverl) str() string {
 		return "UNKNOW"
 	}
 }
+
+func (l LoggerLeverl) Int() int {
+	return int(l)
+}

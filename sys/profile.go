@@ -80,7 +80,7 @@ func RunMemProfile() func() {
 }
 
 // 计算运行f前后内存信息
-func MemoryShow(f func(), log logger4.Logger) {
+func MemoryShow(f func(), log logger4.NormalLogger) {
 	// 启用内存分配统计
 	runtime.MemProfileRate = 1 // 每分配1次就记录一次
 	runtime.GC()               // 强制进行垃圾回收

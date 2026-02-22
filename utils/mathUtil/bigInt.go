@@ -220,3 +220,23 @@ func BigFormat(num string, n int32) (string, error) {
 		return rounded.String(), nil
 	}
 }
+
+func HexStr2BigInt(hexStr string) *big.Int {
+	str := strings.Replace(hexStr, "0x", "", 1)
+	str = strings.Replace(str, "0X", "", 1)
+	str = strings.ToLower(str)
+	// 1. 将十六进制字符串解析为 big.Int
+	n := new(big.Int)
+	n.SetString(hexStr, 16)
+	if !strings.HasPrefix(hexStr, "f") {
+		return n
+	}
+	// 2. 定义 2^256 (用于补码计算)
+	// 256 位十六进制的最大值边界
+	maxVal := new(big.Int).Lsh(big.NewInt(1), 256)
+
+	// 3. 计算补码对应的负数值
+	// 如果 n > 2^255，说明符号位为 1，是一个负数
+	// 这里我们直接计算 n - 2^256 即可得到正确的负值
+	return new(big.Int).Sub(n, maxVal)
+}

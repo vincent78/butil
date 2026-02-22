@@ -3,6 +3,8 @@ package strUtil
 import (
 	"fmt"
 	"strings"
+
+	"github.com/vincent78/butil/utils/byteUtil"
 )
 
 func Bcd2Number(bcd []byte) string {
@@ -22,6 +24,6 @@ func Number2bcd(number string) []byte {
 	for i := 0; i < 8-len(number); i++ {
 		rNumber = "f" + rNumber
 	}
-	bcd := Hex2Byte(rNumber)
+	bcd := byteUtil.Hex2Byte(rNumber)
 	return bcd
 }

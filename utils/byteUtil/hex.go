@@ -1,4 +1,4 @@
-package strUtil
+package byteUtil
 
 import (
 	"encoding/hex"

@@ -6,38 +6,34 @@ import (
 	"go.uber.org/zap/zapcore"
 )
 
-var (
-	defaultLevel      = "debug" // output log levels debug, info, warn, error, default is debug
-	defaultEncoding   = formatConsole
-	defaultCallerSkip = 0
-
-	defaultFilename        = "out.log" // file name
-	defaultMaxSize         = 10        // maximum file size (MB)
-	defaultMaxBackups      = 100       // maximum number of old files
-	defaultMaxAge          = 30        // maximum number of days for old documents
-	defaultStacktraceLevel = levelError
+const (
+	formatConsole = "console"
+	formatJSON    = "json"
 )
 
-type options struct {
-	level         string
-	encoding      string
-	isSave        bool
-	disableCaller bool
-	stacktrace    string
-	callerSkip    int
+type Level zapcore.Level
 
+type options struct {
+	level         Level
+	encoding      string
+	disableCaller bool
+	callerSkip    int
+	stacktrace    Level
+
+	isSave     bool
 	fileConfig *fileOptions
 
 	hooks []func(zapcore.Entry) error
 }
 
 func defaultOptions() *options {
-	return &options{
-		level:      defaultLevel,
-		encoding:   defaultEncoding,
-		stacktrace: defaultStacktraceLevel,
-		callerSkip: defaultCallerSkip,
+	opts := &options{
+		encoding:   formatConsole,
+		stacktrace: Level(zapcore.ErrorLevel),
+		callerSkip: 1,
 	}
+	opts.level = Level(zapcore.DebugLevel)
+	return opts
 }
 
 func (o *options) apply(opts ...Option) {
@@ -50,42 +46,14 @@ func (o *options) apply(opts ...Option) {
 type Option func(*options)
 
 // WithLevel setting the log level
-func WithLevel(levelName string) Option {
+func WithLevel(name string) Option {
 	return func(o *options) {
-		levelName = strings.ToUpper(levelName)
-		switch levelName {
-		case levelDebug, levelInfo, levelWarn, levelError, levelPanic:
-			o.level = levelName
-		default:
-			o.level = levelDebug
+		ln := strings.ToLower(name)
+		l, err := zapcore.ParseLevel(ln)
+		if err != nil {
+			panic(err)
 		}
-	}
-}
-
-// WithDisableCaller setting the log caller
-func WithDisableCaller(caller bool) Option {
-	return func(o *options) {
-		o.disableCaller = caller
-	}
-}
-
-// WithCallerSkip setting the log caller
-func WithCallerSkip(skip int) Option {
-	return func(o *options) {
-		o.callerSkip = skip
-	}
-}
-
-// WithStacktraceLevel setting the log stacktraceLevel
-func WithStacktraceLevel(levelName string) Option {
-	return func(o *options) {
-		levelName = strings.ToUpper(levelName)
-		switch levelName {
-		case levelDebug, levelInfo, levelWarn, levelError, levelPanic:
-			o.stacktrace = levelName
-		default:
-			o.stacktrace = levelError
-		}
+		o.level = Level(l)
 	}
 }
 
@@ -97,6 +65,38 @@ func WithFormat(format string) Option {
 		}
 	}
 }
+
+// WithCallerSkip setting the log caller
+func WithCaller(caller bool, skip int) Option {
+	return func(o *options) {
+		o.disableCaller = caller
+		o.callerSkip = skip
+	}
+}
+
+// WithStacktraceLevel setting the log stacktraceLevel
+func WithStacktraceLevel(name string) Option {
+	return func(o *options) {
+		l, err := zapcore.ParseLevel(strings.ToLower(name))
+		if err != nil {
+			panic(err)
+		}
+		o.stacktrace = Level(l)
+	}
+}
+
+// WithHooks set the log hooks
+func WithHooks(hooks ...func(zapcore.Entry) error) Option {
+	return func(o *options) {
+		o.hooks = hooks
+	}
+}
+
+/*****************************************************************************
+ *
+ * logger file options
+ *
+ *****************************************************************************/
 
 // WithSave save log to file
 func WithSave(isSave bool, opts ...FileOption) Option {
@@ -110,15 +110,6 @@ func WithSave(isSave bool, opts ...FileOption) Option {
 	}
 }
 
-// WithHooks set the log hooks
-func WithHooks(hooks ...func(zapcore.Entry) error) Option {
-	return func(o *options) {
-		o.hooks = hooks
-	}
-}
-
-// ------------------------------------------------------------------------------------------
-
 type fileOptions struct {
 	filename      string
 	maxSize       int
@@ -130,10 +121,10 @@ type fileOptions struct {
 
 func defaultFileOptions() *fileOptions {
 	return &fileOptions{
-		filename:    defaultFilename,
-		maxSize:     defaultMaxSize,
-		maxBackups:  defaultMaxBackups,
-		maxAge:      defaultMaxAge,
+		filename:    "out.log",
+		maxSize:     50, // maximum file size (MB)
+		maxBackups:  20, // maximum number of old files
+		maxAge:      30, // maximum number of days for old documents
 		isLocalTime: true,
 	}
 }
