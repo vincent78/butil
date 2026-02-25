@@ -28,8 +28,8 @@ func CompareVersion(src, dst string) int {
 
 	sa := strings.Split(src, ".")
 	da := strings.Split(dst, ".")
-	sar := FillZero(sa, 3)
-	dar := FillZero(da, 3)
+	sar := FillArrayZero(sa, 3)
+	dar := FillArrayZero(da, 3)
 
 	for i, v := range sar {
 		sn, _ := strconv.Atoi(v)
@@ -43,7 +43,7 @@ func CompareVersion(src, dst string) int {
 	return 0
 }
 
-func FillZero(sl []string, i int) []string {
+func FillArrayZero(sl []string, i int) []string {
 	if len(sl) == i {
 		return sl
 	} else if len(sl) > i {
@@ -238,4 +238,9 @@ func Md5(str string) string {
 func UnsafeEqual(a string, b []byte) bool {
 	bbp := *(*string)(unsafe.Pointer(&b))
 	return a == bbp
+}
+
+func FillZero(n int, num int) string {
+	// %0*d 意思：宽度是动态的 (*)，不足位补零 (0)，类型是整数 (d)
+	return fmt.Sprintf("%0*d", n, num)
 }

@@ -57,3 +57,45 @@ func TestRandomString(t *testing.T) {
 	}
 
 }
+
+func TestFillZero(t *testing.T) {
+	type args struct {
+		n   int
+		num int
+	}
+	tests := []struct {
+		name string
+		args args
+		want string
+	}{
+		{
+			name: "t1",
+			args: args{
+				n:   2,
+				num: 1,
+			},
+			want: "01",
+		},
+		{
+			name: "t2",
+			args: args{
+				n:   1,
+				num: 10,
+			},
+			want: "10",
+		},
+		{
+			name: "t2",
+			args: args{
+				n:   3,
+				num: 1,
+			},
+			want: "001",
+		},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			assert.Equalf(t, tt.want, FillZero(tt.args.n, tt.args.num), "FillZero(%v, %v)", tt.args.n, tt.args.num)
+		})
+	}
+}

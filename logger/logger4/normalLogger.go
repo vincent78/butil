@@ -125,8 +125,9 @@ func (l *NormalLogger) WithMetaCtx(ctx context.Context, keys ...string) {
 	}
 }
 
-//func (l *NormalLogger) WithOptions(ops ...Option) *NormalLogger {
-//	return &NormalLogger{
-//		logger: l.logger
-//	}
-//}
+func (l *NormalLogger) WithCallerSkip(skip int) *NormalLogger {
+	return &NormalLogger{
+		logger: l.logger.WithOptions(zap.AddCallerSkip(skip)),
+		conf:   l.conf,
+	}
+}
