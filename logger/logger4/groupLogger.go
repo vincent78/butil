@@ -77,20 +77,24 @@ func (g *GroupLogger) Sync() error {
 	return nil
 }
 
-func (l *GroupLogger) WithFields(field ...Field) {
-	for _, l := range l.Loggers {
+func (g *GroupLogger) WithFields(field ...Field) {
+	for _, l := range g.Loggers {
 		l.WithFields(field...)
 	}
 }
 
-func (l *GroupLogger) WithMap(mps map[string]any) {
-	for _, l := range l.Loggers {
+func (g *GroupLogger) WithMap(mps map[string]any) {
+	for _, l := range g.Loggers {
 		l.WithMap(mps)
 	}
 }
 
-func (l *GroupLogger) WithMetaCtx(ctx context.Context, keys ...string) {
-	for _, l := range l.Loggers {
+func (g *GroupLogger) WithMetaCtx(ctx context.Context, keys ...string) {
+	for _, l := range g.Loggers {
 		l.WithMetaCtx(ctx, keys...)
 	}
+}
+
+func (g *GroupLogger) AppendLogger(logger *NormalLogger) {
+	g.Loggers = append(g.Loggers, logger)
 }

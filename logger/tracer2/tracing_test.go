@@ -1,12 +1,8 @@
 package tracing
 
 import (
-	"crypto/sha256"
-	"encoding/hex"
 	"fmt"
 	"testing"
-
-	"github.com/google/uuid"
 )
 
 func TestStartSpanWithCustomTraceID(t *testing.T) {
@@ -17,10 +13,7 @@ func TestStartSpanWithCustomTraceID(t *testing.T) {
 	defer cp()
 
 	//trace id
-	traceId := uuid.New().String()
-	// TraceID(32位小写十六进制):sha256 前16字节(Jeager)
-	hash := sha256.Sum256([]byte(traceId))
-	traceId = hex.EncodeToString(hash[:16])
+	traceId := NewTraceId()
 
 	ctxSpan, span := StartSpanWithCustomTraceID("service.MatchFilterList", traceId)
 	defer span.End()

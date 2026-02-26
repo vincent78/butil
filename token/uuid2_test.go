@@ -10,5 +10,7 @@ func TestName(t *testing.T) {
 }
 
 func TestGenSonyflake(t *testing.T) {
-	t.Logf("id: %s", GenSonyflake())
+	for i := 0; i < 20; i++ {
+		t.Logf("id: %s", GenSonyflake())
+	}
 }

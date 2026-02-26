@@ -11,7 +11,6 @@ import (
 	"github.com/rs/xid"
 	"github.com/segmentio/ksuid"
 	"github.com/sony/sonyflake"
-	"github.com/vincent78/butil/logger/logger1"
 )
 
 func GenXid() string {
@@ -37,7 +36,7 @@ func GenSonyflake() string {
 	flake := sonyflake.NewSonyflake(sonyflake.Settings{})
 	id, err := flake.NextID()
 	if err != nil {
-		logger1.Error("flake.NextID() failed with %s\n", err)
+		panic(err)
 	}
 	return strconv.FormatUint(id, 16)
 }
