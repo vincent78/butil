@@ -9,6 +9,41 @@ import (
 	"go.uber.org/zap"
 )
 
+var defaultLogger *NormalLogger
+var defaultSugaredLogger *SugaredLogger
+var loggerMap = make(map[string]*NormalLogger)
+
+var configs = make(map[string]config.LoggerConfig)
+
+func getLogger() *NormalLogger {
+	checkNil()
+	//return defaultLogger.WithOptions(zap.AddCallerSkip(1))
+	return defaultLogger
+}
+
+// Get logger
+func Get() *NormalLogger {
+	checkNil()
+	return defaultLogger
+}
+
+func GetLogger(name string) *NormalLogger {
+	if logger, ok := loggerMap[name]; ok {
+		return logger
+	} else {
+		panic("logger not found: " + name)
+	}
+}
+func GetLoggerMap() map[string]*NormalLogger {
+	return loggerMap
+}
+
+func SetDefaultLogger(name string) {
+	defaultLogger = GetLogger(name)
+}
+
+//////////////////////////////////////////////////////////////////////////////
+
 type NormalLogger struct {
 	logger *SimpleLogger
 	conf   config.LoggerConfig
@@ -23,6 +58,9 @@ func NewNormalLogger(conf config.LoggerConfig) *NormalLogger {
 		logger: logger,
 		conf:   conf,
 	}
+}
+func (l *NormalLogger) GetLogger() *SimpleLogger {
+	return l.logger
 }
 
 func (l *NormalLogger) Debug(msg string, fields ...Field) {
@@ -57,8 +95,9 @@ func (l *NormalLogger) Sync() error {
 	return l.logger.Sync()
 }
 
-func (l *NormalLogger) WithFields(field ...Field) {
+func (l *NormalLogger) WithFields(field ...Field) *NormalLogger {
 	l.logger = l.logger.With(field...)
+	return l
 }
 
 func (l *NormalLogger) WithMap(mps map[string]any) {
@@ -131,3 +170,9 @@ func (l *NormalLogger) WithCallerSkip(skip int) *NormalLogger {
 		conf:   l.conf,
 	}
 }
+
+//// GetWithSkip get defaultLogger, set the skipped caller value, customize the number of lines of code displayed
+//func GetWithSkip(skip int) *NormalLogger {
+//	checkNil()
+//	return defaultLogger.WithCallerSkip(skip)
+//}

@@ -3,8 +3,6 @@ package logger4
 import (
 	"context"
 	"strings"
-
-	"go.uber.org/zap"
 )
 
 type LoggerMethod interface {
@@ -86,7 +84,7 @@ func Sync() error {
 }
 
 // WithFields carrying field information
-func WithFields(fields ...Field) *zap.Logger {
+func WithFields(fields ...Field) *NormalLogger {
 	//return GetWithSkip(0).With(fields...)
-	return Get().With(fields...)
+	return Get().WithFields(fields...)
 }

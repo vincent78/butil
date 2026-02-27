@@ -23,18 +23,6 @@ import (
 type SimpleLogger = zap.Logger
 type SugaredLogger = zap.SugaredLogger
 
-var defaultLogger *SimpleLogger
-var defaultSugaredLogger *SugaredLogger
-var loggerMap = make(map[string]*SimpleLogger)
-
-var configs map[string]config.LoggerConfig
-
-func getLogger() *SimpleLogger {
-	checkNil()
-	//return defaultLogger.WithOptions(zap.AddCallerSkip(1))
-	return defaultLogger
-}
-
 func getLoggerWithOptions(opts ...Option) *SimpleLogger {
 	checkNil()
 	l, err := Init(opts...)
@@ -98,10 +86,10 @@ func Init(opts ...Option) (*SimpleLogger, error) {
 	if len(o.hooks) > 0 {
 		zapLog = zapLog.WithOptions(zap.Hooks(o.hooks...))
 	}
-	if defaultLogger == nil {
-		defaultLogger = zapLog
-		defaultSugaredLogger = zapLog.Sugar()
-	}
+	//if defaultLogger == nil {
+	//	defaultLogger = zapLog
+	//	defaultSugaredLogger = zapLog.Sugar()
+	//}
 	zapLog.Info(str)
 	return zapLog, err
 }
@@ -179,12 +167,6 @@ func timeFormatter(t time.Time, enc zapcore.PrimitiveArrayEncoder) {
 	enc.AppendString(t.Format("2006-01-02 15:04:05.000"))
 }
 
-// GetWithSkip get defaultLogger, set the skipped caller value, customize the number of lines of code displayed
-func GetWithSkip(skip int) *SimpleLogger {
-	checkNil()
-	return defaultLogger.WithOptions(zap.AddCallerSkip(skip))
-}
-
 func checkNil() {
 	if defaultLogger == nil {
 		_, err := Init() // default output to console
@@ -201,7 +183,10 @@ func InitLoggerByConfs(cfgs map[string]config.LoggerConfig) {
 		if err != nil {
 			panic("init logger error:" + err.Error())
 		}
-		loggerMap[name] = log
+		loggerMap[name] = &NormalLogger{
+			logger: log,
+			conf:   cfg,
+		}
 	}
 }
 
@@ -220,24 +205,6 @@ func InitLoggerByConf(cfg config.LoggerConfig) (*SimpleLogger, error) {
 			WithFileIsCompression(cfg.LogFileConfig.IsCompression),
 		),
 	)
-}
-
-// Get logger
-func Get() *SimpleLogger {
-	checkNil()
-	return defaultLogger
-}
-
-func GetLogger(name string) *SimpleLogger {
-	if logger, ok := loggerMap[name]; ok {
-		return logger
-	} else {
-		panic("logger not found: " + name)
-	}
-}
-
-func SetDefaultLogger(name string) {
-	defaultLogger = GetLogger(name)
 }
 
 // getCallerInfo 获取调用者的文件路径和行号（去掉根目录前缀）
