@@ -11,22 +11,23 @@ type Metadata struct {
 }
 
 type metadataKey struct{} // 定义一个不导出的结构体，确保全局唯一
+var metaKey = metadataKey{}
 
 // 初始化并注入一个可变的 Metadata 容器
-func WithMetadata(ctx context.Context) context.Context {
-	return context.WithValue(ctx, metadataKey{}, &Metadata{})
+func WithMetaData(ctx context.Context) context.Context {
+	return context.WithValue(ctx, metaKey, &Metadata{})
 }
 
 // 设置值 (即使在子协程中，由于是指针且使用了 sync.Map，也是安全的)
 func SetCtxValue(ctx context.Context, key string, val interface{}) {
-	if m, ok := ctx.Value(metadataKey{}).(*Metadata); ok {
+	if m, ok := ctx.Value(metaKey).(*Metadata); ok {
 		m.data.Store(key, val)
 	}
 }
 
 // 获取值
 func GetCtxValue(ctx context.Context, key string) (interface{}, bool) {
-	if m, ok := ctx.Value(metadataKey{}).(*Metadata); ok {
+	if m, ok := ctx.Value(metaKey).(*Metadata); ok {
 		return m.data.Load(key)
 	}
 	return nil, false
@@ -39,15 +40,13 @@ func GetCtxValue(ctx context.Context, key string) (interface{}, bool) {
  ******************************************************************/
 
 func NewMetaContext() context.Context {
-	return WithMetadata(context.Background())
+	return WithMetaData(context.Background())
 }
 
 func NewTimeoutContext(timeout time.Duration) (context.Context, context.CancelFunc) {
-	ctx := WithMetadata(context.Background())
-	return context.WithTimeout(ctx, timeout)
+	return context.WithTimeout(NewMetaContext(), timeout)
 }
 
 func NewCancelContext() (context.Context, context.CancelFunc) {
-	ctx := WithMetadata(context.Background())
-	return context.WithCancel(ctx)
+	return context.WithCancel(NewMetaContext())
 }
