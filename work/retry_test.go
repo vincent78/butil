@@ -18,7 +18,8 @@ func TestDoneWithRetry(t *testing.T) {
 
 	err := DoneWithRetry(ctx, opName, func() error {
 		var attemptErr error
-		txID, attemptErr = timeUtil.NowStr(), nil
+		txID, attemptErr = timeUtil.NowStr(), fmt.Errorf("some error")
+		time.Sleep(3 * time.Second)
 		return attemptErr
 	})
 

@@ -52,7 +52,7 @@ func ShellCommandWithCtx(ctx context.Context, ch chan string, rt chan model.Resp
 	c := runWithCtx(ctx, cmd)
 	stdout, err := c.StdoutPipe()
 	if err != nil {
-		rt <- model.FailureRespWithErrModel(model.ErrorBaseNormal(err.Error()))
+		rt <- model.RespWithErrModel(model.ErrorBaseNormal(err.Error()))
 	} else {
 		go func() {
 			reader := bufio.NewReader(stdout)
@@ -62,16 +62,16 @@ func ShellCommandWithCtx(ctx context.Context, ch chan string, rt chan model.Resp
 				// 检测到ctx.Done()之后停止读取
 				case <-ctx.Done():
 					if ctx.Err() != nil {
-						rt <- model.FailureRespWithErrModel(model.ErrorBaseNormal(ctx.Err().Error()))
+						rt <- model.RespWithErrModel(model.ErrorBaseNormal(ctx.Err().Error()))
 					} else {
-						rt <- model.FailureRespWithErrModel(model.ErrorBaseNormal("程序被终止"))
+						rt <- model.RespWithErrModel(model.ErrorBaseNormal("程序被终止"))
 					}
 					return
 				default:
 					readString, err := reader.ReadString('\n')
 					if err != nil {
 						if err != io.EOF {
-							rt <- model.FailureRespWithErrModel(model.ErrorBaseNormal(err.Error()))
+							rt <- model.RespWithErrModel(model.ErrorBaseNormal(err.Error()))
 						}
 						return
 					}
@@ -81,10 +81,10 @@ func ShellCommandWithCtx(ctx context.Context, ch chan string, rt chan model.Resp
 		}()
 		err = c.Start()
 		if err != nil {
-			rt <- model.FailureRespWithErrModel(model.ErrorBaseNormal(err.Error()))
+			rt <- model.RespWithErrModel(model.ErrorBaseNormal(err.Error()))
 		} else {
 			err = c.Wait()
-			rt <- model.FailureRespWithErrModel(model.ErrorBaseNormal(err.Error()))
+			rt <- model.RespWithErrModel(model.ErrorBaseNormal(err.Error()))
 		}
 	}
 

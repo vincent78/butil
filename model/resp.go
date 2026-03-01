@@ -20,7 +20,7 @@ func NewRespModel(bytes []byte) RespModel {
 	obj := RespModel{}
 	err := json.Unmarshal(bytes, &obj)
 	if err != nil {
-		return FailureRespWithError(500, err)
+		return RespWithError(500, err)
 	}
 	return obj
 }
@@ -36,20 +36,9 @@ func SuccessResp(data any) RespModel {
 			Data: data,
 		}
 	}
-	//else if len(data) == 1 {
-	//	return RespModel{
-	//		Code: Success,
-	//		Data: data[0],
-	//	}
-	//} else {
-	//	return RespModel{
-	//		Code: Success,
-	//		Data: strUtil.FmtSlice("%v", " ", data...),
-	//	}
-	//}
 }
 
-func FailureRespWithStr(code int, msg string, v ...any) RespModel {
+func RespWithStr(code int, msg string, v ...any) RespModel {
 	s := msg
 	if v != nil {
 		s = fmt.Sprintf(msg, v)
@@ -61,32 +50,32 @@ func FailureRespWithStr(code int, msg string, v ...any) RespModel {
 	}
 }
 
-func FailureRespWithErrModel(obj *ErrorModel, args ...any) RespModel {
+func RespWithErrModel(obj *ErrorModel, args ...any) RespModel {
 	return RespModel{
 		Code:    obj.Code,
 		Message: obj.ToString(args...),
 	}
 }
 
-func FailureRespWithErrModelObj(data any, obj *ErrorModel) RespModel {
+func RespWithErrModelObj(obj *ErrorModel) RespModel {
 	if obj == nil {
-		return RespModel{Code: Success, Data: data}
+		return RespModel{Code: Success, Data: nil}
 	}
 	return RespModel{
 		Code:    obj.Code,
 		Message: obj.Message,
-		Data:    data,
+		Data:    obj.Data,
 	}
 }
 
-func FailureRespWithError(code int, e error) RespModel {
+func RespWithError(code int, e error) RespModel {
 	if e == nil {
 		return RespModel{
 			Code:    code,
 			Message: "",
 		}
 	} else {
-		return FailureRespWithStr(code, e.Error())
+		return RespWithStr(code, e.Error())
 	}
 }
 func (resp RespModel) IsSuccess() bool {

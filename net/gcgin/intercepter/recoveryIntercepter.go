@@ -30,14 +30,14 @@ func GinRecovery() gin.HandlerFunc {
 							logger.ErrorByName(global.LogFileHttpName, "path: %v", c.Request.URL.Path)
 							logger.ErrorByName(global.LogFileHttpName, "request: %v", strUtil.Bytes2String(httpRequest))
 							logger.ErrorByName(global.LogFileHttpName, "error: %v", ne.Error())
-							c.JSON(http.StatusOK, model.FailureRespWithErrModel(httpModel.ErrorHttpPanic(se.Err)))
+							c.JSON(http.StatusOK, model.RespWithErrModel(httpModel.ErrorHttpPanic(se.Err)))
 							return
 						}
 					} else {
 						c.AbortWithStatus(http.StatusInternalServerError)
 					}
 				} else {
-					c.JSON(http.StatusOK, model.FailureRespWithErrModel(httpModel.ErrorHttpPanic(err.(error))))
+					c.JSON(http.StatusOK, model.RespWithErrModel(httpModel.ErrorHttpPanic(err.(error))))
 				}
 
 			}

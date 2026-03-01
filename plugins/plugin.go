@@ -31,10 +31,10 @@ func LoadPlugin(name, filePath string) {
 
 func RunFuncWithArg0(name, funcName string) model.RespModel {
 	if p, exist := PluginMap[name]; !exist {
-		return model.FailureRespWithStr(500, "not found plugin: %v", name)
+		return model.RespWithStr(500, "not found plugin: %v", name)
 	} else {
 		if f, err := p.Plugin.Lookup(funcName); err != nil {
-			return model.FailureRespWithStr(500, "not found func[%v] in plugin[%v]", funcName, name)
+			return model.RespWithStr(500, "not found func[%v] in plugin[%v]", funcName, name)
 		} else {
 			f.(func())()
 			return model.SuccessResp("")
@@ -58,10 +58,10 @@ func RunFuncWithArg[I any, O any](name, funcName string, i I) model.ResultModel[
 
 func GetObjFromPlugin(name, objName string) model.RespModel {
 	if p, exist := PluginMap[name]; !exist {
-		return model.FailureRespWithStr(500, "not found plugin: %v", name)
+		return model.RespWithStr(500, "not found plugin: %v", name)
 	} else {
 		if f, err := p.Plugin.Lookup(objName); err != nil {
-			return model.FailureRespWithError(500, fmt.Errorf("found the obj[%v] in plugin[%v] error: %v", objName, name, err))
+			return model.RespWithError(500, fmt.Errorf("found the obj[%v] in plugin[%v] error: %v", objName, name, err))
 		} else {
 			return model.SuccessResp(f)
 		}

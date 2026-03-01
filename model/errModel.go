@@ -10,7 +10,7 @@ type ErrorModel struct {
 	Code    int    `json:"code"`
 	Message string `json:"message"`
 	Suggest any    `json:"suggest,omitempty"`
-	Params  any    `json:"params,omitempty"`
+	Data    any    `json:"data,omitempty"`
 }
 
 func NewErrModelByStr(code int, msg string, args ...any) *ErrorModel {

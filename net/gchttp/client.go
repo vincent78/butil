@@ -44,7 +44,7 @@ func HeadRequest(task *Task) model.RespModel {
 	client := &http.Client{}
 	resp, err := client.Head(task.Url)
 	if err != nil {
-		return model.FailureRespWithError(500, err)
+		return model.RespWithError(500, err)
 	} else {
 		return model.SuccessResp(resp)
 	}
@@ -203,7 +203,7 @@ func Done(task *Task, client *HttpClient) model.RespModel {
 	if err != nil {
 		logOutFields = append(logOutFields, logger.String("error", err.Error()))
 		logger.Error("<<-- http", logOutFields...)
-		return model.FailureRespWithError(4000, err)
+		return model.RespWithError(4000, err)
 	}
 
 	//req.Header.Set("Content-Type", "application/json")
@@ -219,7 +219,7 @@ func Done(task *Task, client *HttpClient) model.RespModel {
 	if err != nil {
 		logOutFields = append(logOutFields, logger.String("error", err.Error()))
 		logger.Error("<<-- http", logOutFields...)
-		return model.FailureRespWithError(4000, err)
+		return model.RespWithError(4000, err)
 	}
 	defer func(Body io.ReadCloser) {
 		dfErr := Body.Close()
@@ -233,7 +233,7 @@ func Done(task *Task, client *HttpClient) model.RespModel {
 	if err != nil {
 		logOutFields = append(logOutFields, logger.Any("error", err.Error()))
 		logger.Error("<<-- http", logOutFields...)
-		return model.FailureRespWithError(4000, err)
+		return model.RespWithError(4000, err)
 	} else if strings.HasPrefix(resp.Header.Get("content-type"), "application/json") {
 		r := objUtil.Parse(rep)
 		logOutFields = append(logOutFields, logger.Any("response", r))
@@ -273,10 +273,10 @@ func PostFormData(urlStr string, header map[string]string, body map[string]any) 
 	req, err := http.NewRequest("POST", urlStr, formBytesReader)
 	if err != nil {
 		// handle error
-		return model.FailureRespWithError(500, err)
+		return model.RespWithError(500, err)
 	} else {
 		if resp, err := client.Do(req); err != nil {
-			return model.FailureRespWithError(500, err)
+			return model.RespWithError(500, err)
 		} else {
 			return model.SuccessResp(resp)
 		}

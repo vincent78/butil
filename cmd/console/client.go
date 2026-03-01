@@ -71,6 +71,6 @@ func (c *Client) DoHandler(apName string, args ...string) model.RespModel {
 	} else {
 		m := ErrorNoHandler(key)
 		logger1.Info("cmd[%v] result: %v", key, m)
-		return model.FailureRespWithErrModel(m)
+		return model.RespWithErrModel(m)
 	}
 }

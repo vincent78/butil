@@ -17,18 +17,19 @@ func DoBusAction[T any](g *gin.Context, req T, action func(ctx context.Context, 
 		errs, ok := err.(validator.ValidationErrors)
 		if !ok {
 			// 非validator.ValidationErrors类型错误直接返回
-			g.JSON(http.StatusOK, model.FailureRespWithErrModel(model2.ErrorHttpParams(errs.Error())))
+			g.JSON(http.StatusOK, model.RespWithErrModel(model2.ErrorHttpParams(errs.Error())))
 		} else {
 			// validator.ValidationErrors类型错误则进行翻译
-			g.JSON(http.StatusOK, model.FailureRespWithErrModel(model2.ErrorHttpParams(errs.Error())))
+			g.JSON(http.StatusOK, model.RespWithErrModel(model2.ErrorHttpParams(errs.Error())))
 		}
 	} else {
 		data, errModel := action(g.Request.Context(), req)
 		if errModel != nil {
 			if data == nil {
-				g.JSON(http.StatusOK, model.FailureRespWithStr(errModel.Code, errModel.Message))
+				g.JSON(http.StatusOK, model.RespWithStr(errModel.Code, errModel.Message))
 			} else {
-				g.JSON(http.StatusOK, model.FailureRespWithErrModelObj(data, errModel))
+				errModel.Data = data
+				g.JSON(http.StatusOK, model.RespWithErrModelObj(errModel))
 			}
 		} else {
 			g.JSON(http.StatusOK, model.SuccessResp(data))
