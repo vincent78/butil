@@ -1,16 +1,14 @@
 package registry
 
 import (
-	"github.com/vincent78/butil/logger/logger4"
+	"github.com/vincent78/butil/bus/core/logger"
 )
 
-type NewLogger func(opts ...logger4.Option) logger4.LoggerMethod
-
 type loggerRegistry struct {
-	registry[NewLogger]
+	registry[logger.ILoggerMethod]
 }
 
-func (r *loggerRegistry) Register(name string, v NewLogger) error {
+func (r *loggerRegistry) Register(name string, v logger.ILoggerMethod) error {
 	if err := r.registry.Register(name, v); err != nil {
 	}
 	return nil

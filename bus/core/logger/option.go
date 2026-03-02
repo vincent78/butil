@@ -1,4 +1,4 @@
-package logger4
+package logger
 
 import (
 	"strings"
@@ -7,88 +7,86 @@ import (
 )
 
 const (
-	formatConsole = "console"
+	FormatConsole = "console"
 	formatJSON    = "json"
 )
 
 type Level zapcore.Level
 
-type options struct {
-	level         Level
-	encoding      string
-	disableCaller bool
-	callerSkip    int
-	stacktrace    Level
-
-	isSave     bool
-	fileConfig *fileOptions
-
-	hooks []func(zapcore.Entry) error
+type Options struct {
+	Level         Level
+	Encoding      string
+	DisableCaller bool
+	CallerSkip    int
+	Stacktrace    Level
+	IsSave        bool
+	FileConfig    *fileOptions
+	Hooks         []func(zapcore.Entry) error
 }
 
-func defaultOptions() *options {
-	opts := &options{
-		encoding:   formatConsole,
-		stacktrace: Level(zapcore.ErrorLevel),
-		callerSkip: 1,
+func DefaultOptions() *Options {
+	opts := &Options{
+		Encoding:   FormatConsole,
+		Stacktrace: Level(zapcore.ErrorLevel),
+		CallerSkip: 1,
 	}
-	opts.level = Level(zapcore.DebugLevel)
+	opts.Level = Level(zapcore.DebugLevel)
 	return opts
 }
 
-func (o *options) apply(opts ...Option) {
+func (o *Options) Apply(opts ...Option) {
 	for _, opt := range opts {
 		opt(o)
 	}
 }
 
 // Option set the logger options.
-type Option func(*options)
+type Option func(*Options)
 
 // WithLevel setting the log level
 func WithLevel(name string) Option {
-	return func(o *options) {
+	return func(o *Options) {
 		ln := strings.ToLower(name)
 		l, err := zapcore.ParseLevel(ln)
 		if err != nil {
 			panic(err)
 		}
-		o.level = Level(l)
+		o.Level = Level(l)
 	}
 }
 
 // WithFormat set the output log format, console or json
 func WithFormat(format string) Option {
-	return func(o *options) {
+	return func(o *Options) {
 		if strings.ToLower(format) == formatJSON {
-			o.encoding = formatJSON
+			o.Encoding = formatJSON
 		}
 	}
 }
 
 // WithCallerSkip setting the log caller
 func WithCaller(caller bool, skip int) Option {
-	return func(o *options) {
-		o.disableCaller = caller
-		o.callerSkip = skip
+	return func(o *Options) {
+		o.DisableCaller = caller
+		o.CallerSkip = skip
 	}
 }
 
 // WithStacktraceLevel setting the log stacktraceLevel
 func WithStacktraceLevel(name string) Option {
-	return func(o *options) {
+	return func(o *Options) {
 		l, err := zapcore.ParseLevel(strings.ToLower(name))
 		if err != nil {
 			panic(err)
 		}
-		o.stacktrace = Level(l)
+		o.Stacktrace = Level(l)
 	}
 }
 
 // WithHooks set the log hooks
 func WithHooks(hooks ...func(zapcore.Entry) error) Option {
-	return func(o *options) {
-		o.hooks = hooks
+	return func(o *Options) {
+		o.Hooks = hooks
 	}
 }
 
@@ -100,31 +98,31 @@ func WithHooks(hooks ...func(zapcore.Entry) error) Option {
 
 // WithSave save log to file
 func WithSave(isSave bool, opts ...FileOption) Option {
-	return func(o *options) {
+	return func(o *Options) {
 		if isSave {
-			o.isSave = true
+			o.IsSave = true
 			fo := defaultFileOptions()
 			fo.apply(opts...)
-			o.fileConfig = fo
+			o.FileConfig = fo
 		}
 	}
 }
 
 type fileOptions struct {
-	filename      string
-	maxSize       int
-	maxBackups    int
-	maxAge        int
-	isCompression bool
+	Filename      string
+	MaxSize       int
+	MaxBackups    int
+	MaxAge        int
+	IsCompression bool
 	isLocalTime   bool
 }
 
 func defaultFileOptions() *fileOptions {
 	return &fileOptions{
-		filename:    "out.log",
-		maxSize:     50, // maximum file size (MB)
-		maxBackups:  20, // maximum number of old files
-		maxAge:      30, // maximum number of days for old documents
+		Filename:    "out.log",
+		MaxSize:     50, // maximum file size (MB)
+		MaxBackups:  20, // maximum number of old files
+		MaxAge:      30, // maximum number of days for old documents
 		isLocalTime: true,
 	}
 }
@@ -142,7 +140,7 @@ type FileOption func(*fileOptions)
 func WithFileName(filename string) FileOption {
 	return func(f *fileOptions) {
 		if filename != "" {
-			f.filename = filename
+			f.Filename = filename
 		}
 	}
 }
@@ -151,7 +149,7 @@ func WithFileName(filename string) FileOption {
 func WithFileMaxSize(maxSize int) FileOption {
 	return func(f *fileOptions) {
 		if maxSize > 0 {
-			f.maxSize = maxSize
+			f.MaxSize = maxSize
 		}
 	}
 }
@@ -159,8 +157,8 @@ func WithFileMaxSize(maxSize int) FileOption {
 // WithFileMaxBackups set maximum number of old files
 func WithFileMaxBackups(maxBackups int) FileOption {
 	return func(f *fileOptions) {
-		if f.maxBackups > 0 {
-			f.maxBackups = maxBackups
+		if f.MaxBackups > 0 {
+			f.MaxBackups = maxBackups
 		}
 	}
 }
@@ -168,8 +166,8 @@ func WithFileMaxBackups(maxBackups int) FileOption {
 // WithFileMaxAge set maximum number of days for old documents
 func WithFileMaxAge(maxAge int) FileOption {
 	return func(f *fileOptions) {
-		if f.maxAge > 0 {
-			f.maxAge = maxAge
+		if f.MaxAge > 0 {
+			f.MaxAge = maxAge
 		}
 	}
 }
@@ -177,7 +175,7 @@ func WithFileMaxAge(maxAge int) FileOption {
 // WithFileIsCompression set whether to compress log files
 func WithFileIsCompression(isCompression bool) FileOption {
 	return func(f *fileOptions) {
-		f.isCompression = isCompression
+		f.IsCompression = isCompression
 	}
 }
 

@@ -15,6 +15,8 @@ import (
 	"time"
 
 	"github.com/natefinch/lumberjack"
+	"github.com/vincent78/butil/bus/core/logger"
+	"github.com/vincent78/butil/bus/x/registry"
 	"github.com/vincent78/butil/config"
 	"go.uber.org/zap"
 	"go.uber.org/zap/zapcore"
@@ -23,7 +25,7 @@ import (
 type SimpleLogger = zap.Logger
 type SugaredLogger = zap.SugaredLogger
 
-func getLoggerWithOptions(opts ...Option) *SimpleLogger {
+func getLoggerWithOptions(opts ...logger.Option) *SimpleLogger {
 	checkNil()
 	l, err := Init(opts...)
 	if err != nil {
@@ -38,7 +40,7 @@ func getSugaredLogger() *SugaredLogger {
 	return defaultSugaredLogger
 }
 
-func getSugaredLoggerWithOptions(opts ...Option) *SugaredLogger {
+func getSugaredLoggerWithOptions(opts ...logger.Option) *SugaredLogger {
 	checkNil()
 	l, err := Init(opts...)
 	if err != nil {
@@ -65,26 +67,26 @@ func getSugaredLoggerWithOptions(opts ...Option) *SugaredLogger {
 //			WithFileMaxAge(10),
 //			WithFileIsCompression(true),
 //		))
-func Init(opts ...Option) (*SimpleLogger, error) {
-	o := defaultOptions()
-	o.apply(opts...)
+func Init(opts ...logger.Option) (*SimpleLogger, error) {
+	o := logger.DefaultOptions()
+	o.Apply(opts...)
 
 	var err error
 	var zapLog *SimpleLogger
 	var str string
-	if !o.isSave {
+	if !o.IsSave {
 		zapLog, err = log2Terminal(o)
 		if err != nil {
 			panic(err)
 		}
-		str = fmt.Sprintf("initialize logger finish, config is output to 'terminal', format=%s, level=%s", o.encoding, LevelString(o.level))
+		str = fmt.Sprintf("initialize logger finish, config is output to 'terminal', format=%s, level=%s", o.Encoding, LevelString(o.Level))
 	} else {
 		zapLog = log2File(o)
-		str = fmt.Sprintf("initialize logger finish, config is output to 'file', format=%s, level=%s, file=%s", o.encoding, LevelString(o.level), o.fileConfig.filename)
+		str = fmt.Sprintf("initialize logger finish, config is output to 'file', format=%s, level=%s, file=%s", o.Encoding, LevelString(o.Level), o.FileConfig.Filename)
 	}
 
-	if len(o.hooks) > 0 {
-		zapLog = zapLog.WithOptions(zap.Hooks(o.hooks...))
+	if len(o.Hooks) > 0 {
+		zapLog = zapLog.WithOptions(zap.Hooks(o.Hooks...))
 	}
 	//if defaultLogger == nil {
 	//	defaultLogger = zapLog
@@ -94,14 +96,14 @@ func Init(opts ...Option) (*SimpleLogger, error) {
 	return zapLog, err
 }
 
-func log2Terminal(o *options) (*SimpleLogger, error) {
+func log2Terminal(o *logger.Options) (*SimpleLogger, error) {
 	js := fmt.Sprintf(`{
       		"level": "%s",
             "encoding": "%s",
       		"outputPaths": ["stdout"],
             "errorOutputPaths": ["stdout"],
 			"x": %v
-		}`, LevelString(o.level), o.encoding, o.disableCaller)
+		}`, LevelString(o.Level), o.Encoding, o.DisableCaller)
 
 	var config zap.Config
 	err := json.Unmarshal([]byte(js), &config)
@@ -110,42 +112,42 @@ func log2Terminal(o *options) (*SimpleLogger, error) {
 	}
 
 	config.EncoderConfig = zap.NewProductionEncoderConfig()
-	if o.encoding == formatConsole {
+	if o.Encoding == logger.FormatConsole {
 		config.EncoderConfig.EncodeLevel = zapcore.CapitalColorLevelEncoder // logging color
 	} else {
 		config.EncoderConfig.EncodeLevel = zapcore.CapitalLevelEncoder // logging levels in the log file using upper case letters
 	}
 	config.EncoderConfig.EncodeTime = timeFormatter // default time format
-	return config.Build(zap.AddStacktrace(zapcore.Level(o.stacktrace)),
-		zap.AddCallerSkip(o.callerSkip),
+	return config.Build(zap.AddStacktrace(zapcore.Level(o.Stacktrace)),
+		zap.AddCallerSkip(o.CallerSkip),
 	)
 }
 
-func log2File(o *options) *SimpleLogger {
+func log2File(o *logger.Options) *SimpleLogger {
 	encoderConfig := zap.NewProductionEncoderConfig()
 	encoderConfig.EncodeTime = zapcore.ISO8601TimeEncoder   // modify Time Encoder
 	encoderConfig.EncodeLevel = zapcore.CapitalLevelEncoder // logging levels in the log file using upper case letters
 	var encoder zapcore.Encoder
-	if o.encoding == formatConsole { // console format
+	if o.Encoding == logger.FormatConsole { // console format
 		encoder = zapcore.NewConsoleEncoder(encoderConfig)
 	} else { // json format
 		encoder = zapcore.NewJSONEncoder(encoderConfig)
 	}
 
 	ws := zapcore.AddSync(&lumberjack.Logger{
-		Filename:   o.fileConfig.filename,      // file name
-		MaxSize:    o.fileConfig.maxSize,       // maximum file size (MB)
-		MaxBackups: o.fileConfig.maxBackups,    // maximum number of old files
-		MaxAge:     o.fileConfig.maxAge,        // maximum number of days for old documents
-		Compress:   o.fileConfig.isCompression, // whether to compress and archive old files
+		Filename:   o.FileConfig.Filename,      // file name
+		MaxSize:    o.FileConfig.MaxSize,       // maximum file size (MB)
+		MaxBackups: o.FileConfig.MaxBackups,    // maximum number of old files
+		MaxAge:     o.FileConfig.MaxAge,        // maximum number of days for old documents
+		Compress:   o.FileConfig.IsCompression, // whether to compress and archive old files
 	})
-	core := zapcore.NewCore(encoder, ws, zapcore.Level(o.level))
+	core := zapcore.NewCore(encoder, ws, zapcore.Level(o.Level))
 
 	// add the function call information log to the log.
 	return zap.New(core,
 		zap.AddCaller(),
-		zap.AddStacktrace(zapcore.Level(o.stacktrace)),
-		zap.AddCallerSkip(o.callerSkip),
+		zap.AddStacktrace(zapcore.Level(o.Stacktrace)),
+		zap.AddCallerSkip(o.CallerSkip),
 	)
 }
 
@@ -158,7 +160,7 @@ func getLevel(name string) zapcore.Level {
 	return level
 }
 
-func LevelString(level Level) string {
+func LevelString(level logger.Level) string {
 	l := zapcore.Level(level)
 	return l.String()
 }
@@ -168,41 +170,59 @@ func timeFormatter(t time.Time, enc zapcore.PrimitiveArrayEncoder) {
 }
 
 func checkNil() {
-	if defaultLogger == nil {
-		_, err := Init() // default output to console
+	if registry.LoggerRegistry().Get(DefaultName) == nil {
+		sl, err := Init() // default output to console
 		if err != nil {
 			panic(err)
 		}
+		SetDefaultLogger(&NormalLogger{
+			logger: sl,
+			conf:   config.NewLoggerConfig(),
+		})
 	}
 }
 
 func InitLoggerByConfs(cfgs map[string]config.LoggerConfig) {
 	for name, cfg := range cfgs {
 		configs[name] = cfg
-		log, err := InitLoggerByConf(cfg)
+		_, err := InitLoggerByConfAndRegistered(name, cfg)
 		if err != nil {
 			panic("init logger error:" + err.Error())
-		}
-		loggerMap[name] = &NormalLogger{
-			logger: log,
-			conf:   cfg,
 		}
 	}
 }
 
+func InitLoggerByConfAndRegistered(name string, cfg config.LoggerConfig) (logger.ILoggerMethod, error) {
+	l, err := InitLoggerByConf(cfg)
+	if err != nil {
+		return nil, err
+	}
+
+	n := &NormalLogger{
+		logger: l,
+		conf:   cfg,
+	}
+
+	err = registry.LoggerRegistry().Register(name, n)
+	if err != nil {
+		return nil, err
+	}
+	return n, nil
+}
+
 func InitLoggerByConf(cfg config.LoggerConfig) (*SimpleLogger, error) {
 	return Init(
-		WithLevel(cfg.Level),
-		WithFormat(cfg.Format),
-		WithCaller(cfg.DisableCaller, cfg.CallerSkip),
-		WithStacktraceLevel(cfg.StacktraceLevel),
-		WithSave(
+		logger.WithLevel(cfg.Level),
+		logger.WithFormat(cfg.Format),
+		logger.WithCaller(cfg.DisableCaller, cfg.CallerSkip),
+		logger.WithStacktraceLevel(cfg.StacktraceLevel),
+		logger.WithSave(
 			cfg.IsSave,
-			WithFileName(cfg.LogFileConfig.Filename),
-			WithFileMaxSize(cfg.LogFileConfig.MaxSize),
-			WithFileMaxBackups(cfg.LogFileConfig.MaxBackups),
-			WithFileMaxAge(cfg.LogFileConfig.MaxAge),
-			WithFileIsCompression(cfg.LogFileConfig.IsCompression),
+			logger.WithFileName(cfg.LogFileConfig.Filename),
+			logger.WithFileMaxSize(cfg.LogFileConfig.MaxSize),
+			logger.WithFileMaxBackups(cfg.LogFileConfig.MaxBackups),
+			logger.WithFileMaxAge(cfg.LogFileConfig.MaxAge),
+			logger.WithFileIsCompression(cfg.LogFileConfig.IsCompression),
 		),
 	)
 }
@@ -255,4 +275,21 @@ func getProjectRoot() string {
 		return wd
 	}
 	return ""
+}
+
+// Get logger
+func Get() logger.ILoggerMethod {
+	return GetLogger(DefaultName)
+}
+
+func GetLogger(name string) logger.ILoggerMethod {
+	checkNil()
+	return registry.LoggerRegistry().Get(name)
+}
+
+func SetDefaultLogger(logger logger.ILoggerMethod) {
+	err := registry.LoggerRegistry().Register(DefaultName, logger)
+	if err != nil {
+		panic(err)
+	}
 }

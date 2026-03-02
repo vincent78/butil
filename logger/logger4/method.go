@@ -1,51 +1,45 @@
 package logger4
 
 import (
-	"context"
 	"strings"
+
+	"github.com/vincent78/butil/bus/core/logger"
 )
 
-type LoggerMethod interface {
-	Debug(msg string, fields ...Field)
-	Info(msg string, fields ...Field)
-	Warn(msg string, fields ...Field)
-	Error(msg string, fields ...Field)
-	DPanic(msg string, fields ...Field)
-	Panic(msg string, fields ...Field)
-	Fatal(msg string, fields ...Field)
-	WithMetaCtx(ctx context.Context, keys ...string)
-	WithFields(fields ...Field)
-	WithMap(map[string]any)
-}
+/*************************************************************************************************
+ *
+ * default的外露方法
+ *
+ **************************************************************************************************/
 
 // Debug level information
-func Debug(msg string, fields ...Field) {
-	getLogger().Debug(msg, fields...)
+func Debug(msg string, fields ...logger.Field) {
+	Get().Debug(msg, fields...)
 }
 
 // Info level information
-func Info(msg string, fields ...Field) {
-	getLogger().Info(msg, fields...)
+func Info(msg string, fields ...logger.Field) {
+	Get().Info(msg, fields...)
 }
 
 // Warn level information
-func Warn(msg string, fields ...Field) {
-	getLogger().Warn(msg, fields...)
+func Warn(msg string, fields ...logger.Field) {
+	Get().Warn(msg, fields...)
 }
 
 // Error level information
-func Error(msg string, fields ...Field) {
-	getLogger().Error(msg, fields...)
+func Error(msg string, fields ...logger.Field) {
+	Get().Error(msg, fields...)
 }
 
 // Panic level information
-func Panic(msg string, fields ...Field) {
-	getLogger().Panic(msg, fields...)
+func Panic(msg string, fields ...logger.Field) {
+	Get().Panic(msg, fields...)
 }
 
 // Fatal level information
-func Fatal(msg string, fields ...Field) {
-	getLogger().Fatal(msg, fields...)
+func Fatal(msg string, fields ...logger.Field) {
+	Get().Fatal(msg, fields...)
 }
 
 // Debugf format level information
@@ -76,7 +70,7 @@ func Fatalf(format string, a ...any) {
 // Sync flushing any buffered log entries, applications should take care to call Sync before exiting.
 func Sync() error {
 	_ = getSugaredLogger().Sync()
-	err := getLogger().Sync()
+	err := Get().Sync()
 	if err != nil && !strings.Contains(err.Error(), "/dev/stdout") {
 		return err
 	}
@@ -84,7 +78,7 @@ func Sync() error {
 }
 
 // WithFields carrying field information
-func WithFields(fields ...Field) *NormalLogger {
+func WithFields(fields ...logger.Field) logger.ILoggerMethod {
 	//return GetWithSkip(0).With(fields...)
 	return Get().WithFields(fields...)
 }

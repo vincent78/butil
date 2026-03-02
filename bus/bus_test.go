@@ -37,11 +37,13 @@ import (
 func Test_RegisterTest(t *testing.T) {
 	// 必须在import中添加  _ "github.com/vincent78/butil/bus/x/test"
 	// 这样才能让init方法被调用。
-	md1 := metadata.NewMetadata(map[string]any{
-		"test": "test",
-		"now":  timeUtil.NowUtcStr(),
-	})
+
 	if f := registry.TestRegistry().Get("test"); f != nil {
+		//执行注册的方法（注：这里才是真正初始化的地方）
+		md1 := metadata.NewMetadata(map[string]any{
+			"test": "test",
+			"now":  timeUtil.NowUtcStr(),
+		})
 		obj := f(test.WithMetadata(md1))
 		md2 := metadata.NewMetadata(map[string]any{
 			"xxx": "xxx",
@@ -56,4 +58,8 @@ func Test_RegisterHttpHandler(t *testing.T) {
 	if f := registry.HandlerRegistry().Get("http"); f != nil {
 		_ = f(opts...)
 	}
+}
+
+func Test_RegisterLogger(t *testing.T) {
+
 }

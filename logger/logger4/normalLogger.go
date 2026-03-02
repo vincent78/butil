@@ -4,43 +4,17 @@ import (
 	"context"
 	"reflect"
 
+	"github.com/vincent78/butil/bus/core/logger"
 	"github.com/vincent78/butil/config"
 	"github.com/vincent78/butil/global"
 	"go.uber.org/zap"
 )
 
-var defaultLogger *NormalLogger
+const DefaultName = "default"
+
 var defaultSugaredLogger *SugaredLogger
-var loggerMap = make(map[string]*NormalLogger)
 
 var configs = make(map[string]config.LoggerConfig)
-
-func getLogger() *NormalLogger {
-	checkNil()
-	//return defaultLogger.WithOptions(zap.AddCallerSkip(1))
-	return defaultLogger
-}
-
-// Get logger
-func Get() *NormalLogger {
-	checkNil()
-	return defaultLogger
-}
-
-func GetLogger(name string) *NormalLogger {
-	if logger, ok := loggerMap[name]; ok {
-		return logger
-	} else {
-		panic("logger not found: " + name)
-	}
-}
-func GetLoggerMap() map[string]*NormalLogger {
-	return loggerMap
-}
-
-func SetDefaultLogger(name string) {
-	defaultLogger = GetLogger(name)
-}
 
 //////////////////////////////////////////////////////////////////////////////
 
@@ -50,12 +24,12 @@ type NormalLogger struct {
 }
 
 func NewNormalLogger(conf config.LoggerConfig) *NormalLogger {
-	logger, err := InitLoggerByConf(conf)
+	l, err := InitLoggerByConf(conf)
 	if err != nil {
 		panic(err)
 	}
 	return &NormalLogger{
-		logger: logger,
+		logger: l,
 		conf:   conf,
 	}
 }
@@ -63,31 +37,31 @@ func (l *NormalLogger) GetLogger() *SimpleLogger {
 	return l.logger
 }
 
-func (l *NormalLogger) Debug(msg string, fields ...Field) {
+func (l *NormalLogger) Debug(msg string, fields ...logger.Field) {
 	l.logger.Debug(msg, fields...)
 }
 
-func (l *NormalLogger) Info(msg string, fields ...Field) {
+func (l *NormalLogger) Info(msg string, fields ...logger.Field) {
 	l.logger.Info(msg, fields...)
 }
 
-func (l *NormalLogger) Warn(msg string, fields ...Field) {
+func (l *NormalLogger) Warn(msg string, fields ...logger.Field) {
 	l.logger.Warn(msg, fields...)
 }
 
-func (l *NormalLogger) Error(msg string, fields ...Field) {
+func (l *NormalLogger) Error(msg string, fields ...logger.Field) {
 	l.logger.Error(msg, fields...)
 }
 
-func (l *NormalLogger) DPanic(msg string, fields ...Field) {
+func (l *NormalLogger) DPanic(msg string, fields ...logger.Field) {
 	l.logger.DPanic(msg, fields...)
 }
 
-func (l *NormalLogger) Panic(msg string, fields ...Field) {
+func (l *NormalLogger) Panic(msg string, fields ...logger.Field) {
 	l.logger.Panic(msg, fields...)
 }
 
-func (l *NormalLogger) Fatal(msg string, fields ...Field) {
+func (l *NormalLogger) Fatal(msg string, fields ...logger.Field) {
 	l.logger.Fatal(msg, fields...)
 }
 
@@ -95,13 +69,13 @@ func (l *NormalLogger) Sync() error {
 	return l.logger.Sync()
 }
 
-func (l *NormalLogger) WithFields(field ...Field) *NormalLogger {
+func (l *NormalLogger) WithFields(field ...logger.Field) logger.ILoggerMethod {
 	l.logger = l.logger.With(field...)
 	return l
 }
 
-func (l *NormalLogger) WithMap(mps map[string]any) {
-	var mp []Field
+func (l *NormalLogger) WithMap(mps map[string]any) logger.ILoggerMethod {
+	var mp []logger.Field
 	for k, v := range mps {
 		if v == nil {
 			continue
@@ -150,29 +124,23 @@ func (l *NormalLogger) WithMap(mps map[string]any) {
 		}
 	}
 	l.logger = l.logger.With(mp...)
+	return l
 }
 
-func (l *NormalLogger) WithMetaCtx(ctx context.Context, keys ...string) {
+func (l *NormalLogger) WithMetaCtx(ctx context.Context, keys ...string) logger.ILoggerMethod {
 	mp := make(map[string]any)
 	for _, k := range keys {
 		if v, e := global.GetCtxValue(ctx, k); e {
 			mp[k] = v
 		}
 	}
-	if len(mp) > 0 {
-		l.WithMap(mp)
-	}
+	return l.WithMap(mp)
+
 }
 
-func (l *NormalLogger) WithCallerSkip(skip int) *NormalLogger {
+func (l *NormalLogger) WithCallerSkip(skip int) logger.ILoggerMethod {
 	return &NormalLogger{
 		logger: l.logger.WithOptions(zap.AddCallerSkip(skip)),
 		conf:   l.conf,
 	}
 }
-
-//// GetWithSkip get defaultLogger, set the skipped caller value, customize the number of lines of code displayed
-//func GetWithSkip(skip int) *NormalLogger {
-//	checkNil()
-//	return defaultLogger.WithCallerSkip(skip)
-//}

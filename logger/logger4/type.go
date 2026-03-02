@@ -4,12 +4,14 @@ import (
 	"fmt"
 	"time"
 
+	"github.com/vincent78/butil/bus/core/logger"
 	"go.uber.org/zap"
-	"go.uber.org/zap/zapcore"
 )
 
 // Field type
-type Field = zapcore.Field
+type Field = logger.Field
+
+type Method = logger.ILoggerMethod
 
 // Int type
 func Int(key string, val int) Field {

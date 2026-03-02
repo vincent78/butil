@@ -5,6 +5,7 @@ import (
 	"testing"
 
 	"github.com/vincent78/butil/utils/fileUtil"
+	"github.com/vincent78/butil/utils/objUtil"
 )
 
 func TestParseConfig(t *testing.T) {
@@ -14,7 +15,7 @@ func TestParseConfig(t *testing.T) {
 	if err != nil {
 		t.Errorf("parse the config error: %v", err.Error())
 	} else {
-		t.Logf("the config : %+v", conf)
+		t.Logf("the config : %+v", objUtil.ToString(conf))
 	}
 }
 

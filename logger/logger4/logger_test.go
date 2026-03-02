@@ -7,6 +7,7 @@ import (
 	"testing"
 	"time"
 
+	logger2 "github.com/vincent78/butil/bus/core/logger"
 	"github.com/vincent78/butil/config"
 	logger "github.com/vincent78/butil/logger/logger2/logger"
 	"github.com/vincent78/butil/utils/fileUtil"
@@ -46,7 +47,7 @@ func printInfo() {
 
 func TestInit(t *testing.T) {
 	type args struct {
-		opts []Option
+		opts []logger2.Option
 	}
 	tests := []struct {
 		name    string
@@ -60,24 +61,24 @@ func TestInit(t *testing.T) {
 		},
 		{
 			name: "terminal json info",
-			args: args{[]Option{
-				WithFormat("json"), WithLevel("info"),
+			args: args{[]logger2.Option{
+				logger2.WithFormat("json"), logger2.WithLevel("info"),
 			}},
 			wantErr: false,
 		},
 		{
 			name: "terminal json warn",
-			args: args{[]Option{
-				WithFormat("json"), WithLevel("warn"),
+			args: args{[]logger2.Option{
+				logger2.WithFormat("json"), logger2.WithLevel("warn"),
 			}},
 			wantErr: false,
 		},
 		{
 			name: "with hooks info",
-			args: args{[]Option{
-				WithFormat("json"),
-				WithLevel("info"),
-				WithHooks(func(entry zapcore.Entry) error {
+			args: args{[]logger2.Option{
+				logger2.WithFormat("json"),
+				logger2.WithLevel("info"),
+				logger2.WithHooks(func(entry zapcore.Entry) error {
 					if strings.Contains(entry.Message, "this is error") {
 						fmt.Println("it contains error message")
 					}
@@ -88,16 +89,16 @@ func TestInit(t *testing.T) {
 		},
 		{
 			name: "file json debug",
-			args: args{[]Option{
-				WithFormat("json"), WithLevel("unknown"),
-				WithSave(
+			args: args{[]logger2.Option{
+				logger2.WithFormat("json"), logger2.WithLevel("unknown"),
+				logger2.WithSave(
 					true,
-					WithFileName(os.TempDir()+"/testLog/my.log"),
-					WithFileMaxSize(5),
-					WithFileMaxBackups(5),
-					WithFileMaxAge(10),
-					WithFileIsCompression(true),
-					WithLocalTime(true),
+					logger2.WithFileName(os.TempDir()+"/testLog/my.log"),
+					logger2.WithFileMaxSize(5),
+					logger2.WithFileMaxBackups(5),
+					logger2.WithFileMaxAge(10),
+					logger2.WithFileIsCompression(true),
+					logger2.WithLocalTime(true),
 				),
 			}},
 			wantErr: false,
@@ -155,7 +156,7 @@ func Test_InitConfigByFile(t *testing.T) {
 	cfgs := &config.CmdConfig{}
 	_ = config.Parse(file, cfgs)
 	InitLoggerByConfs(cfgs.Logger)
-	SetDefaultLogger("default")
+
 	logger.Info("this is info")
 	logger.Debug("this is debug")
 }

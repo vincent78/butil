@@ -16,6 +16,7 @@ func NewLoggerConfig() LoggerConfig {
 		Level:           "debug",
 		IsSave:          false,
 		DisableCaller:   true,
+		CallerSkip:      0,
 		StacktraceLevel: "error",
 		LogFileConfig: LogFileConfig{
 			Filename:      "out.log",

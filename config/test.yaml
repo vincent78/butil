@@ -1,47 +1,76 @@
 app:
-  name: test
+  name: chainEth
+  node: local
   debug: true
-
+  proxy: http://127.0.0.1:7897
+  run:
+    uniswapV2: false
+    uniswapV3: true
 
 server:
   http:
     host:
-    port: 7101
-    ssl: false
+    port: 11000
+  ws:
+    host:
+    port: 11001
   ext: >-
     {      
-    } 
+    }   
 
 logger:
   default:
     level: "debug"
     format: "console"
     isSave: false
+    callerSkip: 1
+    stacktraceLevel: "error"
     logFileConfig:
-      filename: "./out.log"
+      filename: "~/temp/logs/out.log"
+  default_debug:
+    level: "debug"
+    format: "json"
+    isSave: true
+    callerSkip: 0
+    stacktraceLevel: "error"
+    logFileConfig:
+      filename: "~/temp/logs/debug.log"
+  default_error:
+    level: "error"
+    format: "json"
+    isSave: true
+    callerSkip: 0
+    stacktraceLevel: "error"
+    logFileConfig:
+      filename: "~/temp/logs/error.log"
+  mysql:
+    level: "debug"
+    format: "console"
+    isSave: true
+    callerSkip: 0
+    logFileConfig:
+      filename: "~/temp/logs/mysql.log"
 
 redis:
-  dsn: "vincent:qt%402023@127.0.0.1:6379/0"
+  dsn: "vincent:utXvMi1ECWIO7@127.0.0.1:6379/0"
   dialTimeout: 10
   readTimeout: 2
   writeTimeout: 2
   queueConfig:
-    stream: "order_events"
-    group: "order_processing_group"
-    dlqStream: "order_dlq"
-    maxRetries: 3
-    consumerName: "consumer-"
+    streamUV2: "stream.dev.u2.logs"
+    streamUV3: "stream.dev.u3.logs"
     blockTimeout: 5
     pendingCheckInterval: 5
-    maxPendingAge: 30
+    maxPendingAge: 300
 
 database:
   mysql:
     dev:
-      dsn: "root:rootpassword@(127.0.0.1:3306)/dev?parseTime=true&loc=Local&charset=utf8,utf8mb4&useSSL=false"
+      #      dsn: "uniswap:uniswap@2025@(sh-cdb-dbupw87c.sql.tencentcdb.com:60842)/uniswap?parseTime=true&loc=Local&charset=utf8,utf8mb4"
+      dsn: "uniswap:uniswap@2025@(127.0.0.1:3306)/uniswap?parseTime=true&loc=UTC&charset=utf8mb4"
       enableLog: true
-      logLevel: debug
-      logger: mysql,default
+      logger: mysql
+      traceIdKey: traceId
       cacheType: memory
       maxIdleConns: 10
       maxOpenConns: 100
