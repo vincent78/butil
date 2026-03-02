@@ -9,7 +9,6 @@ import (
 
 	logger2 "github.com/vincent78/butil/bus/core/logger"
 	"github.com/vincent78/butil/config"
-	logger "github.com/vincent78/butil/logger/logger2/logger"
 	"github.com/vincent78/butil/utils/fileUtil"
 
 	"go.uber.org/zap/zapcore"
@@ -139,24 +138,28 @@ func BenchmarkAny(b *testing.B) {
 	}
 }
 
-func Test_InitTestConfigByFile(t *testing.T) {
-	path := fileUtil.GetCurrentProjectPath()
-	file := fileUtil.Join(path, "config", "test.yaml")
-	cfg := &config.CmdConfig{}
-	_ = config.Parse(file, cfg)
-	dfl := cfg.Logger["default"]
-	l, _ := InitLoggerByConf(dfl)
-	l.Info("this is info")
+func Test_InitLogger(t *testing.T) {
+	conf := config.NewLoggerConfig()
+	l, err := InitLoggerByConf(conf)
+	if err != nil {
+		t.Errorf("init logger error: %v", err.Error())
+		return
+	}
+	if l == nil {
+		t.Errorf("init logger error: the logger is nil")
+		return
+	}
+	l.Info("this is info", String("string", "hello golang"))
 	l.Debug("this is debug")
 }
 
-func Test_InitConfigByFile(t *testing.T) {
+func Test_InitLoggerByFile(t *testing.T) {
 	path := fileUtil.GetCurrentProjectPath()
 	file := fileUtil.Join(path, "config", "test.yaml")
 	cfgs := &config.CmdConfig{}
 	_ = config.Parse(file, cfgs)
 	InitLoggerByConfs(cfgs.Logger)
 
-	logger.Info("this is info")
-	logger.Debug("this is debug")
+	Info("this is info", String("string", "hello golang"))
+	Debug("this is debug")
 }

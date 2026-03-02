@@ -14,8 +14,6 @@ const DefaultName = "default"
 
 var defaultSugaredLogger *SugaredLogger
 
-var configs = make(map[string]config.LoggerConfig)
-
 //////////////////////////////////////////////////////////////////////////////
 
 type NormalLogger struct {
@@ -139,8 +137,10 @@ func (l *NormalLogger) WithMetaCtx(ctx context.Context, keys ...string) logger.I
 }
 
 func (l *NormalLogger) WithCallerSkip(skip int) logger.ILoggerMethod {
+	c := l.conf
+	c.CallerSkip = skip
 	return &NormalLogger{
 		logger: l.logger.WithOptions(zap.AddCallerSkip(skip)),
-		conf:   l.conf,
+		conf:   c,
 	}
 }

@@ -36,7 +36,6 @@ func getLoggerWithOptions(opts ...logger.Option) *SimpleLogger {
 
 func getSugaredLogger() *SugaredLogger {
 	checkNil()
-	//return defaultSugaredLogger.WithOptions(zap.AddCallerSkip(1))
 	return defaultSugaredLogger
 }
 
@@ -113,10 +112,12 @@ func log2Terminal(o *logger.Options) (*SimpleLogger, error) {
 
 	config.EncoderConfig = zap.NewProductionEncoderConfig()
 	if o.Encoding == logger.FormatConsole {
+
 		config.EncoderConfig.EncodeLevel = zapcore.CapitalColorLevelEncoder // logging color
 	} else {
 		config.EncoderConfig.EncodeLevel = zapcore.CapitalLevelEncoder // logging levels in the log file using upper case letters
 	}
+
 	config.EncoderConfig.EncodeTime = timeFormatter // default time format
 	return config.Build(zap.AddStacktrace(zapcore.Level(o.Stacktrace)),
 		zap.AddCallerSkip(o.CallerSkip),
@@ -184,7 +185,6 @@ func checkNil() {
 
 func InitLoggerByConfs(cfgs map[string]config.LoggerConfig) {
 	for name, cfg := range cfgs {
-		configs[name] = cfg
 		_, err := InitLoggerByConfAndRegistered(name, cfg)
 		if err != nil {
 			panic("init logger error:" + err.Error())
