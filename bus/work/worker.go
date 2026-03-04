@@ -18,8 +18,7 @@ const (
 
 type Worker struct {
 	Id       string               // 唯一标识
-	Context  context.Context      // worker的上下文
-	JobCtx   context.Context      // 当前工作的上下文
+	Ctx      context.Context      // worker的上下文
 	Status   WorkStatusType       // 当前状态
 	Desc     string               // 描述
 	JobCh    chan context.Context // 工作队列（输入）
@@ -31,8 +30,7 @@ func NewWorker(ctx context.Context, id string) *Worker {
 
 	w := &Worker{
 		Id:       id,
-		Context:  ctx,
-		JobCtx:   nil,
+		Ctx:      ctx,
 		Status:   Created,
 		JobCh:    make(chan context.Context),
 		OutCh:    make(chan string),
@@ -43,7 +41,7 @@ func NewWorker(ctx context.Context, id string) *Worker {
 		for {
 			select {
 			case jCtx := <-w.JobCh:
-				w.doWork(jCtx)
+				w.DoJob(jCtx)
 				//case <-w.JobCh
 			}
 		}
@@ -51,11 +49,7 @@ func NewWorker(ctx context.Context, id string) *Worker {
 	return w
 }
 
-func (w *Worker) doWork(jCtx context.Context) {
-}
-
-func (w *Worker) CancelWork() {
-
+func (w *Worker) DoJob(ctx context.Context) {
 }
 
 func (w *Worker) GetStatus() WorkStatusType {

@@ -171,14 +171,13 @@ func timeFormatter(t time.Time, enc zapcore.PrimitiveArrayEncoder) {
 }
 
 func checkNil() {
-	if registry.LoggerRegistry().Get(DefaultName) == nil {
+	if !registry.LoggerRegistry().IsRegistered(DefaultName) {
 		sl, err := Init() // default output to console
 		if err != nil {
 			panic(err)
 		}
 		SetDefaultLogger(&NormalLogger{
 			logger: sl,
-			conf:   config.NewLoggerConfig(),
 		})
 	}
 }
@@ -288,6 +287,9 @@ func GetLogger(name string) logger.ILoggerMethod {
 }
 
 func SetDefaultLogger(logger logger.ILoggerMethod) {
+	if registry.LoggerRegistry().IsRegistered(DefaultName) {
+		registry.LoggerRegistry().Unregister(DefaultName)
+	}
 	err := registry.LoggerRegistry().Register(DefaultName, logger)
 	if err != nil {
 		panic(err)

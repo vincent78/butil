@@ -10,6 +10,7 @@ type loggerRegistry struct {
 
 func (r *loggerRegistry) Register(name string, v logger.ILoggerMethod) error {
 	if err := r.registry.Register(name, v); err != nil {
+		return err
 	}
 	return nil
 }

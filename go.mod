@@ -38,7 +38,6 @@ require (
 	github.com/mitchellh/mapstructure v1.5.0
 	github.com/oklog/ulid v1.3.1
 	github.com/rs/xid v1.6.0
-	github.com/sony/sonyflake v1.3.0
 )
 
 require (
@@ -48,7 +47,6 @@ require (
 	github.com/bytedance/sonic v1.15.0
 	github.com/bytedance/sonic/loader v0.5.0 // indirect; indire
 	github.com/cenkalti/backoff/v5 v5.0.3 // indirect
-	github.com/clipperhouse/stringish v0.1.1 // indirect
 	github.com/clipperhouse/uax29/v2 v2.6.0 // indirect
 	github.com/cloudwego/base64x v0.1.6 // indirect
 	github.com/davecgh/go-spew v1.1.1 // indirect
@@ -110,20 +108,20 @@ require (
 
 require (
 	github.com/fsnotify/fsnotify v1.9.0
+	github.com/go-gost/core v0.3.3
 	github.com/golang/protobuf v1.5.4
 	github.com/gorilla/websocket v1.5.3
 	github.com/mattn/go-colorable v0.1.14
 	github.com/natefinch/lumberjack v2.0.0+incompatible
+	github.com/panjf2000/ants/v2 v2.11.5
 	github.com/peterh/liner v1.2.2
 	github.com/prometheus/client_golang v1.23.2
 	github.com/segmentio/ksuid v1.0.4
 	github.com/shopspring/decimal v1.4.0
+	github.com/sony/sonyflake/v2 v2.2.0
 	github.com/spf13/viper v1.21.0
 	github.com/tidwall/gjson v1.18.0
 	github.com/xuri/excelize/v2 v2.10.0
 )
 
-require (
-	github.com/panjf2000/ants/v2 v2.11.5 // indirect
-	golang.org/x/sync v0.19.0 // indirect
-)
+require golang.org/x/sync v0.19.0 // indirect

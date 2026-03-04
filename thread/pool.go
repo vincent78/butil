@@ -53,7 +53,7 @@ func NewPool(size, expiry int) (*Pool, error) {
 }
 
 // Submit submit a task to pool
-func (p *Pool) Submit(task functinType, str any) error {
+func (p *Pool) Submit(task functionType, str any) error {
 	if len(p.release) > 0 {
 		return errors.New("Pool is Close")
 	}
@@ -95,7 +95,7 @@ func (p *Pool) getWorker() *Worker {
 			p.running++
 			w = &Worker{
 				pool:  p,
-				task:  make(chan functinType),
+				task:  make(chan functionType),
 				input: make(chan any),
 			}
 		}

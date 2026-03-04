@@ -5,7 +5,7 @@ import (
 	"time"
 )
 
-type functinType func(any) error
+type functionType func(any) error
 
 // Worker is the actual executor who runs the tasks,
 // it starts a goroutine that accepts tasks and
@@ -14,7 +14,7 @@ type Worker struct {
 	// pool who owns this routine.
 	pool *Pool
 	// task is a job should be done.
-	task chan functinType
+	task chan functionType
 	// recycleTime will be update when putting a routine back into queue.
 	recycleTime time.Time
 
@@ -29,7 +29,7 @@ func (w *Worker) run() {
 		//监听任务列表，一旦有任务立马取出运行
 		count := 1
 		var input any
-		var f functinType
+		var f functionType
 		for count <= 2 {
 			select {
 			case str_temp, ok := <-w.input:
@@ -66,7 +66,7 @@ func (w *Worker) stop() {
 }
 
 // sendTask sends a task to this routine.
-func (w *Worker) sendTask(task functinType) {
+func (w *Worker) sendTask(task functionType) {
 	w.task <- task
 }
 
