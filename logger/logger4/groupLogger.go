@@ -88,7 +88,7 @@ func (g *GroupLogger) Sync() error {
 func (g *GroupLogger) WithFields(field ...logger.Field) logger.ILoggerMethod {
 	gl := &GroupLogger{
 		Name:    g.Name,
-		Loggers: make([]logger.ILoggerMethod, len(g.Loggers)),
+		Loggers: make([]logger.ILoggerMethod, 0, len(g.Loggers)),
 	}
 	for _, l := range g.Loggers {
 		gl.Loggers = append(gl.Loggers, l.WithFields(field...))
@@ -100,7 +100,7 @@ func (g *GroupLogger) WithFields(field ...logger.Field) logger.ILoggerMethod {
 func (g *GroupLogger) WithMap(mps map[string]any) logger.ILoggerMethod {
 	gl := &GroupLogger{
 		Name:    g.Name,
-		Loggers: make([]logger.ILoggerMethod, len(g.Loggers)),
+		Loggers: make([]logger.ILoggerMethod, 0, len(g.Loggers)),
 	}
 	for _, l := range g.Loggers {
 		gl.Loggers = append(gl.Loggers, l.WithMap(mps))
@@ -112,7 +112,7 @@ func (g *GroupLogger) WithMap(mps map[string]any) logger.ILoggerMethod {
 func (g *GroupLogger) WithMetaCtx(ctx context.Context, keys ...string) logger.ILoggerMethod {
 	gl := &GroupLogger{
 		Name:    g.Name,
-		Loggers: make([]logger.ILoggerMethod, len(g.Loggers)),
+		Loggers: make([]logger.ILoggerMethod, 0, len(g.Loggers)),
 	}
 	for _, l := range g.Loggers {
 		gl.Loggers = append(gl.Loggers, l.WithMetaCtx(ctx, keys...))
@@ -124,7 +124,7 @@ func (g *GroupLogger) WithMetaCtx(ctx context.Context, keys ...string) logger.IL
 func (g *GroupLogger) WithCallerSkip(skip int) logger.ILoggerMethod {
 	gl := &GroupLogger{
 		Name:    g.Name,
-		Loggers: make([]logger.ILoggerMethod, len(g.Loggers)),
+		Loggers: make([]logger.ILoggerMethod, 0, len(g.Loggers)),
 	}
 	for _, l := range g.Loggers {
 		gl.Loggers = append(gl.Loggers, l.WithCallerSkip(skip))

@@ -68,8 +68,11 @@ func (l *NormalLogger) Sync() error {
 }
 
 func (l *NormalLogger) WithFields(field ...logger.Field) logger.ILoggerMethod {
-	l.logger = l.logger.With(field...)
-	return l
+	nl := l.logger.With(field...)
+	return &NormalLogger{
+		logger: nl,
+		conf:   l.conf,
+	}
 }
 
 func (l *NormalLogger) WithMap(mps map[string]any) logger.ILoggerMethod {
@@ -121,8 +124,11 @@ func (l *NormalLogger) WithMap(mps map[string]any) logger.ILoggerMethod {
 			mp = append(mp, zap.Any(k, v))
 		}
 	}
-	l.logger = l.logger.With(mp...)
-	return l
+	nl := l.logger.With(mp...)
+	return &NormalLogger{
+		logger: nl,
+		conf:   l.conf,
+	}
 }
 
 func (l *NormalLogger) WithMetaCtx(ctx context.Context, keys ...string) logger.ILoggerMethod {

@@ -19,14 +19,14 @@ func WithMetaData(ctx context.Context) context.Context {
 }
 
 // 设置值 (即使在子协程中，由于是指针且使用了 sync.Map，也是安全的)
-func SetCtxValue(ctx context.Context, key string, val interface{}) {
+func SetCtxValue(ctx context.Context, key string, val any) {
 	if m, ok := ctx.Value(metaKey).(*Metadata); ok {
 		m.data.Store(key, val)
 	}
 }
 
 // 获取值
-func GetCtxValue(ctx context.Context, key string) (interface{}, bool) {
+func GetCtxValue(ctx context.Context, key string) (any, bool) {
 	if m, ok := ctx.Value(metaKey).(*Metadata); ok {
 		return m.data.Load(key)
 	}

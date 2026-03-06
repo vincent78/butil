@@ -10,6 +10,7 @@ import (
 	logger2 "github.com/vincent78/butil/bus/core/logger"
 	"github.com/vincent78/butil/config"
 	"github.com/vincent78/butil/utils/fileUtil"
+	"github.com/vincent78/butil/utils/timeUtil"
 
 	"go.uber.org/zap/zapcore"
 )
@@ -162,4 +163,10 @@ func Test_InitLoggerByFile(t *testing.T) {
 
 	Info("this is info", String("string", "hello golang"))
 	Debug("this is debug")
+}
+
+func Test_LoggerWithFields(t *testing.T) {
+	l := NewNormalLogger(config.NewLoggerConfig())
+	lm := l.WithMap(map[string]interface{}{"init": timeUtil.NowUtcStr()})
+	lm.Info("this is info", String("string", "hello golang"))
 }

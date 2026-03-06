@@ -61,7 +61,7 @@ func GetObjFromPlugin(name, objName string) model.RespModel {
 		return model.RespWithStr(500, "not found plugin: %v", name)
 	} else {
 		if f, err := p.Plugin.Lookup(objName); err != nil {
-			return model.RespWithError(500, fmt.Errorf("found the obj[%v] in plugin[%v] error: %v", objName, name, err))
+			return model.RespWithError(fmt.Errorf("found the obj[%v] in plugin[%v] error: %v", objName, name, err), 500)
 		} else {
 			return model.SuccessResp(f)
 		}

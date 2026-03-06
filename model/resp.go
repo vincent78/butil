@@ -7,7 +7,8 @@ import (
 	"github.com/vincent78/butil/utils/strUtil"
 )
 
-const Success = 0
+const SuccessCode = 0
+const FailureCode = 1
 
 type RespModel struct {
 	Code    int            `json:"code" example:"0"`
@@ -20,19 +21,19 @@ func NewRespModel(bytes []byte) RespModel {
 	obj := RespModel{}
 	err := json.Unmarshal(bytes, &obj)
 	if err != nil {
-		return RespWithError(500, err)
+		return RespWithError(err, 500)
 	}
 	return obj
 }
 
-func SuccessResp(data any) RespModel {
+func SuccessResp(data ...any) RespModel {
 	if data == nil {
 		return RespModel{
-			Code: Success,
+			Code: SuccessCode,
 		}
 	} else {
 		return RespModel{
-			Code: Success,
+			Code: SuccessCode,
 			Data: data,
 		}
 	}
@@ -59,7 +60,7 @@ func RespWithErrModel(obj *ErrorModel, args ...any) RespModel {
 
 func RespWithErrModelObj(obj *ErrorModel) RespModel {
 	if obj == nil {
-		return RespModel{Code: Success, Data: nil}
+		return RespModel{Code: SuccessCode, Data: nil}
 	}
 	return RespModel{
 		Code:    obj.Code,
@@ -68,7 +69,11 @@ func RespWithErrModelObj(obj *ErrorModel) RespModel {
 	}
 }
 
-func RespWithError(code int, e error) RespModel {
+func RespWithError(e error, codes ...int) RespModel {
+	code := FailureCode
+	if len(codes) > 0 {
+		code = codes[0]
+	}
 	if e == nil {
 		return RespModel{
 			Code:    code,
@@ -79,7 +84,7 @@ func RespWithError(code int, e error) RespModel {
 	}
 }
 func (resp RespModel) IsSuccess() bool {
-	return resp.Code == Success
+	return resp.Code == SuccessCode
 }
 func (resp RespModel) String() string {
 	return strUtil.ToStr(resp)

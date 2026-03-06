@@ -25,7 +25,7 @@ func NewResultModel[T any](bytes []byte) ResultModel[T] {
 
 func SuccessResult[T any](data T) ResultModel[T] {
 	return ResultModel[T]{
-		Code: Success,
+		Code: SuccessCode,
 		Data: data,
 	}
 }
@@ -69,7 +69,7 @@ func FailureResultWithError[T any](code int, e error) ResultModel[T] {
 	}
 }
 func (resp ResultModel[T]) IsSuccess() bool {
-	return resp.Code == Success
+	return resp.Code == SuccessCode
 }
 func (resp ResultModel[T]) String() string {
 	return strUtil.ToStr(resp)
