@@ -13,7 +13,7 @@ type Task struct {
 	Header   map[string]string
 	Url      string
 	Body     string
-	RespChan chan *model.RespModel
+	RespChan chan model.RespModel
 }
 
 type TaskOption interface {
@@ -59,7 +59,7 @@ func WithHeaderMap(m map[string]string) TaskOption {
 	})
 }
 
-func NewTask(ctx context.Context, url string, respCh chan *model.RespModel, options ...TaskOption) *Task {
+func NewTask(ctx context.Context, url string, respCh chan model.RespModel, options ...TaskOption) *Task {
 	if len(url) == 0 {
 		panic("url cannot be empty")
 	}

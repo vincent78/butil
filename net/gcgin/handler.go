@@ -32,7 +32,7 @@ func DoBusAction[T any](g *gin.Context, req T, action func(ctx context.Context, 
 				g.JSON(http.StatusOK, model.RespWithErrModelObj(errModel))
 			}
 		} else {
-			g.JSON(http.StatusOK, model.SuccessResp(data))
+			g.JSON(http.StatusOK, model.RespSuccess(data))
 		}
 	}
 }

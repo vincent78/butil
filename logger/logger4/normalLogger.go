@@ -21,6 +21,10 @@ type NormalLogger struct {
 	conf   config.LoggerConfig
 }
 
+func DefaultNormalLogger() *NormalLogger {
+	return NewNormalLogger(config.NewLoggerConfig())
+}
+
 func NewNormalLogger(conf config.LoggerConfig) *NormalLogger {
 	l, err := InitLoggerByConf(conf)
 	if err != nil {

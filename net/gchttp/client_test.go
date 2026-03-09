@@ -9,6 +9,7 @@ import (
 	"strings"
 	"testing"
 
+	logger "github.com/vincent78/butil/logger/logger4"
 	"github.com/vincent78/butil/model"
 	"github.com/vincent78/butil/utils/netUtil"
 )
@@ -23,13 +24,20 @@ func TestGetBaseUrl(t *testing.T) {
 }
 
 func TestProxyDone(t *testing.T) {
-	urlstr := "http://ipinfo.io"
+	//urlstr := "http://ipinfo.io"
 	//urlstr := "http://cip.cc"
+	urlstr := "https://jsonplaceholder.typicode.com/users/1"
 	proxy := "http://127.0.0.1:7897"
-	proxyClient := NewHttpClient(urlstr, WithProxy(proxy))
+	proxyClient := NewHttpClient(urlstr,
+		WithProxy(proxy),
+		WithLogger(logger.DefaultNormalLogger()),
+	)
 	task := NewTask(context.Background(), urlstr, nil)
 	proxyResp := Done(task, proxyClient)
-	t.Log(proxyResp.Data)
+	if proxyResp.IsSuccess() {
+		t.Log(proxyResp.GetJson())
+		//t.Log(proxyResp.GetJson().Get("address.street"))
+	}
 
 	client := NewHttpClient(urlstr)
 	resp := Done(task, client)
@@ -40,7 +48,7 @@ func TestDoneInChannel(t *testing.T) {
 	urlstr := "https://red-solitary-valley.quiknode.pro/954951fe5e8f41b83d503bf29450307900fd4a6c"
 	proxy := "http://127.0.0.1:7897"
 	client := NewHttpClient(urlstr, WithProxy(proxy))
-	respChan := make(chan *model.RespModel)
+	respChan := make(chan model.RespModel)
 	task := NewTask(context.Background(), urlstr, respChan,
 		WithMethod("POST"),
 		WithHeader("Content-Type", "application/json"),
@@ -76,8 +84,7 @@ func TestPostHttpForm(t *testing.T) {
 
 func TestPostHttpJson(t *testing.T) {
 	urlApi := "http://localhost:8080/v1/discovery"
-	var contentType string = "application/json"
-
+	var contentType = "application/json"
 	jsonParam := `{"id":"1010"}`
 	resp, err := http.Post(urlApi, contentType, strings.NewReader(jsonParam))
 	if err != nil {

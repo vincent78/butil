@@ -25,7 +25,7 @@ func TestHttp(t *testing.T) {
 	<-c
 	urlstr := "http://localhost:9090/timestamp"
 	r := Done(NewTask(context.Background(), urlstr, nil), GetClient(urlstr))
-	if r.Code == model.Success {
+	if r.Code == model.SUCCESS {
 		logger.Debug("http get result. %v ", r.Data)
 	} else {
 		logger.Error("http get error: %v", r.Message)

@@ -2,8 +2,10 @@ package model
 
 import (
 	"encoding/json"
+	"errors"
 	"fmt"
 
+	"github.com/tidwall/gjson"
 	"github.com/vincent78/butil/utils/strUtil"
 )
 
@@ -26,7 +28,7 @@ func NewRespModel(bytes []byte) RespModel {
 	return obj
 }
 
-func SuccessResp(data ...any) RespModel {
+func RespSuccess(data any) RespModel {
 	if data == nil {
 		return RespModel{
 			Code: SuccessCode,
@@ -86,10 +88,27 @@ func RespWithError(e error, codes ...int) RespModel {
 func (resp RespModel) IsSuccess() bool {
 	return resp.Code == SuccessCode
 }
+
 func (resp RespModel) String() string {
 	return strUtil.ToStr(resp)
 }
 
 func (resp RespModel) Bytes() []byte {
 	return strUtil.ToBytes(resp)
+}
+
+func (resp RespModel) Error() error {
+	return errors.New(resp.Message)
+}
+
+func (resp RespModel) GetJson() gjson.Result {
+	if r, ok := resp.Data.(gjson.Result); ok {
+		return r
+	} else if r, ok := resp.Data.([]gjson.Result); ok {
+		return r[0]
+	} else if r, ok := resp.Data.(string); ok {
+		return gjson.Parse(r)
+	} else {
+		return gjson.Result{}
+	}
 }

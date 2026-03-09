@@ -10,6 +10,7 @@ import (
 	"sync"
 	"time"
 
+	cl "github.com/vincent78/butil/bus/core/logger"
 	logger "github.com/vincent78/butil/logger/logger4"
 	"github.com/vincent78/butil/model"
 	"github.com/vincent78/butil/token"
@@ -46,7 +47,7 @@ func HeadRequest(task *Task) model.RespModel {
 	if err != nil {
 		return model.RespWithError(err, 500)
 	} else {
-		return model.SuccessResp(resp)
+		return model.RespSuccess(resp)
 	}
 }
 
@@ -73,6 +74,7 @@ type HttpClient struct {
 	Running            bool
 	client             *http.Client
 	Lock               sync.RWMutex
+	Logger             cl.ILoggerMethod
 }
 
 type ClientOption interface {
@@ -101,6 +103,11 @@ func WithTimeout(timeout time.Duration) ClientOption {
 		client.Timeout = timeout
 	})
 }
+func WithLogger(log cl.ILoggerMethod) ClientOption {
+	return clientOptionFunc(func(client *HttpClient) {
+		client.Logger = log
+	})
+}
 
 func NewHttpClient(baseUrl string, opt ...ClientOption) *HttpClient {
 	client := &HttpClient{
@@ -111,6 +118,7 @@ func NewHttpClient(baseUrl string, opt ...ClientOption) *HttpClient {
 			Timeout: defaultTimeout,
 		},
 		Timeout: defaultTimeout,
+		Logger:  logger.DefaultNormalLogger(),
 	}
 	client.BaseUrl = netUtil.GetUrlPrefix(baseUrl)
 	for _, f := range opt {
@@ -149,7 +157,7 @@ func GetClient(baseUrl string, opt ...ClientOption) *HttpClient {
 func DoneInChannel(task *Task, client *HttpClient) {
 	go func() {
 		if task.RespChan != nil {
-			task.RespChan <- new(Done(task, client))
+			task.RespChan <- Done(task, client)
 		} else {
 			panic("the task resp channel is nil")
 		}
@@ -174,36 +182,34 @@ func Done(task *Task, client *HttpClient) model.RespModel {
 		tk = token.UniqueId()
 	}
 
-	logInFields := make([]logger.Field, 0)
-	logInFields = append(logInFields,
+	logIn := client.Logger.WithFields(
 		logger.String("token", tk),
 		logger.String("method", task.Method),
-		logger.String("url", task.Url))
+		logger.String("url", task.Url),
+	)
 
 	if task.Header != nil && len(task.Header) > 0 {
 		for k, v := range task.Header {
-			logInFields = append(logInFields, logger.String(k, v))
+			logIn = logIn.WithFields(logger.String(k, v))
 		}
 	}
 
 	if len(task.Body) > 0 {
-		logInFields = append(logInFields, logger.String("body", task.Body))
+		logIn = logIn.WithFields(logger.String("body", task.Body))
 	}
 
-	logger.Debug("-->> http", logInFields...)
+	logIn.Debug("-->> http")
 
 	var bodyReader io.Reader
 	if task.Body != "" {
 		bodyReader = strings.NewReader(task.Body)
 	}
-	logOutFields := make([]logger.Field, 0)
-	logOutFields = append(logOutFields, logger.String("token", tk))
+	logOut := client.Logger.WithFields(logger.String("token", tk))
 
 	req, err := http.NewRequest(task.Method, task.Url, bodyReader)
 	if err != nil {
-		logOutFields = append(logOutFields, logger.String("error", err.Error()))
-		logger.Error("<<-- http", logOutFields...)
-		return model.RespWithError(err, 4000)
+		logOut.Error("<<-- http", logger.String("error", err.Error()))
+		return model.RespWithError(err)
 	}
 
 	//req.Header.Set("Content-Type", "application/json")
@@ -217,33 +223,27 @@ func Done(task *Task, client *HttpClient) model.RespModel {
 	resp, err := client.client.Do(req)
 
 	if err != nil {
-		logOutFields = append(logOutFields, logger.String("error", err.Error()))
-		logger.Error("<<-- http", logOutFields...)
+		logOut.Error("<<-- http", logger.String("error", err.Error()))
 		return model.RespWithError(err, 4000)
 	}
 	defer func(Body io.ReadCloser) {
 		dfErr := Body.Close()
 		if dfErr != nil {
-			logOutFields = append(logOutFields, logger.String("error", dfErr.Error()))
-			logger.Error("<<-- http: close the body err", logOutFields...)
+			logOut.Error("<<-- http", logger.String("error", err.Error()))
 		}
 	}(resp.Body)
 	//rep, err := ioutil.ReadAll(resp.Body)
 	rep, err := io.ReadAll(resp.Body)
 	if err != nil {
-		logOutFields = append(logOutFields, logger.Any("error", err.Error()))
-		logger.Error("<<-- http", logOutFields...)
+		logOut.Error("<<-- http", logger.String("error", err.Error()))
 		return model.RespWithError(err, 4000)
 	} else if strings.HasPrefix(resp.Header.Get("content-type"), "application/json") {
 		r := objUtil.Parse(rep)
-		logOutFields = append(logOutFields, logger.Any("response", r))
-		logger.Debug("<<-- http", logOutFields...)
-		return model.SuccessResp(r)
+		logOut.Debug("<<-- http", logger.Any("response", r))
+		return model.RespSuccess(r)
 	} else {
-		//rs := ToStr(resp)
-		md := model.SuccessResp(resp)
-		logger.Debug("<<-- http", logOutFields...)
-		return md
+		logOut.Debug("<<-- http", logger.Any("response", resp))
+		return model.RespSuccess(resp)
 	}
 }
 
@@ -278,7 +278,7 @@ func PostFormData(urlStr string, header map[string]string, body map[string]any) 
 		if resp, err := client.Do(req); err != nil {
 			return model.RespWithError(err, 500)
 		} else {
-			return model.SuccessResp(resp)
+			return model.RespSuccess(resp)
 		}
 
 	}
