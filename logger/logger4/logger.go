@@ -9,6 +9,7 @@ package logger4
 import (
 	"encoding/json"
 	"fmt"
+	"log"
 	"os"
 	"runtime"
 	"strings"
@@ -93,6 +94,50 @@ func Init(opts ...logger.Option) (*SimpleLogger, error) {
 	//}
 	zapLog.Info(str)
 	return zapLog, err
+}
+
+func InitLoggerByConfs(cfgs map[string]config.LoggerConfig) {
+	for name, cfg := range cfgs {
+		_, err := InitLoggerByConfAndRegistered(name, cfg)
+		if err != nil {
+			panic("init logger error:" + err.Error())
+		}
+	}
+}
+
+func InitLoggerByConfAndRegistered(name string, cfg config.LoggerConfig) (logger.ILoggerMethod, error) {
+	l, err := InitLoggerByConf(cfg)
+	if err != nil {
+		return nil, err
+	}
+
+	n := &NormalLogger{
+		logger: l,
+		conf:   cfg,
+	}
+
+	err = registry.LoggerRegistry().Register(name, n)
+	if err != nil {
+		return nil, err
+	}
+	return n, nil
+}
+
+func InitLoggerByConf(cfg config.LoggerConfig) (*SimpleLogger, error) {
+	return Init(
+		logger.WithLevel(cfg.Level),
+		logger.WithFormat(cfg.Format),
+		logger.WithCaller(cfg.DisableCaller, cfg.CallerSkip),
+		logger.WithStacktraceLevel(cfg.StacktraceLevel),
+		logger.WithSave(
+			cfg.IsSave,
+			logger.WithFileName(cfg.LogFileConfig.Filename),
+			logger.WithFileMaxSize(cfg.LogFileConfig.MaxSize),
+			logger.WithFileMaxBackups(cfg.LogFileConfig.MaxBackups),
+			logger.WithFileMaxAge(cfg.LogFileConfig.MaxAge),
+			logger.WithFileIsCompression(cfg.LogFileConfig.IsCompression),
+		),
+	)
 }
 
 func log2Terminal(o *logger.Options) (*SimpleLogger, error) {
@@ -182,50 +227,6 @@ func checkNil() {
 	}
 }
 
-func InitLoggerByConfs(cfgs map[string]config.LoggerConfig) {
-	for name, cfg := range cfgs {
-		_, err := InitLoggerByConfAndRegistered(name, cfg)
-		if err != nil {
-			panic("init logger error:" + err.Error())
-		}
-	}
-}
-
-func InitLoggerByConfAndRegistered(name string, cfg config.LoggerConfig) (logger.ILoggerMethod, error) {
-	l, err := InitLoggerByConf(cfg)
-	if err != nil {
-		return nil, err
-	}
-
-	n := &NormalLogger{
-		logger: l,
-		conf:   cfg,
-	}
-
-	err = registry.LoggerRegistry().Register(name, n)
-	if err != nil {
-		return nil, err
-	}
-	return n, nil
-}
-
-func InitLoggerByConf(cfg config.LoggerConfig) (*SimpleLogger, error) {
-	return Init(
-		logger.WithLevel(cfg.Level),
-		logger.WithFormat(cfg.Format),
-		logger.WithCaller(cfg.DisableCaller, cfg.CallerSkip),
-		logger.WithStacktraceLevel(cfg.StacktraceLevel),
-		logger.WithSave(
-			cfg.IsSave,
-			logger.WithFileName(cfg.LogFileConfig.Filename),
-			logger.WithFileMaxSize(cfg.LogFileConfig.MaxSize),
-			logger.WithFileMaxBackups(cfg.LogFileConfig.MaxBackups),
-			logger.WithFileMaxAge(cfg.LogFileConfig.MaxAge),
-			logger.WithFileIsCompression(cfg.LogFileConfig.IsCompression),
-		),
-	)
-}
-
 // getCallerInfo 获取调用者的文件路径和行号（去掉根目录前缀）
 func getCallerInfo() string {
 	// 从调用栈中查找第一个非logger包的调用者
@@ -294,4 +295,9 @@ func SetDefaultLogger(logger logger.ILoggerMethod) {
 	if err != nil {
 		panic(err)
 	}
+}
+
+// 系统最简单的Logger
+func LogObj() *log.Logger {
+	return log.New(os.Stdout, "cron: ", log.LstdFlags)
 }
