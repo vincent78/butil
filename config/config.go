@@ -1,12 +1,10 @@
 package config
 
 import (
-	"encoding/json"
 	"fmt"
 
 	"github.com/spf13/viper"
 	"github.com/vincent78/butil/utils/fileUtil"
-	"github.com/vincent78/butil/utils/strUtil"
 )
 
 /*
@@ -27,7 +25,7 @@ var (
 // ParseConfig conf 必须传入指针类型
 func ParseConfig[T any](filepath string, conf T) (T, error) {
 	//configMap[filepath] = val
-	fmt.Println("configPath:", filepath)
+	//fmt.Println("configPath:", filepath)
 
 	if filepath == "" {
 		return conf, nil
@@ -48,10 +46,9 @@ func ParseConfig[T any](filepath string, conf T) (T, error) {
 		fmt.Println(err.Error())
 		return conf, err
 	}
-
-	confBytes, err := json.Marshal(conf)
-	fmt.Print(strUtil.Bytes2String(confBytes))
-	fmt.Print("\n\n\n")
+	//confBytes, err := json.Marshal(conf)
+	//fmt.Print(strUtil.Bytes2String(confBytes))
+	//fmt.Print("\n\n\n")
 	globalConfig = conf
 	return conf, nil
 }
