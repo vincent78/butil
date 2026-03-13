@@ -123,6 +123,7 @@ func defaultFileOptions() *fileOptions {
 		MaxSize:     50, // maximum file size (MB)
 		MaxBackups:  20, // maximum number of old files
 		MaxAge:      30, // maximum number of days for old documents
+		IsCompression: true,
 		isLocalTime: true,
 	}
 }

@@ -132,10 +132,11 @@ func InitLoggerByConf(cfg config.LoggerConfig) (*SimpleLogger, error) {
 		logger.WithSave(
 			cfg.IsSave,
 			logger.WithFileName(cfg.LogFileConfig.Filename),
-			logger.WithFileMaxSize(cfg.LogFileConfig.MaxSize),
-			logger.WithFileMaxBackups(cfg.LogFileConfig.MaxBackups),
 			logger.WithFileMaxAge(cfg.LogFileConfig.MaxAge),
+			logger.WithFileMaxBackups(cfg.LogFileConfig.MaxBackups),
+			logger.WithFileMaxSize(cfg.LogFileConfig.MaxSize),
 			logger.WithFileIsCompression(cfg.LogFileConfig.IsCompression),
+			logger.WithLocalTime(cfg.LogFileConfig.IsLocalTime),
 		),
 	)
 }

@@ -5,6 +5,7 @@ type LoggerConfig struct {
 	IsSave          bool          `yaml:"isSave" json:"isSave"`
 	Level           string        `yaml:"level" json:"level"`
 	DisableCaller   bool          `yaml:"disableCaller" json:"disableCaller"`
+	IsLocalTime     bool          `yaml:"isLocalTime" json:"isLocalTime"`
 	CallerSkip      int           `yaml:"callerSkip" json:"callerSkip"`
 	StacktraceLevel string        `yaml:"stacktraceLevel" json:"stacktraceLevel"`
 	LogFileConfig   LogFileConfig `yaml:"logFileConfig" json:"logFileConfig"`
@@ -24,6 +25,7 @@ func NewLoggerConfig() LoggerConfig {
 			MaxBackups:    50,
 			MaxAge:        15,
 			IsCompression: true,
+			IsLocalTime:   false,
 		},
 	}
 }
@@ -41,4 +43,5 @@ type LogFileConfig struct {
 	MaxAge        int    `yaml:"maxAge" json:"maxAge"`
 	MaxBackups    int    `yaml:"maxBackups" json:"maxBackups"`
 	MaxSize       int    `yaml:"maxSize" json:"maxSize"`
+	IsLocalTime   bool   `yaml:"isLocalTime" json:"isLocalTime"`
 }
