@@ -74,3 +74,7 @@ func GetRandomNumber() int {
 func GetRandomNumber100() int {
 	return mr.IntN(100)
 }
+
+func GetRandomNumberFrom(n int) int {
+	return mr.IntN(n)
+}
