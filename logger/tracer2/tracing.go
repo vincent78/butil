@@ -3,12 +3,10 @@ package tracing
 import (
 	"context"
 	"crypto/sha256"
-	"encoding/hex"
 	"fmt"
 	"strconv"
 	"time"
 
-	"github.com/google/uuid"
 	"go.opentelemetry.io/otel"
 	"go.opentelemetry.io/otel/attribute"
 	"go.opentelemetry.io/otel/exporters/otlp/otlptrace/otlptracegrpc"
@@ -31,13 +29,6 @@ var ServerRunEnv *string // 运行环境: local、dev、test、prod
 
 func init() {
 	ServerRunEnv = new("dev")
-}
-
-func NewTraceId() string {
-	traceId := uuid.New().String()
-	hash := sha256.Sum256([]byte(traceId))
-	actualTraceID := hex.EncodeToString(hash[:16])
-	return actualTraceID
 }
 
 // InitJaeger 初始化 Jaeger 追踪

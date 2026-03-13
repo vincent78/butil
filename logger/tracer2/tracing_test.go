@@ -3,6 +3,8 @@ package tracing
 import (
 	"fmt"
 	"testing"
+
+	"github.com/vincent78/butil/token"
 )
 
 func TestStartSpanWithCustomTraceID(t *testing.T) {
@@ -13,7 +15,7 @@ func TestStartSpanWithCustomTraceID(t *testing.T) {
 	defer cp()
 
 	//trace id
-	traceId := NewTraceId()
+	traceId := token.NewTraceId()
 
 	ctxSpan, span := StartSpanWithCustomTraceID("service.MatchFilterList", traceId)
 	defer span.End()
