@@ -165,8 +165,16 @@ func Test_InitLoggerByFile(t *testing.T) {
 	Debug("this is debug")
 }
 
-func Test_LoggerWithFields(t *testing.T) {
+func Test_NormalLogger_WithFields(t *testing.T) {
+	l := NewNormalLogger(config.NewLoggerConfig())
+	lm := l.WithFields(String("init", timeUtil.NowUtcStr()))
+	lm.Debug("this is debug", String("string", "hello golang"))
+	lm.Info("this is info", String("string", "hello golang"))
+}
+
+func Test_NormalLogger_WithMaps(t *testing.T) {
 	l := NewNormalLogger(config.NewLoggerConfig())
 	lm := l.WithMap(map[string]interface{}{"init": timeUtil.NowUtcStr()})
+	lm.Debug("this is debug", String("string", "hello golang"))
 	lm.Info("this is info", String("string", "hello golang"))
 }

@@ -94,7 +94,7 @@ func (g *GroupLogger) WithFields(field ...logger.Field) logger.ILoggerMethod {
 		gl.Loggers = append(gl.Loggers, l.WithFields(field...))
 	}
 
-	return g
+	return gl
 }
 
 func (g *GroupLogger) WithMap(mps map[string]any) logger.ILoggerMethod {
