@@ -7,11 +7,11 @@ import (
 type NewTest func(opts ...test.Option) test.Test
 
 type testRegistry struct {
-	registry[NewTest]
+	Registry[NewTest]
 }
 
 func (r *testRegistry) Register(name string, v NewTest) error {
-	if err := r.registry.Register(name, v); err != nil {
+	if err := r.Registry.Register(name, v); err != nil {
 		//logger.Default().Fatal(err)
 	}
 	return nil

@@ -8,11 +8,11 @@ import (
 type NewHandler func(opts ...handler.Option) handler.Handler[metadata.Metadata]
 
 type handlerRegistry struct {
-	registry[NewHandler]
+	Registry[NewHandler]
 }
 
 func (r *handlerRegistry) Register(name string, v NewHandler) error {
-	if err := r.registry.Register(name, v); err != nil {
+	if err := r.Registry.Register(name, v); err != nil {
 		return err
 	}
 	return nil

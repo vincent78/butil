@@ -7,14 +7,14 @@ import (
 )
 
 var (
-	ErrDup = errors.New("registry: duplicate object")
+	ErrDup = errors.New("Registry: duplicate object")
 )
 
-type registry[T any] struct {
+type Registry[T any] struct {
 	m sync.Map
 }
 
-func (r *registry[T]) Register(name string, v T) error {
+func (r *Registry[T]) Register(name string, v T) error {
 	if name == "" {
 		return nil
 	}
@@ -25,7 +25,7 @@ func (r *registry[T]) Register(name string, v T) error {
 	return nil
 }
 
-func (r *registry[T]) Unregister(name string) {
+func (r *Registry[T]) Unregister(name string) {
 	if v, ok := r.m.Load(name); ok {
 		if closer, ok := v.(io.Closer); ok {
 			closer.Close()
@@ -34,12 +34,12 @@ func (r *registry[T]) Unregister(name string) {
 	}
 }
 
-func (r *registry[T]) IsRegistered(name string) bool {
+func (r *Registry[T]) IsRegistered(name string) bool {
 	_, ok := r.m.Load(name)
 	return ok
 }
 
-func (r *registry[T]) Get(name string) (t T) {
+func (r *Registry[T]) Get(name string) (t T) {
 	if name == "" {
 		return
 	}
@@ -48,7 +48,7 @@ func (r *registry[T]) Get(name string) (t T) {
 	return
 }
 
-func (r *registry[T]) GetAll() (m map[string]T) {
+func (r *Registry[T]) GetAll() (m map[string]T) {
 	m = make(map[string]T)
 	r.m.Range(func(key, value any) bool {
 		k, _ := key.(string)
