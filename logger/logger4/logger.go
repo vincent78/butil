@@ -283,16 +283,23 @@ func Get() logger.ILoggerMethod {
 	return GetLogger(DefaultName)
 }
 
+
+
+func SetDefaultLogger(logger logger.ILoggerMethod) {
+	SetLogger(DefaultName, logger)
+}
+
+
 func GetLogger(name string) logger.ILoggerMethod {
 	checkNil()
 	return registry.LoggerRegistry().Get(name)
 }
 
-func SetDefaultLogger(logger logger.ILoggerMethod) {
-	if registry.LoggerRegistry().IsRegistered(DefaultName) {
-		registry.LoggerRegistry().Unregister(DefaultName)
+func SetLogger(name string, logger logger.ILoggerMethod) {
+	if registry.LoggerRegistry().IsRegistered(name) {
+		registry.LoggerRegistry().Unregister(name)
 	}
-	err := registry.LoggerRegistry().Register(DefaultName, logger)
+	err := registry.LoggerRegistry().Register(name, logger)
 	if err != nil {
 		panic(err)
 	}
