@@ -76,5 +76,8 @@ func GetRandomNumber100() int {
 }
 
 func GetRandomNumberFrom(n int) int {
+	if n <= 1 {
+		return 0
+	}
 	return mr.IntN(n)
 }
