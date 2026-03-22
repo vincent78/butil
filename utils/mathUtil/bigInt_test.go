@@ -277,3 +277,51 @@ func TestBigDivExp(t *testing.T) {
 		})
 	}
 }
+
+func TestHexStr2BigInt(t *testing.T) {
+	type args struct {
+		hexStr   string
+		bitSizes []int
+	}
+	tests := []struct {
+		name string
+		args args
+	}{
+		{
+			name: "max positive",
+			args: args{
+				hexStr: "0x7fffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff",
+				bitSizes: []int{
+					256,
+				},
+			},
+		},
+		{
+			name: "min negative",
+			args: args{
+				hexStr: "0x8000000000000000000000000000000000000000000000000000000000000000",
+				bitSizes: []int{
+					256,
+				},
+			},
+		},
+		{
+			name: "test",
+			args: args{
+				hexStr: "0x7ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffe",
+				bitSizes: []int{
+					256,
+				},
+			},
+		},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			r := HexStr2BigInt(tt.args.hexStr, tt.args.bitSizes...)
+			t.Logf("HexStr2BigInt: %v", r.Text(10))
+			//max := new(big.Int).Lsh(big.NewInt(1), uint(256-1))
+			//t.Logf("max big int: %v", max.String())
+			//t.Logf("hexString: %v", max.Text(16))
+		})
+	}
+}

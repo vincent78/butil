@@ -221,22 +221,79 @@ func BigFormat(num string, n int32) (string, error) {
 	}
 }
 
-func HexStr2BigInt(hexStr string) *big.Int {
+func BigInt2HexStr(num int64, bitSizes ...int) string {
+	n := new(big.Int).SetInt64(num)
+	l := 256
+	if len(bitSizes) > 0 {
+		l = bitSizes[0]
+	}
+
+	// %x: 小写十六进制
+	// %X: 大写十六进制
+	// %#x: 带 0x 前缀的小写
+	// %064x: 补齐到 64 位长度（常用于以太坊 Hash 或 Address）
+
+	//fmt.Printf("%x\n", n)    // ff
+	//fmt.Printf("%X\n", n)    // FF
+	//fmt.Printf("%#x\n", n)   // 0xff
+	//fmt.Printf("%064x\n", n) // 00000000000000000000000000000000000000000000000000000000000000ff
+	return fmt.Sprintf("%0"+strconv.Itoa(l)+"x", n)
+}
+
+// bitsizes是指hexStr最大的长度,不传默认为256位（这是以太坊中常用的)
+func HexStr2BigInt(hexStr string, bitSizes ...int) *big.Int {
+	bitSize := 256
+	if len(bitSizes) > 0 {
+		bitSize = bitSizes[0]
+	}
+
 	str := strings.Replace(hexStr, "0x", "", 1)
 	str = strings.Replace(str, "0X", "", 1)
+
 	str = strings.ToLower(str)
+
 	// 1. 将十六进制字符串解析为 big.Int
 	n := new(big.Int)
-	n.SetString(hexStr, 16)
-	if !strings.HasPrefix(hexStr, "f") {
+	n.SetString(str, 16)
+
+	if CheckOverflow(n, bitSizes...) == 0 {
 		return n
 	}
+
 	// 2. 定义 2^256 (用于补码计算)
 	// 256 位十六进制的最大值边界
-	maxVal := new(big.Int).Lsh(big.NewInt(1), 256)
-
+	maxVal := new(big.Int).Lsh(big.NewInt(1), uint(bitSize))
 	// 3. 计算补码对应的负数值
 	// 如果 n > 2^255，说明符号位为 1，是一个负数
 	// 这里我们直接计算 n - 2^256 即可得到正确的负值
 	return new(big.Int).Sub(n, maxVal)
+}
+
+// CheckOverflow 检查 val 在指定的 bitSize 下是否溢出（有符号整数）
+func CheckOverflow(val *big.Int, bitSize ...int) int {
+	// 1. 设置默认位数为 256
+	n := 256
+	if len(bitSize) > 0 {
+		n = bitSize[0]
+	}
+
+	// 2. 计算最大正数边界 (2^(n-1) - 1)
+	// limit = 1 << (n-1)
+	limit := new(big.Int).Lsh(big.NewInt(1), uint(n-1))
+	maxPos := new(big.Int).Sub(limit, big.NewInt(1))
+
+	// 3. 计算最小负数边界 (-2^(n-1))
+	minNeg := new(big.Int).Neg(limit)
+
+	// 4. 执行范围检查： minNeg <= val <= maxPos
+	if val.Cmp(maxPos) > 0 {
+		//return fmt.Errorf("上溢出: 数值大于 %d 位下的最大正数", n)
+		return 1
+	}
+	if val.Cmp(minNeg) < 0 {
+		//return fmt.Errorf("下溢出: 数值小于 %d 位下的最小负数", n)
+		return -1
+	}
+
+	return 0
 }

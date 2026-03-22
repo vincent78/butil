@@ -3,7 +3,6 @@ package byteUtil
 import (
 	"encoding/hex"
 	"fmt"
-	"math/big"
 	"strconv"
 	"strings"
 )
@@ -28,13 +27,13 @@ func Hex2Byte(str string) []byte {
 	return bHex
 }
 
-func HexStr2BigInt(str string) (*big.Int, error) {
-	if byteValue, err := hex.DecodeString(str); err == nil {
-		return new(big.Int).SetBytes(byteValue), nil
-	} else {
-		return nil, err
-	}
-}
+//func HexStr2BigInt(str string) (*big.Int, error) {
+//	if byteValue, err := hex.DecodeString(str); err == nil {
+//		return new(big.Int).SetBytes(byteValue), nil
+//	} else {
+//		return nil, err
+//	}
+//}
 
 func HexStr2Int64(str string) (int64, error) {
 	numberStr := strings.Replace(str, "0x", "", -1)
