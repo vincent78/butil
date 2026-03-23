@@ -28,5 +28,5 @@ func WSConnect(_ context.Context, ch chan string, params ...string) bm.RespModel
 	time.Sleep(3 * time.Second)
 	ch <- timeUtil.NowStr()
 	time.Sleep(1 * time.Second)
-	return bm.SuccessResp(nil)
+	return bm.RespSuccess(nil)
 }

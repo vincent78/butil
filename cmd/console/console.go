@@ -216,7 +216,7 @@ func (c *Console) Evaluate(statement string) {
 	params := inputs[1:]
 
 	resp := c.doHandler(apiCmd, params...)
-	if resp.Code == model.Success {
+	if resp.Code == model.SUCCESS {
 		if resp.Data != nil {
 			fmt.Fprintf(c.printer, "%v \n", resp.Data)
 		}
