@@ -1,4 +1,4 @@
-package mapUtil
+package types
 
 import (
 	"context"
@@ -58,13 +58,21 @@ func (s *MapSafe[T]) Len() int {
 	return len(s.data)
 }
 
-func (s *MapSafe[T]) Range(handler func(key string, value T) bool) {
+func (s *MapSafe[T]) Keys() []string {
+	s.mux.RLock()
+	defer s.mux.RUnlock()
+	r := make([]string,0,len(s.data))
+	for k := range s.data {
+		r = append(r,k)
+	}
+	return r
+}
+
+func (s *MapSafe[T]) Range(handler func(key string, value T)) {
 	s.mux.RLock()
 	defer s.mux.RUnlock()
 
 	for k, v := range s.data {
-		if !handler(k, v) {
-			//logger.Errorf(s.ctx, "map safe range handler error, key:%v, value:%+v", k, v)
-		}
+		handler(k, v)
 	}
 }

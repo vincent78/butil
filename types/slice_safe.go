@@ -1,4 +1,4 @@
-package sliceUtil
+package types
 
 import (
 	"context"
