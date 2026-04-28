@@ -124,4 +124,7 @@ require (
 	github.com/xuri/excelize/v2 v2.10.0
 )
 
-require golang.org/x/sync v0.19.0 // indirect
+require (
+	github.com/tidwall/sjson v1.2.5 // indirect
+	golang.org/x/sync v0.19.0 // indirect
+)
