@@ -28,6 +28,22 @@ func TestSet3JsonStr(t *testing.T) {
 				value: 12,
 			},
 		},
+		{
+			name: "test3",
+			args: args{
+				json:  "{\"t\":1}",
+				key:   "t",
+				value: 2,
+			},
+		},
+		{
+			name: "test4",
+			args: args{
+				json:  "{\"t\":1}",
+				key:   "t.f.g",
+				value: 2,
+			},
+		},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
