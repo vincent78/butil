@@ -20,7 +20,10 @@ func WithMetaData(ctx context.Context) context.Context {
 
 // 设置值 (即使在子协程中，由于是指针且使用了 sync.Map，也是安全的)
 func SetCtxValue(ctx context.Context, key string, val any) {
-	if m, ok := ctx.Value(metaKey).(*Metadata); ok {
+	m, ok := ctx.Value(metaKey).(*Metadata)
+	if !ok || m == nil {
+		panic("context not include MetaData")
+	} else {
 		m.data.Store(key, val)
 	}
 }
