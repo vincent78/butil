@@ -25,6 +25,12 @@ func NewSliceSafe[T any](ctx context.Context, cp ...int) *SliceSafe[T] {
 	}
 }
 
+func (s *SliceSafe[T]) GetSlices() []T {
+	s.mu.Lock()
+	defer s.mu.Unlock()
+	return s.sl
+}
+
 func (s *SliceSafe[T]) Append(v ...T) {
 	s.mu.Lock()
 	defer s.mu.Unlock()
