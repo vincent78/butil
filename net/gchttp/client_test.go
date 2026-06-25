@@ -27,7 +27,8 @@ func TestProxyDone(t *testing.T) {
 	//urlstr := "http://ipinfo.io"
 	//urlstr := "http://cip.cc"
 	urlstr := "https://jsonplaceholder.typicode.com/users/1"
-	proxy := "http://127.0.0.1:7897"
+	//proxy := "http://127.0.0.1:7897"
+	proxy := "socks5://admin:U4oDtdNW@43.163.205.250:10444"
 	proxyClient := NewHttpClient(urlstr,
 		WithProxy(proxy),
 		WithLogger(logger.DefaultNormalLogger()),

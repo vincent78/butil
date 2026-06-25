@@ -17,25 +17,19 @@ func NewLoggerConfig() LoggerConfig {
 		Level:           "debug",
 		IsSave:          false,
 		DisableCaller:   true,
-		CallerSkip:      0,
+		CallerSkip:      1,
 		StacktraceLevel: "error",
 		LogFileConfig: LogFileConfig{
 			Filename:      "out.log",
-			MaxSize:       20,
-			MaxBackups:    50,
-			MaxAge:        15,
+			MaxSize:       256,
+			MaxBackups:    15,
+			MaxAge:        20,
 			IsCompression: true,
 			IsLocalTime:   false,
 		},
 	}
 }
 
-//type Logger struct {
-//	Format        string        `yaml:"format" json:"format"`
-//	IsSave        bool          `yaml:"isSave" json:"isSave"`
-//	Level         string        `yaml:"level" json:"level"`
-//	LogFileConfig LogFileConfig `yaml:"logFileConfig" json:"logFileConfig"`
-//}
 
 type LogFileConfig struct {
 	Filename      string `yaml:"filename" json:"filename"`
