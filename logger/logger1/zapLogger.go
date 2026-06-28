@@ -81,13 +81,13 @@ func genZapLogger(obj *Logger) *zap.Logger {
 	}
 
 	core := zapcore.NewTee(cores...)
-	//return zap.New(core)
+	//return zap.New(service)
 	if obj.Conf.ShowStack {
 		stack := zap.AddStacktrace(zap.ErrorLevel)
 		return zap.New(core, stack)
 		//caller := zap.AddCaller()
 		//development := zap.Development()
-		//return zap.New(core, stack, caller ,development)
+		//return zap.New(service, stack, caller ,development)
 	} else {
 		return zap.New(core)
 	}

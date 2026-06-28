@@ -151,7 +151,7 @@ func GetClient(baseUrl string, opt ...ClientOption) *HttpClient {
 
 /************************************************************************
  *
- *  core
+ *  service
  *
  **************************************************************************/
 func DoneInChannel(task *Task, client *HttpClient) {
@@ -229,17 +229,17 @@ func Done(task *Task, client *HttpClient) model.RespModel {
 	defer func(Body io.ReadCloser) {
 		dfErr := Body.Close()
 		if dfErr != nil {
-			logOut.Error("<<-- http",logger.Any("statusCode", resp.StatusCode), logger.String("error", err.Error()))
+			logOut.Error("<<-- http", logger.Any("statusCode", resp.StatusCode), logger.String("error", err.Error()))
 		}
 	}(resp.Body)
 	//rep, err := ioutil.ReadAll(resp.Body)
 	rep, err := io.ReadAll(resp.Body)
 	if err != nil {
-		logOut.Error("<<-- http", logger.Any("statusCode", resp.StatusCode),logger.String("error", err.Error()))
+		logOut.Error("<<-- http", logger.Any("statusCode", resp.StatusCode), logger.String("error", err.Error()))
 		return model.RespWithError(err, 4000)
 	} else if strings.HasPrefix(resp.Header.Get("content-type"), "application/json") {
 		r := objUtil.Parse(rep)
-		logOut.Debug("<<-- http",logger.Any("statusCode", resp.StatusCode), logger.Any("response", r))
+		logOut.Debug("<<-- http", logger.Any("statusCode", resp.StatusCode), logger.Any("response", r))
 		return model.RespSuccess(r)
 	} else {
 		logOut.Debug("<<-- http", logger.Any("statusCode", resp.StatusCode), logger.Any("response", rep))
