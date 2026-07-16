@@ -101,7 +101,7 @@ func TestInit(t *testing.T) {
 					logger2.WithLocalTime(true),
 				),
 			}},
-			wantErr: false,
+			wantErr: true,
 		},
 	}
 
@@ -110,6 +110,9 @@ func TestInit(t *testing.T) {
 			_, err := Init(tt.args.opts...)
 			if (err != nil) != tt.wantErr {
 				t.Errorf("Init() error = %v, wantErr %v", err, tt.wantErr)
+				return
+			}
+			if tt.wantErr {
 				return
 			}
 
@@ -141,7 +144,7 @@ func BenchmarkAny(b *testing.B) {
 
 func Test_InitLogger(t *testing.T) {
 	conf := config.NewLoggerConfig()
-	l, err := InitLoggerByConf(conf)
+	l, err := InitLoggerByConf(fromButilLoggerConfig(conf))
 	if err != nil {
 		t.Errorf("init logger error: %v", err.Error())
 		return
@@ -159,22 +162,50 @@ func Test_InitLoggerByFile(t *testing.T) {
 	file := fileUtil.Join(path, "config", "test.yaml")
 	cfgs := &config.CmdConfig{}
 	_ = config.Parse(file, cfgs)
-	InitLoggerByConfs(cfgs.Logger)
+	InitLoggerByConfs(fromButilLoggerConfigMap(cfgs.Logger))
 
 	Info("this is info", String("string", "hello golang"))
 	Debug("this is debug")
 }
 
 func Test_NormalLogger_WithFields(t *testing.T) {
-	l := NewNormalLogger(config.NewLoggerConfig())
+	l := NewNormalLogger(NewLoggerConfig())
 	lm := l.WithFields(String("init", timeUtil.NowUtcStr()))
 	lm.Debug("this is debug", String("string", "hello golang"))
 	lm.Info("this is info", String("string", "hello golang"))
 }
 
 func Test_NormalLogger_WithMaps(t *testing.T) {
-	l := NewNormalLogger(config.NewLoggerConfig())
+	l := NewNormalLogger(NewLoggerConfig())
 	lm := l.WithMap(map[string]interface{}{"init": timeUtil.NowUtcStr()})
 	lm.Debug("this is debug", String("string", "hello golang"))
 	lm.Info("this is info", String("string", "hello golang"))
+}
+
+func fromButilLoggerConfigMap(cfgs map[string]config.LoggerConfig) map[string]LoggerConfig {
+	out := make(map[string]LoggerConfig, len(cfgs))
+	for name, cfg := range cfgs {
+		out[name] = fromButilLoggerConfig(cfg)
+	}
+	return out
+}
+
+func fromButilLoggerConfig(conf config.LoggerConfig) LoggerConfig {
+	return LoggerConfig{
+		Format:          conf.Format,
+		IsSave:          conf.IsSave,
+		Level:           conf.Level,
+		DisableCaller:   conf.DisableCaller,
+		IsLocalTime:     conf.IsLocalTime,
+		CallerSkip:      conf.CallerSkip,
+		StacktraceLevel: conf.StacktraceLevel,
+		LogFileConfig: LogFileConfig{
+			Filename:      conf.LogFileConfig.Filename,
+			IsCompression: conf.LogFileConfig.IsCompression,
+			MaxAge:        conf.LogFileConfig.MaxAge,
+			MaxBackups:    conf.LogFileConfig.MaxBackups,
+			MaxSize:       conf.LogFileConfig.MaxSize,
+			IsLocalTime:   conf.LogFileConfig.IsLocalTime,
+		},
+	}
 }

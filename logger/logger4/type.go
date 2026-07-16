@@ -12,6 +12,7 @@ import (
 type Field = logger.Field
 
 type Method = logger.ILoggerMethod
+type Logger = logger.ILoggerMethod
 
 // Int type
 func Int(key string, val int) Field {

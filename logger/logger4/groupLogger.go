@@ -2,11 +2,10 @@ package logger4
 
 import (
 	"context"
+	"fmt"
 	"strings"
 
 	"github.com/vincent78/butil/bus/core/logger"
-	"github.com/vincent78/butil/bus/x/registry"
-	"github.com/vincent78/butil/config"
 )
 
 type GroupLogger struct {
@@ -14,12 +13,12 @@ type GroupLogger struct {
 	Loggers []logger.ILoggerMethod
 }
 
-func NewGroupLogger(name string, confs map[string]config.LoggerConfig) *GroupLogger {
+func NewGroupLogger(name string, confs map[string]LoggerConfig) *GroupLogger {
 	var ls []logger.ILoggerMethod
 
 	for n, conf := range confs {
 		if strings.HasPrefix(n, name) {
-			l := registry.LoggerRegistry().Get(n)
+			l := loadLogger(n)
 			if l == nil {
 				l = NewNormalLogger(conf)
 			}
@@ -39,10 +38,18 @@ func (g *GroupLogger) Debug(msg string, fields ...logger.Field) {
 	}
 }
 
+func (g *GroupLogger) Debugf(format string, a ...any) {
+	g.Debug(fmt.Sprintf(format, a...))
+}
+
 func (g *GroupLogger) Info(msg string, fields ...logger.Field) {
 	for _, l := range g.Loggers {
 		l.Info(msg, fields...)
 	}
+}
+
+func (g *GroupLogger) Infof(format string, a ...any) {
+	g.Info(fmt.Sprintf(format, a...))
 }
 
 func (g *GroupLogger) Warn(msg string, fields ...logger.Field) {
@@ -51,10 +58,18 @@ func (g *GroupLogger) Warn(msg string, fields ...logger.Field) {
 	}
 }
 
+func (g *GroupLogger) Warnf(format string, a ...any) {
+	g.Warn(fmt.Sprintf(format, a...))
+}
+
 func (g *GroupLogger) Error(msg string, fields ...logger.Field) {
 	for _, l := range g.Loggers {
 		l.Error(msg, fields...)
 	}
+}
+
+func (g *GroupLogger) Errorf(format string, a ...any) {
+	g.Error(fmt.Sprintf(format, a...))
 }
 
 func (g *GroupLogger) DPanic(msg string, fields ...logger.Field) {

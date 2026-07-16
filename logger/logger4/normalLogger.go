@@ -2,11 +2,10 @@ package logger4
 
 import (
 	"context"
+	"fmt"
 	"reflect"
 
 	"github.com/vincent78/butil/bus/core/logger"
-	"github.com/vincent78/butil/config"
-	"github.com/vincent78/butil/global"
 	"go.uber.org/zap"
 )
 
@@ -18,14 +17,14 @@ var defaultSugaredLogger *SugaredLogger
 
 type NormalLogger struct {
 	logger *SimpleLogger
-	conf   config.LoggerConfig
+	conf   LoggerConfig
 }
 
 func DefaultNormalLogger() *NormalLogger {
-	return NewNormalLogger(config.NewLoggerConfig())
+	return NewNormalLogger(NewLoggerConfig())
 }
 
-func NewNormalLogger(conf config.LoggerConfig) *NormalLogger {
+func NewNormalLogger(conf LoggerConfig) *NormalLogger {
 	l, err := InitLoggerByConf(conf)
 	if err != nil {
 		panic(err)
@@ -43,16 +42,32 @@ func (l *NormalLogger) Debug(msg string, fields ...logger.Field) {
 	l.logger.Debug(msg, fields...)
 }
 
+func (l *NormalLogger) Debugf(format string, a ...any) {
+	l.Debug(fmt.Sprintf(format, a...))
+}
+
 func (l *NormalLogger) Info(msg string, fields ...logger.Field) {
 	l.logger.Info(msg, fields...)
+}
+
+func (l *NormalLogger) Infof(format string, a ...any) {
+	l.Info(fmt.Sprintf(format, a...))
 }
 
 func (l *NormalLogger) Warn(msg string, fields ...logger.Field) {
 	l.logger.Warn(msg, fields...)
 }
 
+func (l *NormalLogger) Warnf(format string, a ...any) {
+	l.Warn(fmt.Sprintf(format, a...))
+}
+
 func (l *NormalLogger) Error(msg string, fields ...logger.Field) {
 	l.logger.Error(msg, fields...)
+}
+
+func (l *NormalLogger) Errorf(format string, a ...any) {
+	l.Error(fmt.Sprintf(format, a...))
 }
 
 func (l *NormalLogger) DPanic(msg string, fields ...logger.Field) {
@@ -138,7 +153,7 @@ func (l *NormalLogger) WithMap(mps map[string]any) logger.ILoggerMethod {
 func (l *NormalLogger) WithMetaCtx(ctx context.Context, keys ...string) logger.ILoggerMethod {
 	mp := make(map[string]any)
 	for _, k := range keys {
-		if v, e := global.GetCtxValue(ctx, k); e {
+		if v, e := metaExtractor(ctx, k); e {
 			mp[k] = v
 		}
 	}

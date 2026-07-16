@@ -114,17 +114,17 @@ type fileOptions struct {
 	MaxBackups    int
 	MaxAge        int
 	IsCompression bool
-	isLocalTime   bool
+	IsLocalTime   bool
 }
 
 func defaultFileOptions() *fileOptions {
 	return &fileOptions{
-		Filename:    "out.log",
-		MaxSize:     50, // maximum file size (MB)
-		MaxBackups:  20, // maximum number of old files
-		MaxAge:      30, // maximum number of days for old documents
+		Filename:      "out.log",
+		MaxSize:       50, // maximum file size (MB)
+		MaxBackups:    20, // maximum number of old files
+		MaxAge:        30, // maximum number of days for old documents
 		IsCompression: true,
-		isLocalTime: true,
+		IsLocalTime:   true,
 	}
 }
 
@@ -158,7 +158,7 @@ func WithFileMaxSize(maxSize int) FileOption {
 // WithFileMaxBackups set maximum number of old files
 func WithFileMaxBackups(maxBackups int) FileOption {
 	return func(f *fileOptions) {
-		if f.MaxBackups > 0 {
+		if maxBackups > 0 {
 			f.MaxBackups = maxBackups
 		}
 	}
@@ -183,6 +183,6 @@ func WithFileIsCompression(isCompression bool) FileOption {
 // WithLocalTime set whether to use local time
 func WithLocalTime(isLocalTime bool) FileOption {
 	return func(f *fileOptions) {
-		f.isLocalTime = isLocalTime
+		f.IsLocalTime = isLocalTime
 	}
 }

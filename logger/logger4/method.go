@@ -1,6 +1,7 @@
 package logger4
 
 import (
+	"fmt"
 	"strings"
 
 	"github.com/vincent78/butil/bus/core/logger"
@@ -44,32 +45,34 @@ func Fatal(msg string, fields ...logger.Field) {
 
 // Debugf format level information
 func Debugf(format string, a ...any) {
-	getSugaredLogger().Debugf(format, a...)
+	Get().Debug(fmt.Sprintf(format, a...))
 }
 
 // Infof format level information
 func Infof(format string, a ...any) {
-	getSugaredLogger().Infof(format, a...)
+	Get().Info(fmt.Sprintf(format, a...))
 }
 
 // Warnf format level information
 func Warnf(format string, a ...any) {
-	getSugaredLogger().Warnf(format, a...)
+	Get().Warn(fmt.Sprintf(format, a...))
 }
 
 // Errorf format level information
 func Errorf(format string, a ...any) {
-	getSugaredLogger().Errorf(format, a...)
+	Get().Error(fmt.Sprintf(format, a...))
 }
 
 // Fatalf format level information
 func Fatalf(format string, a ...any) {
-	getSugaredLogger().Fatalf(format, a...)
+	Get().Fatal(fmt.Sprintf(format, a...))
 }
 
 // Sync flushing any buffered log entries, applications should take care to call Sync before exiting.
 func Sync() error {
-	_ = getSugaredLogger().Sync()
+	if sl := getSugaredLogger(); sl != nil {
+		_ = sl.Sync()
+	}
 	err := Get().Sync()
 	if err != nil && !strings.Contains(err.Error(), "/dev/stdout") {
 		return err
@@ -81,4 +84,31 @@ func Sync() error {
 func WithFields(fields ...logger.Field) logger.ILoggerMethod {
 	//return GetWithSkip(0).With(fields...)
 	return Get().WithFields(fields...)
+}
+
+func DebugByName(name, format string, a ...any) {
+	GetLoggerOrDefault(name).Debug(fmt.Sprintf(format, a...))
+}
+
+func InfoByName(name, format string, a ...any) {
+	GetLoggerOrDefault(name).Info(fmt.Sprintf(format, a...))
+}
+
+func WarnByName(name, format string, a ...any) {
+	GetLoggerOrDefault(name).Warn(fmt.Sprintf(format, a...))
+}
+
+func ErrorByName(name, format string, a ...any) {
+	GetLoggerOrDefault(name).Error(fmt.Sprintf(format, a...))
+}
+
+func GetLoggerOrDefault(name string) logger.ILoggerMethod {
+	if name == "" {
+		return Get()
+	}
+	l := GetLogger(name)
+	if l == nil {
+		return Get()
+	}
+	return l
 }

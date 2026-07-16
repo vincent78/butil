@@ -8,6 +8,7 @@ package logger4
 
 import (
 	"encoding/json"
+	"errors"
 	"fmt"
 	"log"
 	"os"
@@ -17,8 +18,6 @@ import (
 
 	"github.com/natefinch/lumberjack"
 	"github.com/vincent78/butil/bus/core/logger"
-	"github.com/vincent78/butil/bus/x/registry"
-	"github.com/vincent78/butil/config"
 	"go.uber.org/zap"
 	"go.uber.org/zap/zapcore"
 )
@@ -69,7 +68,9 @@ func getSugaredLoggerWithOptions(opts ...logger.Option) *SugaredLogger {
 //		))
 func Init(opts ...logger.Option) (*SimpleLogger, error) {
 	o := logger.DefaultOptions()
-	o.Apply(opts...)
+	if err := applyOptions(o, opts...); err != nil {
+		return nil, err
+	}
 
 	var err error
 	var zapLog *SimpleLogger
@@ -77,7 +78,7 @@ func Init(opts ...logger.Option) (*SimpleLogger, error) {
 	if !o.IsSave {
 		zapLog, err = log2Terminal(o)
 		if err != nil {
-			panic(err)
+			return nil, err
 		}
 		str = fmt.Sprintf("initialize logger finish, config is output to 'terminal', format=%s, level=%s", o.Encoding, LevelString(o.Level))
 	} else {
@@ -96,7 +97,7 @@ func Init(opts ...logger.Option) (*SimpleLogger, error) {
 	return zapLog, err
 }
 
-func InitLoggerByConfs(cfgs map[string]config.LoggerConfig) {
+func InitLoggerByConfs(cfgs map[string]LoggerConfig) {
 	for name, cfg := range cfgs {
 		_, err := InitLoggerByConfAndRegistered(name, cfg)
 		if err != nil {
@@ -105,7 +106,7 @@ func InitLoggerByConfs(cfgs map[string]config.LoggerConfig) {
 	}
 }
 
-func InitLoggerByConfAndRegistered(name string, cfg config.LoggerConfig) (logger.ILoggerMethod, error) {
+func InitLoggerByConfAndRegistered(name string, cfg LoggerConfig) (logger.ILoggerMethod, error) {
 	l, err := InitLoggerByConf(cfg)
 	if err != nil {
 		return nil, err
@@ -116,14 +117,11 @@ func InitLoggerByConfAndRegistered(name string, cfg config.LoggerConfig) (logger
 		conf:   cfg,
 	}
 
-	err = registry.LoggerRegistry().Register(name, n)
-	if err != nil {
-		return nil, err
-	}
+	storeLogger(name, n)
 	return n, nil
 }
 
-func InitLoggerByConf(cfg config.LoggerConfig) (*SimpleLogger, error) {
+func InitLoggerByConf(cfg LoggerConfig) (*SimpleLogger, error) {
 	return Init(
 		logger.WithLevel(cfg.Level),
 		logger.WithFormat(cfg.Format),
@@ -141,13 +139,30 @@ func InitLoggerByConf(cfg config.LoggerConfig) (*SimpleLogger, error) {
 	)
 }
 
+func applyOptions(o *logger.Options, opts ...logger.Option) (err error) {
+	defer func() {
+		if r := recover(); r != nil {
+			err = fmt.Errorf("invalid logger option: %w", asError(r))
+		}
+	}()
+	o.Apply(opts...)
+	return nil
+}
+
+func asError(v any) error {
+	if err, ok := v.(error); ok {
+		return err
+	}
+	return errors.New(fmt.Sprint(v))
+}
+
 func log2Terminal(o *logger.Options) (*SimpleLogger, error) {
 	js := fmt.Sprintf(`{
       		"level": "%s",
             "encoding": "%s",
       		"outputPaths": ["stdout"],
             "errorOutputPaths": ["stdout"],
-			"x": %v
+			"disableCaller": %v
 		}`, LevelString(o.Level), o.Encoding, o.DisableCaller)
 
 	var config zap.Config
@@ -187,6 +202,7 @@ func log2File(o *logger.Options) *SimpleLogger {
 		MaxBackups: o.FileConfig.MaxBackups,    // maximum number of old files
 		MaxAge:     o.FileConfig.MaxAge,        // maximum number of days for old documents
 		Compress:   o.FileConfig.IsCompression, // whether to compress and archive old files
+		LocalTime:  o.FileConfig.IsLocalTime,   // whether to use local time for backup timestamps
 	})
 	core := zapcore.NewCore(encoder, ws, zapcore.Level(o.Level))
 
@@ -217,7 +233,7 @@ func timeFormatter(t time.Time, enc zapcore.PrimitiveArrayEncoder) {
 }
 
 func checkNil() {
-	if !registry.LoggerRegistry().IsRegistered(DefaultName) {
+	if !IsRegistered(DefaultName) {
 		sl, err := Init() // default output to console
 		if err != nil {
 			panic(err)
@@ -283,25 +299,26 @@ func Get() logger.ILoggerMethod {
 	return GetLogger(DefaultName)
 }
 
-
-
 func SetDefaultLogger(logger logger.ILoggerMethod) {
 	SetLogger(DefaultName, logger)
 }
 
-
 func GetLogger(name string) logger.ILoggerMethod {
 	checkNil()
-	return registry.LoggerRegistry().Get(name)
+	return loadLogger(name)
 }
 
 func SetLogger(name string, logger logger.ILoggerMethod) {
-	if registry.LoggerRegistry().IsRegistered(name) {
-		registry.LoggerRegistry().Unregister(name)
+	if IsRegistered(name) {
+		unregisterLogger(name)
 	}
-	err := registry.LoggerRegistry().Register(name, logger)
-	if err != nil {
-		panic(err)
+	storeLogger(name, logger)
+	if name == DefaultName {
+		if nl, ok := logger.(*NormalLogger); ok && nl.logger != nil {
+			defaultSugaredLogger = nl.logger.Sugar()
+			return
+		}
+		defaultSugaredLogger = nil
 	}
 }
 
