@@ -180,3 +180,12 @@ func GetAbs(path string) string {
 func LastPathName(fp string) string {
 	return pathUtil.Base(fp)
 }
+
+// 获取可执行文件的名称
+func executableName() string {
+	path, err := os.Executable()
+	if err != nil {
+		return pathUtil.Base(os.Args[0])
+	}
+	return pathUtil.Base(path)
+}
