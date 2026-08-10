@@ -182,7 +182,7 @@ func LastPathName(fp string) string {
 }
 
 // 获取可执行文件的名称
-func executableName() string {
+func ExecutableName() string {
 	path, err := os.Executable()
 	if err != nil {
 		return pathUtil.Base(os.Args[0])
